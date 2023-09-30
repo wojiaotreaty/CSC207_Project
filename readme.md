@@ -55,4 +55,6 @@ maintain app engagement.
 
 ## Link to the documentation 
 
+https://platform.openai.com/docs/api-reference/introduction 
+
 ## 
