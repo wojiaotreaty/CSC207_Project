@@ -24,7 +24,8 @@ public class TestAPICall {
                 .build();
 
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody requestBody = RequestBody.create(mediaType, "{\"model\":\"gpt-3.5-turbo\"," +
+        RequestBody requestBody = RequestBody.create(mediaType,
+                "{\"model\":\"gpt-3.5-turbo-instruct\"," +
                 "\"prompt\":\"Say this is a test\"," +
                 "\"temperature\":0.7}");
 
@@ -35,13 +36,18 @@ public class TestAPICall {
                 .post(requestBody)
                 .build();
 
-        System.out.println(requestBody.contentType());
-
+        System.out.println(API_TOKEN);
         System.out.println(request);
 
         try {
             Response response = client.newCall(request).execute();
             System.out.println(response);
+            JSONObject responseBody = new JSONObject(response.body().string());
+
+            if (responseBody.getInt("status_code") == 200) {
+                String responseString = response.body().string();
+                System.out.println(responseString);
+            }
 
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
