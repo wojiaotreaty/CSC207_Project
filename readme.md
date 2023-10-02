@@ -2,8 +2,8 @@
 Main repository for the CSC207 Group Project!
 
 ## Problem Domain
-Our primary problem domain is motivation and goal achievement, under the umbrella of lifestyle. This
-domain encompasses a few key points and problems:
+Our primary problem domain is motivation and goal achievement, especially in relation to
+lifestyle. This domain encompasses a few key points and problems:
 
 1. Motivation Erosion: Users often struggle to maintain their motivation over time. They may start enthusiastically but 
 gradually lose interest in pursuing their goals. The challenge is to provide consistent and effective motivation to 
@@ -15,7 +15,7 @@ Measurable, Achievable, Relevant, Time-bound) goals and tracking their journey.
 
 3. Maintaining Engagement: Keeping users engaged with the app is a significant challenge. Users might lose interest if 
 they perceive the app's content as repetitive or unhelpful. Ensuring that the app continues to provide value and 
-motivation is vital.
+motivation is vital to providing an effective lifestyle changing solution to the above problems.
 
 
 ## Description
