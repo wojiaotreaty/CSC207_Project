@@ -1,0 +1,47 @@
+package interface_adapter.add_project;
+
+import java.time.LocalDate;
+import java.util.Date;
+
+public class AddProjectState {
+    private String projectTitle = "";
+    private String projectDetails = "";
+
+    private String projectDeadline = "";
+
+    public AddProjectState(AddProjectState copy) {
+        projectTitle = copy.projectTitle;
+        projectDetails = copy.projectDetails;
+        projectDeadline = copy.projectDeadline;
+    }
+
+    public AddProjectState() {
+    }
+
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    public String getProjectDetails() {
+        return projectDetails;
+    }
+    public String getProjectDeadline() { return projectDeadline; }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
+
+    public void setProjectDetails(String projectDetails) {
+        this.projectDetails = projectDetails;
+    }
+    public void setProjectDeadline(String projectDeadline) { this.projectDeadline = projectDeadline; }
+
+    @Override
+    public String toString() {
+        return "AddProjectState{" +
+                "projectTitle='" + projectTitle + '\'' +
+                ", projectDetails='" + projectDetails + '\'' +
+                ", projectDeadline='" + projectDeadline + '\'' +
+                '}';
+    }
+}
