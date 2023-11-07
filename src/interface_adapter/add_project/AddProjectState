@@ -1,8 +1,5 @@
 package interface_adapter.add_project;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 public class AddProjectState {
     private String projectTitle = "";
     private String projectDetails = "";
