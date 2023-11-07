@@ -1,0 +1,26 @@
+package use_case.add_project;
+
+public class AddProjectInputData {
+
+    final private String projectTitle;
+    final private String projectDetails;
+    final private String projectDeadline;
+
+    public AddProjectInputData(String projectTitle, String projectDetails, String projectDeadline) {
+        this.projectTitle = projectTitle;
+        this.projectDetails = projectDetails;
+        this.projectDeadline = projectDeadline;
+    }
+
+    String getProjectTitle() {
+        return projectTitle;
+    }
+
+    String getProjectDetails() {
+        return projectDetails;
+    }
+
+    String getProjectDeadline() {
+        return projectDeadline;
+    }
+}
