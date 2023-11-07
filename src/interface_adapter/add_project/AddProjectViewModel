@@ -11,7 +11,7 @@ public class AddProjectViewModel extends ViewModel {
     public static final String TITLE_LABEL = "Add Project View";
     public static final String PROJECT_TITLE_LABEL = "Enter the project title";
     public static final String PROJECT_DETAILS_LABEL = "Enter the project details";
-    public static final String PROJECT_DEADLINE_LABEL = "Enter the project dealine";
+    public static final String PROJECT_DEADLINE_LABEL = "Enter the project deadline";
 
     private AddProjectState state = new AddProjectState();
 
