@@ -1,0 +1,41 @@
+package interface_adapter.add_project;
+
+import interface_adapter.ViewModel;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
+public class AddProjectViewModel extends ViewModel {
+
+    public static final String ADD_PROJECT_BUTTON_LABEL = "Add Project";
+    public static final String TITLE_LABEL = "Add Project View";
+    public static final String PROJECT_TITLE_LABEL = "Enter the project title";
+    public static final String PROJECT_DETAILS_LABEL = "Enter the project details";
+    public static final String PROJECT_DEADLINE_LABEL = "Enter the project dealine";
+
+    private AddProjectState state = new AddProjectState();
+
+    public AddProjectViewModel() {
+        super("add project");
+    }
+
+    public void setState(AddProjectState state) {
+        this.state = state;
+    }
+
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+
+    // This is what the Signup Presenter will call to let the ViewModel know
+    // to alert the View
+    public void firePropertyChanged() {
+        support.firePropertyChange("state", null, this.state);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public AddProjectState getState() {
+        return state;
+    }
+}
