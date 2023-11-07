@@ -38,7 +38,7 @@ public class AddProjectView extends JPanel implements ActionListener, PropertyCh
         LabelTextPanel projectTitleInfo = new LabelTextPanel(
                 new JLabel(AddProjectViewModel.PROJECT_TITLE_LABEL), projectTitleInputField);
         LabelTextPanel projectDetailsInfo = new LabelTextPanel(
-                new JLabel(AddProjectViewModel.PROJECT_DETAILS_LABEL), projectDetailsInputField);
+                new JLabel(AddProjectViewModel.PROJECT_DETAILS_LABEL), projectDetailsInputArea);
         LabelTextPanel projectDeadlineInfo = new LabelTextPanel(
                 new JLabel(AddProjectViewModel.PROJECT_DEADLINE_LABEL), projectDeadlineInputField);
 
