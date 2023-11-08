@@ -7,11 +7,13 @@ import java.beans.PropertyChangeSupport;
 
 public class AddProjectViewModel extends ViewModel {
 
-    public static final String ADD_PROJECT_BUTTON_LABEL = "Add Project";
-    public static final String TITLE_LABEL = "Add Project View";
+    public static final String ADD_PROJECT_BUTTON_LABEL = "Add";
+    public static final String ADD_PROJECT_TITLE_LABEL = "Add Project View";
+    public static final String MAIN_TITLE_LABEL = "Main Calendar View";
     public static final String PROJECT_TITLE_LABEL = "Enter the project title";
     public static final String PROJECT_DETAILS_LABEL = "Enter the project details";
     public static final String PROJECT_DEADLINE_LABEL = "Enter the project deadline";
+    public static final String PROJECT_POPUP_BUTTON_LABEL = "Add Project";
 
     private AddProjectState state = new AddProjectState();
 
