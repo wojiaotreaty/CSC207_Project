@@ -1,7 +1,5 @@
 package use_case.add_project;
 
-import use_case.env;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
