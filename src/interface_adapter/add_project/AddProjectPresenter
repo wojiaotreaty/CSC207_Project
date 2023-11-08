@@ -1,0 +1,31 @@
+package interface_adapter.add_project;
+
+import use_case.add_project.AddProjectOutputBoundary;
+import use_case.add_project.AddProjectOutputData;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class AddProjectPresenter implements AddProjectOutputBoundary {
+
+    private final AddProjectViewModel addProjectViewModel;
+
+    public AddProjectPresenter(AddProjectViewModel addProjectViewModel) {
+        this.addProjectViewModel = addProjectViewModel;
+    }
+
+    @Override
+    public void prepareSuccessView(AddProjectOutputData response) {
+        LocalDateTime responseTime = LocalDateTime.parse(response.getCreationTime());
+        response.setCreationTime(responseTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")));
+
+        //letting the view know that the calendar has changed in the database so the display needs to be refreshed.
+        addProjectViewModel.firePropertyChanged();
+    }
+    @Override
+    public void prepareFailView(String error) {
+        AddProjectState addProjectState = addProjectViewModel.getState();
+        addProjectState.setAddProjectError(error);
+        addProjectViewModel.firePropertyChanged();
+    }
+}
