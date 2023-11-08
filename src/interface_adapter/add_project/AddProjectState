@@ -3,13 +3,14 @@ package interface_adapter.add_project;
 public class AddProjectState {
     private String projectTitle = "";
     private String projectDetails = "";
-
     private String projectDeadline = "";
+    private String addProjectError = null;
 
     public AddProjectState(AddProjectState copy) {
         projectTitle = copy.projectTitle;
         projectDetails = copy.projectDetails;
         projectDeadline = copy.projectDeadline;
+        addProjectError = copy.addProjectError;
     }
 
     public AddProjectState() {
@@ -23,6 +24,7 @@ public class AddProjectState {
         return projectDetails;
     }
     public String getProjectDeadline() { return projectDeadline; }
+    public String getAddProjectError() { return addProjectError; }
 
     public void setProjectTitle(String projectTitle) {
         this.projectTitle = projectTitle;
@@ -32,6 +34,7 @@ public class AddProjectState {
         this.projectDetails = projectDetails;
     }
     public void setProjectDeadline(String projectDeadline) { this.projectDeadline = projectDeadline; }
+    public void setAddProjectError(String addProjectError) { this.addProjectError = addProjectError; }
 
     @Override
     public String toString() {
