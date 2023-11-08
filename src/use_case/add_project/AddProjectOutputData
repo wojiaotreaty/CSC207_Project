@@ -1,0 +1,19 @@
+package use_case.add_project;
+public class AddProjectOutputData {
+    private String creationTime;
+    private boolean useCaseFailed;
+
+    public AddProjectOutputData(String creationTime, boolean useCaseFailed) {
+        this.creationTime = creationTime;
+        this.useCaseFailed = useCaseFailed;
+    }
+
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+
+}
