@@ -6,11 +6,13 @@ public class Task {
     private String name;
     private LocalDate deadline;
     private String description;
+    private boolean status;
 
     public Task(String name, LocalDate deadline, String description) {
         this.name = name;
         this.deadline = deadline;
         this.description = description;
+        status = false;
     }
 
     public void setName(String name) {
@@ -21,6 +23,9 @@ public class Task {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public void setStatus(boolean status) {
+        this.status = status;
     }
     public String getName() {
         return name;
@@ -33,5 +38,7 @@ public class Task {
         return description;
     }
 
-
+    public boolean getStatus() {
+        return status;
+    }
 }
