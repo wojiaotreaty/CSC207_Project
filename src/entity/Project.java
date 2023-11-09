@@ -15,6 +15,12 @@ public class Project {
         this.deadline = deadline;
         tasks = new ArrayList<Task>();
     }
+    public Project(int id, String name, LocalDate deadline, ArrayList<Task> tasks) {
+        this.id = id;
+        this.name = name;
+        this.deadline = deadline;
+        this.tasks = new ArrayList<Task>(tasks);
+    }
 
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
@@ -28,5 +34,22 @@ public class Project {
     }
     public String getName() {
         return name;
+    }
+    // adds task to tasks such that it is the first task with its deadline chronologically.
+    public void addTask(Task task) {
+        if (tasks.isEmpty()) {
+            tasks.add(task);
+        } else {
+            LocalDate taskDeadline = task.getDeadline();
+            int i = 0;
+            while (i < tasks.size() && tasks.get(i).getDeadline().isBefore(taskDeadline)) {
+                i++;
+            }
+            if (i == tasks.size()) {
+                tasks.add(task);
+            } else {
+                tasks.add(i, task);
+            }
+        }
     }
 }
