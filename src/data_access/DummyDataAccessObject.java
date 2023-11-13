@@ -16,7 +16,7 @@ public class DummyDataAccessObject implements AddProjectDataAccessInterface{
     HashMap<String, String> credentialsInMemory;
     HashMap<String, UserCalendar> gmailCalendarMap;
 
-//    This part is necessary
+//    This part (or something similar) will be necessary
     String currentUserGmail;
     UserCalendar currentCalendar;
 
@@ -35,7 +35,7 @@ public class DummyDataAccessObject implements AddProjectDataAccessInterface{
     }
 
     /**
-     * NOTE: this method should exclusively be used for building tests with blank users. <br>
+     * NOTE: this method should exclusively be used for building tests with predetermined user templates. <br>
      * Creates a new user in memory with a calendar that includes the given tasks. <br>
      * If there already exists a user with the same gmail, the old one will be overwritten.
      */
@@ -71,6 +71,9 @@ public class DummyDataAccessObject implements AddProjectDataAccessInterface{
         return currentCalendar.tasks;
     }
 
+    /**
+     * Adds all the given tasks to the calendar associated with the current user.
+     */
     @Override
     public void saveTasks(ArrayList<HashMap<String, String>> tasks){
         currentCalendar.tasks.addAll(tasks);
