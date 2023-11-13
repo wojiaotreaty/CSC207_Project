@@ -12,5 +12,5 @@ public interface AddProjectDataAccessInterface {
      *      - TaskDeadline: <deadline of the task>
      * @param taskMap
      */
-    void saveTasks(ArrayList<HashMap<String, String>> taskMap);
+    void saveTasks(ArrayList<HashMap<String, String>> tasks);
 }
