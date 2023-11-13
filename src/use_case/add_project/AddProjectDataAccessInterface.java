@@ -5,11 +5,13 @@ import java.util.HashMap;
 
 public interface AddProjectDataAccessInterface {
     /**
-     * Takes an ArrayList of tasks to put into the calendar. Each task is represented by a HashMap, mapping
-     * an attribute of the task to its value. Each task will have the following keys and values:
+     * @param projectTitle - the title of the project
+     * @param tasks - an ArrayList representing the subtasks that the project has been broken down to, to put into the
+     * calendar. Each task is represented by a HashMap, mapping an attribute of the task to its value. Each subtask will
+     * have the following keys and values:
      *      - TaskName: <name of the task>
      *      - TaskDescription: <description of the task>
      *      - TaskDeadline: <deadline of the task>
      */
-    void saveTasks(ArrayList<HashMap<String, String>> tasks);
+    void saveTasks(String projectTitle, ArrayList<HashMap<String, String>> tasks);
 }

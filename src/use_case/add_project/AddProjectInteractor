@@ -89,7 +89,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
                 throw new RuntimeException(e);
             }
 
-            userDataAccessObject.saveTasks(tasks);
+            userDataAccessObject.saveTasks(addProjectInputData.getProjectTitle(), tasks);
             //TODO: why are we returning taskMap? That should be directly applied to the calendar, not returned to the user.
             AddProjectOutputData addProjectOutputData = new AddProjectOutputData(now.toString(), false);
             userPresenter.prepareSuccessView(addProjectOutputData);
