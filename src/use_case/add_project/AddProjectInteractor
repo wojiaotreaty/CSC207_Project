@@ -41,7 +41,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
             }
             String model = "gpt-3.5-turbo";
 
-            HashMap<String, String> taskMap = null;
+            ArrayList<HashMap<String, String>> tasks = new ArrayList<HashMap<String, String>>();
             try {
                 URL obj = new URI(url).toURL();
                 HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
@@ -73,13 +73,11 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
                 }
                 br.close();
 
-                ArrayList<Object> tasks = new ArrayList<Object>();
-
                 String[] tasksArray = extractMessageFromJSONResponse(response.toString()).split(";", 0);
 
                 for (String task : tasksArray) {
                     String[] taskAttributes = task.split(",");
-                    taskMap = new HashMap<String, String>();
+                    HashMap<String, String> taskMap = new HashMap<String, String>();
                     taskMap.put("TaskName", taskAttributes[0]);
                     taskMap.put("TaskDescription", taskAttributes[1]);
                     taskMap.put("TaskDeadline", taskAttributes[2]);
@@ -91,7 +89,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
                 throw new RuntimeException(e);
             }
 
-            userDataAccessObject.saveTasks(taskMap);
+            userDataAccessObject.saveTasks(tasks);
             //TODO: why are we returning taskMap? That should be directly applied to the calendar, not returned to the user.
             AddProjectOutputData addProjectOutputData = new AddProjectOutputData(now.toString(), false);
             userPresenter.prepareSuccessView(addProjectOutputData);
