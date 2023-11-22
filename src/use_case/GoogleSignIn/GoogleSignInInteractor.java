@@ -1,4 +1,4 @@
-package use_case.GoogleLogin;
+package use_case.GoogleSignIn;
 
 public class GoogleSignInInteractor {
 }
