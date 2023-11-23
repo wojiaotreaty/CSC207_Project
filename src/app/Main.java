@@ -1,2 +1,4 @@
-package app;public class Main {
+package app;
+public class Main {
+
 }
