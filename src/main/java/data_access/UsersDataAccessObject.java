@@ -91,10 +91,23 @@ public class UsersDataAccessObject {
 //                if the user exists, overwrite it in the modified file content
                 if (currentName.equals(username)){
                     String password = String.valueOf(col[headers.get("password")]);
-                    StringBuilder projectIDs = new StringBuilder();
 
+                    ArrayList<String> newProjectIds = new ArrayList<>();
                     for (Project project : user.getProjects()){
-                        projectIDs.append(project.getProjectID()).append(";");
+                        newProjectIds.add(project.getProjectID());
+                    }
+
+//                    Check for deleted projects
+                    String[] oldProjectIds = String.valueOf(col[headers.get("projectIDs")]).split(";");
+                    for (int i = 0; i < oldProjectIds.length; i++){
+                        if (!newProjectIds.contains(oldProjectIds[i])){
+                            projectsDAO.deleteProject(oldProjectIds[i]);
+                        }
+                    }
+//                    Create the new projectIDs string
+                    StringBuilder projectIDs = new StringBuilder();
+                    for (String id : newProjectIds) {
+                        projectIDs.append(id).append(";");
                     }
 
                     row = username + "," + password + "," + projectIDs;
