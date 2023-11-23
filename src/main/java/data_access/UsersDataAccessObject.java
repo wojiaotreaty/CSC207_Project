@@ -121,7 +121,7 @@ public class UsersDataAccessObject {
 //            if user does not exist, append it in the modified file content
 //            ProjectID is set to -1 to indicate there are no projects associated with the user
             if (!userExists){
-                inputBuffer.append(username + "," + user.getPassword() + "," + "-1");
+                inputBuffer.append(username + "," + user.getPassword() + "," + "-1").append('\n');
             }
 
             reader.close();
