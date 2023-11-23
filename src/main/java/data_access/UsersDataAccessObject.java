@@ -5,6 +5,7 @@ import entity.User;
 import entity.UserFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * This DAO interacts with information of users (email, list of projects).
+ * This DAO interacts with information of users (username, password, list of projects).
  * It DOES NOT have project information.
  */
 
@@ -40,8 +41,9 @@ public class UsersDataAccessObject {
         this.projectsDAO = projectsDAO;
 
         usersCsvFile = new File(usersCsvPath);
-        headers.put("email", 0);
-        headers.put("projectIDs", 1);
+        headers.put("username", 0);
+        headers.put("password", 1);
+        headers.put("projectIDs", 2);
 
         if (usersCsvFile.length() == 0) {
 //            If no existing csv file exists, write a csv file that only contains the headers
@@ -52,63 +54,119 @@ public class UsersDataAccessObject {
         }
     }
 
+    /**
+     *
+     * @param currentUser
+     */
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
-//    Do this when we are just operating on the current user.
+    //    Do this when we are just operating on the current user.
     private void saveUser(){
-        saveUser(currentUser.getEmail());
+        saveUser(currentUser);
     }
 
-//    TODO: finish the saveUser method
     /**
-     * Adds the user if it does not exist yet.
-     * If the user does exist, save it.
+     * Adds a user with no projects if user does not exist yet.
+     * If the user does exist, save it (saves all the projects it owns and updates user info).
+     * Does not allow for changing passwords.
+     * @return true if the user previously existed in the database, false if not.
      */
-    private void saveUser(String email) {
+    private boolean saveUser(User user) {
+        String username = user.getUsername();
+        boolean userExists = false;
 
-    }
+//        Save all the projects that user is associated with
+        for (Project project: user.getProjects()){
+            projectsDAO.saveProject(project);
+        }
 
-
-    /**
-     * Uses the Google API to log in the user.
-     * If the user does not exist in our local database, create a matching entry.
-     * If successful, builds the matching User and sets it to currentUser.
-     * @param email
-     */
-//    TODO: finish the login method
-//    Calls Google API for authentication
-//    Calls ProjectDAO for building the projects
-    public void login(String email, String password){
-
-//        TODO: authentication using Google
-
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(usersCsvFile))) {
-            String header = reader.readLine();
-            // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-            assert header.equals("email,projectIDs");
+        try {
+            // input the (modified) file content to the StringBuffer "input"
+            BufferedReader reader = new BufferedReader(new FileReader(usersCsvFile));
+            StringBuffer inputBuffer = new StringBuffer();
 
             String row;
             while ((row = reader.readLine()) != null) {
                 String[] col = row.split(",");
-                String currentEmail = String.valueOf(col[headers.get("email")]);
-                if (currentEmail.equals(email)){
-                    String projectIDs = String.valueOf(col[headers.get("projectIDs")]);
-                    String[] projectIDsCol = projectIDs.split(",");
-                    ArrayList<Project> projects = new ArrayList<>();
-                    for (String id : projectIDsCol){
-//                        projects.add(projectsDAO.get(id));
+                String currentName = String.valueOf(col[headers.get("username")]);
+
+//                if the user exists, overwrite it in the modified file content
+                if (currentName.equals(username)){
+                    String password = String.valueOf(col[headers.get("password")]);
+                    StringBuilder projectIDs = new StringBuilder();
+
+                    for (Project project : user.getProjects()){
+                        projectIDs.append(project.getProjectID()).append(";");
                     }
-                    User user = userFactory.create(currentEmail, projects);
-                    currentUser = user;
-                    return;
+
+                    row = username + "," + password + "," + projectIDs;
+                    userExists = true;
                 }
+
+                inputBuffer.append(row);
+                inputBuffer.append('\n');
             }
 
-//            TODO: handle case where user does not exist in local database
+//            if user does not exist, append it in the modified file content
+//            ProjectID is set to -1 to indicate there are no projects associated with the user
+            if (!userExists){
+                inputBuffer.append(username + "," + user.getPassword() + "," + "-1");
+            }
 
+            reader.close();
 
-        } catch (IOException e){
-//            TODO: what to do when it is caught?
+            // write the new string with the replaced line OVER the same file
+            FileOutputStream fileOut = new FileOutputStream(usersCsvFile);
+            fileOut.write(inputBuffer.toString().getBytes());
+            fileOut.close();
+
+            return userExists;
+
+        } catch (IOException e) {
+            throw new RuntimeException("ERROR: problem reading file when saving the user");
         }
     }
+
+
+    /**
+     * Precondition: username exists in the database.
+     * @return the User if successful. null if no user with this username exists in the database.
+     */
+    public User getUser(String username){
+        try (BufferedReader reader = new BufferedReader(new FileReader(usersCsvFile))) {
+            String header = reader.readLine();
+            // For later: clean this up by creating a new Exception subclass and handling it in the UI.
+            assert header.equals("username,password,projectIDs");
+
+            String row;
+            while ((row = reader.readLine()) != null) {
+                String[] col = row.split(",");
+                String currentName = String.valueOf(col[headers.get("username")]);
+                String currentPassword = String.valueOf(col[headers.get("password")]);
+                if (currentName.equals(username)){
+                    String projectIDs = String.valueOf(col[headers.get("projectIDs")]);
+
+//                    If there is no project associated with the user
+                    if (projectIDs.equals("-1")){
+                        return userFactory.create(currentName, currentPassword, new ArrayList<>());
+                    }
+
+                    String[] projectIDsCol = projectIDs.split(";");
+                    ArrayList<Project> projects = new ArrayList<>();
+                    for (String id : projectIDsCol){
+                        projects.add(projectsDAO.getProject(id));
+                    }
+                    return userFactory.create(currentName, currentPassword, projects);
+                }
+            }
+            return null;
+
+        } catch (IOException e){
+            throw new RuntimeException("ERROR: problem reading file when getting the user");
+        }
+    }
+
+
 }

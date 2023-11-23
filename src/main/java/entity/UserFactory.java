@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 public interface UserFactory {
 
-    User create(String email, ArrayList<Project> projects);
+    User create(String username, String password, ArrayList<Project> projects);
 }
