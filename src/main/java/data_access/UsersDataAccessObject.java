@@ -3,12 +3,10 @@ package data_access;
 import entity.Project;
 import entity.User;
 import entity.UserFactory;
+import use_case.add_project.AddProjectDataAccessInterface;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -54,12 +52,12 @@ public class UsersDataAccessObject {
         }
     }
 
-    /**
-     *
-     * @param currentUser
-     */
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public User getCurrentUser(){
+        return currentUser;
     }
 
     //    Do this when we are just operating on the current user.
