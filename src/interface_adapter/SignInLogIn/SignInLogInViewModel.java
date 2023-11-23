@@ -1,14 +1,14 @@
-package interface_adapter.GoogleSignIn;
+package interface_adapter.SignInLogIn;
 import interface_adapter.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class GoogleSignInViewModel extends ViewModel {
+public class SignInLogInViewModel extends ViewModel {
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    public GoogleSignInViewModel(String viewName) {
+    public SignInLogInViewModel(String viewName) {
         super("GoogleSignIn");
     }
 
