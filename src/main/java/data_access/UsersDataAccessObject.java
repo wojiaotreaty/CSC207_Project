@@ -3,7 +3,6 @@ package data_access;
 import entity.Project;
 import entity.User;
 import entity.UserFactory;
-import use_case.add_project.AddProjectDataAccessInterface;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,10 +28,9 @@ public class UsersDataAccessObject {
     private User currentUser;
 
 
-//    TODO: finish the UsersDAO constructor
     /**
      * Note that no Users are built at time of DAO construction.
-     * Instead, only the currentUser is built on successful login.
+     * Instead, the currentUser (only) is built on successful login.
      */
     public UsersDataAccessObject(String usersCsvPath, UserFactory userFactory, ProjectsDataAccessObject projectsDAO) throws IOException {
         this.userFactory = userFactory;
@@ -60,8 +58,10 @@ public class UsersDataAccessObject {
         return currentUser;
     }
 
-    //    Do this when we are just operating on the current user.
-    private void saveUser(){
+    /**
+     * Use this method when you are only operating on the currentUser.
+     */
+    public void saveUser(){
         saveUser(currentUser);
     }
 
@@ -71,14 +71,12 @@ public class UsersDataAccessObject {
      * Does not allow for changing passwords.
      * @return true if the user previously existed in the database, false if not.
      */
-    private boolean saveUser(User user) {
+    public boolean saveUser(User user) {
         String username = user.getUsername();
         boolean userExists = false;
 
 //        Save all the projects that user is associated with
-        for (Project project: user.getProjects()){
-            projectsDAO.saveProject(project);
-        }
+        projectsDAO.saveProjects(user.getProjects());
 
         try {
             // input the (modified) file content to the StringBuffer "input"
@@ -152,10 +150,7 @@ public class UsersDataAccessObject {
                     }
 
                     String[] projectIDsCol = projectIDs.split(";");
-                    ArrayList<Project> projects = new ArrayList<>();
-                    for (String id : projectIDsCol){
-                        projects.add(projectsDAO.getProject(id));
-                    }
+                    ArrayList<Project> projects = projectsDAO.getProjects(projectIDsCol);
                     return userFactory.create(currentName, currentPassword, projects);
                 }
             }
