@@ -1,4 +1,10 @@
 package use_case.delete_project;
-//TODO: implement data access interface
+
+import entity.User;
+
 public interface DeleteProjectDataAccessInterface {
+
+    User getCurrentUser();
+
+    void saveUser();
 }
