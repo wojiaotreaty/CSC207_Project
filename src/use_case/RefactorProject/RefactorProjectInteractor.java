@@ -49,7 +49,7 @@ import java.util.Objects;
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            // claculating the time difference between the currentdate and the deadline date
+            // claculating the time difference between the current date and the deadline date
             long time_difference = deadline_date.getTime() - now.getTime();
             double deci_days = time_difference / 86400000;
             long days = Math.round(deci_days);
