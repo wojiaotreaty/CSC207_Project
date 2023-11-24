@@ -9,11 +9,11 @@ public class DeleteProjectOutputData {
         this.projectName = projectName;
     }
 
-    String getProjectId() {
+    public String getProjectId() {
         return projectId;
     }
 
-    String getProjectName() {
+    public String getProjectName() {
         return projectName;
     }
 
