@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * This file is a placeholder for DAO functionality.
  */
-public interface UserFactory {
+public interface UserFactoryInterface {
 
-    User create(String username, String password, ArrayList<Project> projects);
+    UserInterface create(String username, String password, ArrayList<Project> projects);
 }

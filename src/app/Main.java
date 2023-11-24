@@ -1,12 +1,11 @@
 package app;
 
-import data_access.FileUserDataAccessObject;
-import entity.CommonUserFactory;
+import data_access.UserDataAccessObject;
+import entity.UserFactory;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-import use_case.login.LoginDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
@@ -42,11 +41,10 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
-//        ClearViewModel clearViewModel = new ClearViewModel();
 
-        FileUserDataAccessObject userDataAccessObject;
+        UserDataAccessObject userDataAccessObject;
         try {
-            userDataAccessObject = new FileUserDataAccessObject("./users.csv", new CommonUserFactory());
+            userDataAccessObject = new UserDataAccessObject("./users.csv", new UserFactory());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,9 +1,8 @@
 package entity;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class CommonUser implements User {
+public class User implements UserInterface {
 
     private final String name;
     private final String password;
@@ -14,7 +13,7 @@ public class CommonUser implements User {
      * @param name
      * @param password
      */
-    CommonUser(String name, String password, ArrayList<Project> projects) {
+    User(String name, String password, ArrayList<Project> projects) {
         this.name = name;
         this.password = password;
         this.projects = projects;

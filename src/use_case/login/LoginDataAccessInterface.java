@@ -1,11 +1,10 @@
 package use_case.login;
 
-import entity.CommonUser;
+import entity.User;
 
 public interface LoginDataAccessInterface {
-    boolean existsByName(String identifier);
 
-    void save(CommonUser user);
+    User getUser(String username);
+    boolean saveUser(User user);
 
-    CommonUser get(String username);
 }
