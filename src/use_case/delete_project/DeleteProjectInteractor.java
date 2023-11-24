@@ -6,18 +6,18 @@ import interface_adapter.delete_project.DeleteProjectPresenter;
 
 public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
 
-    final private DeleteProjectDataAccessInterface deleteDataAccessObject;
-    final private DeleteProjectOutputBoundary deletePresenter;
+    final private DeleteProjectDataAccessInterface userDataAccessObject;
+    final private DeleteProjectOutputBoundary deleteProjectPresenter;
 
-    public DeleteProjectInteractor(DeleteProjectDataAccessInterface deleteDataAccessObject, DeleteProjectOutputBoundary deletePresenter) {
-        this.deleteDataAccessObject = deleteDataAccessObject;
-        this.deletePresenter = deletePresenter;
+    public DeleteProjectInteractor(DeleteProjectDataAccessInterface userDataAccessObject, DeleteProjectOutputBoundary deleteProjectPresenter) {
+        this.userDataAccessObject = userDataAccessObject;
+        this.deleteProjectPresenter = deleteProjectPresenter;
     }
 
     @Override
     public void execute(DeleteProjectInputData deleteProjectInputData) {
         String projectId = deleteProjectInputData.getProjectId();
-        User currentUser = deleteDataAccessObject.getCurrentUser();
+        User currentUser = userDataAccessObject.getCurrentUser();
 
         Project deletedProject = currentUser.deleteProject(projectId);
 
@@ -26,10 +26,10 @@ public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
             throw new RuntimeException("Issue occurred while deleting project");
         }
 
-        deleteDataAccessObject.saveUser();
+        userDataAccessObject.saveUser();
 
         String projectName = deletedProject.getProjectName();
         DeleteProjectOutputData deleteProjectOutputData = new DeleteProjectOutputData(projectId, projectName);
-        deletePresenter.prepareSuccessView(deleteProjectOutputData);
+        deleteProjectPresenter.prepareSuccessView(deleteProjectOutputData);
     }
 }
