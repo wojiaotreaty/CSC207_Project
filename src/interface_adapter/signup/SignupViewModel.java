@@ -1,11 +1,10 @@
-package interface_adapter.SignInLogIn;
+package interface_adapter.signup;
 import interface_adapter.ViewModel;
 
-import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class SignInLogInViewModel extends ViewModel {
+public class SignupViewModel extends ViewModel {
 
     public static final String TITLE_LABEL = "Sign in View";
     public static final String USERNAME_LABEL = "Choose username";
@@ -15,8 +14,8 @@ public class SignInLogInViewModel extends ViewModel {
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    public SignInLogInViewModel(String viewName) {
-        super("GoogleSignIn");
+    public SignupViewModel() {
+        super("Sign up");
     }
 
     @Override
