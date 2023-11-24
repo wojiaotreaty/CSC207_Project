@@ -12,6 +12,6 @@ public class NotificationController {
     }
     public void execute(LocalDate date) {
         NotificationInputData notificationInputData = new NotificationInputData(date);
-        notificationInteractor.execute(notificationInputData)
+        notificationInteractor.execute(notificationInputData);
     }
 }
