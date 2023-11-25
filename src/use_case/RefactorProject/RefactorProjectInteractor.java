@@ -31,31 +31,36 @@ import java.util.Objects;
         @Override
         public void execute(RefactorProjectInputData refactorProjectInputData) {
             Date now = new Date();
-            Project project = refactorProjectInputData.getProject();
+            Project Project = refactorProjectInputData.getProject();
             ArrayList<HashMap<String, String>> tasks = refactorProjectInputData.getTasks();
-            int task_index = 0;
-            while (tasks.get(task_index).get("Done") == "1") {
-                task_index++;
+            int taskIndex = 0;
+            while (tasks.get(taskIndex).get("Done") == "1") {
+                taskIndex++;
             }
             //getting the task which was completed most recently just before the deadline
-            HashMap<String, String> completed_task = tasks.get(task_index - 1);
+            HashMap<String, String> completedTask = tasks.get(taskIndex - 1);
             // getting the deadline
-            String deadline = completed_task.get("TaskDeadline");
+            String deadline = completedTask.get("TaskDeadline");
             // assuming the TasksDeadline is in "YYYY-MM-DD" format
             SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
-            Date deadline_date = null;
+            Date deadlineDate = null;
             try {
-                deadline_date = formatter.parse(deadline);
+                deadlineDate = formatter.parse(deadline);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
             // claculating the time difference between the current date and the deadline date
-            long time_difference = deadline_date.getTime() - now.getTime();
-            double deci_days = time_difference / 86400000;
-            long days = Math.round(deci_days);
+            long timeDifference = deadlineDate.getTime() - now.getTime();
+            double deciDays = timeDifference / 86400000;
+            long days = Math.round(deciDays);
             ArrayList<LocalDate> dates = new ArrayList<>();
-            for (int i = task_index; i < tasks.size(); i++) {
-
+            for (int i = taskIndex; i < tasks.size(); i++) {
+                String taskDeadline=tasks.get(i).get("TaskDeadline");
+                LocalDate date= LocalDate.parse(taskDeadline);
+                 LocalDate shiftedTaskDeadline=date.minusDays(days);
+                 String shiftedTaskDeadlineString=shiftedTaskDeadline.toString();
+                 tasks.get(i).put("TaskDeadline",shiftedTaskDeadlineString);
             }
+
         }
     }
