@@ -11,6 +11,12 @@ public class User {
         this.password = password;
         this.projects = new ArrayList<Project>();
     }
+    public String getUsername() {
+        return username;
+    }
+    public String getPassword() {
+        return password;
+    }
     public ArrayList<Project> getProjects() {
         return (ArrayList<Project>) projects.clone();
     }
