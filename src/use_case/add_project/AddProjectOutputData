@@ -1,19 +1,21 @@
 package use_case.add_project;
 public class AddProjectOutputData {
-    private String creationTime;
-    private boolean useCaseFailed;
 
-    public AddProjectOutputData(String creationTime, boolean useCaseFailed) {
-        this.creationTime = creationTime;
-        this.useCaseFailed = useCaseFailed;
+    private String projectID = "";
+    private String projectTitle = "";
+    private String projectDescription = "";
+    private String projectTasks = "";
+
+
+    public AddProjectOutputData(String projectID, String projectTitle, String projectDescription, String projectTasks) {
+        this.projectID = projectID;
+        this.projectTitle = projectTitle;
+        this.projectDescription = projectDescription;
+        this.projectTasks = projectTasks;
     }
 
-    public String getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(String creationTime) {
-        this.creationTime = creationTime;
-    }
-
+    public String getProjectID () { return this.projectID; }
+    public String getProjectTitle () { return this.projectTitle; }
+    public String getProjectDescription () { return this.projectDescription; }
+    public String getProjectTasks () { return this.projectTasks; }
 }
