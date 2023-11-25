@@ -70,7 +70,9 @@ public class NotificationInteractor implements NotificationInputBoundary {
             // generates gpt query and executes the api call using helper functions
             String gptQuery = generateQuery(duePlusOne, duePlusTwo, dueToday);
             String gptOutput = apiCall(gptQuery);
-
+            // Creates output data and calls presenter
+            NotificationOutputData notificationOutputData = new NotificationOutputData(gptOutput);
+            notificationPresenter.prepareNotificationView(notificationOutputData);
         }
 
 
