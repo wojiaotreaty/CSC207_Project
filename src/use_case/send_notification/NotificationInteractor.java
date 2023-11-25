@@ -70,6 +70,7 @@ public class NotificationInteractor implements NotificationInputBoundary {
             // generates gpt query and executes the api call using helper functions
             String gptQuery = generateQuery(duePlusOne, duePlusTwo, dueToday);
             String gptOutput = apiCall(gptQuery);
+
         }
 
 
@@ -129,7 +130,8 @@ public class NotificationInteractor implements NotificationInputBoundary {
             q.append("}\n");
         }
         q.append("Briefly give me some advice for how I should get started, as well as some encouragement" +
-                "and motivation.");
+                "and motivation.\n");
+        q.append("IMPORTANT: mark the beginning and end of your response with \"|uwu|\"");
         return String.valueOf(q);
     }
     private static String apiCall(String query) {
@@ -153,12 +155,7 @@ public class NotificationInteractor implements NotificationInputBoundary {
 
             // The request body
             String body = "{\"model\": \"" + model + "\", \"messages\": " +
-                    "[{\"role\": \"user\", \"content\": \"___ Here are the details of a project I am working on: Project Title: " +
-                    addProjectInputData.getProjectTitle() + ". Project Description: " + addProjectInputData.getProjectDetails() +
-                    ". Project Deadline: " + addProjectInputData.getProjectDeadline() + ". Given this project, " +
-                    "break it down into smaller subtasks. I want your response formatted EXACTLY in the following " +
-                    "way: ;<insert task name>, <insert brief task description>, <insert task deadline>; another task;" +
-                    " .... Do not include an opening or closing sentence in your response. ___\"___}]}";
+                    "[{\"role\": \"user\", \"content\": \"" + query + "\"}]}";
             connection.setDoOutput(true);
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(body);
@@ -175,21 +172,17 @@ public class NotificationInteractor implements NotificationInputBoundary {
             }
             br.close();
 
-            String[] tasksArray = extractMessageFromJSONResponse(response.toString()).split(";", 0);
-
-            for (String task : tasksArray) {
-                String[] taskAttributes = task.split(",");
-                HashMap<String, String> taskMap = new HashMap<String, String>();
-                taskMap.put("TaskName", taskAttributes[0]);
-                taskMap.put("TaskDescription", taskAttributes[1]);
-                taskMap.put("TaskDeadline", taskAttributes[2]);
-
-                tasks.add(taskMap);
-            }
+            return extractMessage(response.toString());
 
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        return "";
+    }
+    private static String extractMessage(String response) {
+        int start = response.indexOf("|uwu|");
+
+        int end = response.indexOf("|uwu|", start + 5);
+
+        return response.substring(start, end);
     }
 }
