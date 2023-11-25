@@ -4,47 +4,30 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Project {
-    private final int id;
-    private String name;
-    private LocalDate deadline;
+    private final String id;
+    private final String name;
+    private final String description;
     private ArrayList<Task> tasks;
-    private boolean status;
 
-    public Project(int id, String name, LocalDate deadline) {
+    public Project(String id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.deadline = deadline;
+        this.description = description;
         tasks = new ArrayList<Task>();
-        status = false;
-    }
-    public Project(int id, String name, LocalDate deadline, ArrayList<Task> tasks) {
-        this.id = id;
-        this.name = name;
-        this.deadline = deadline;
-        this.tasks = new ArrayList<Task>(tasks);
-        status = false;
     }
 
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public LocalDate getDeadline() {
-        return deadline;
-    }
     public String getName() {
         return name;
     }
-    public boolean getStatus() {
-        return status;
+    public ArrayList<Task> getTasks() {
+        return (ArrayList<Task>) tasks.clone();
+    }
+    public String getId() {
+        return id;
     }
     // adds task to tasks such that it is the first task with its deadline chronologically.
     public void addTask(Task task) {
