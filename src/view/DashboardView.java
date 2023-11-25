@@ -192,6 +192,11 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
     public void propertyChange(PropertyChangeEvent evt) {
         DashboardState state = (DashboardState) evt.getNewValue();
+
+        if (state.getAddProjectError() != null) {
+            JOptionPane.showMessageDialog(this, state.getAddProjectError());
+            state.setAddProjectError(null);
+        }
         displayAllProjects();
     }
 }
