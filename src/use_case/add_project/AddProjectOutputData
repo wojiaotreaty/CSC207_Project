@@ -1,21 +1,17 @@
 package use_case.add_project;
-public class AddProjectOutputData {
 
-    private String projectID = "";
-    private String projectTitle = "";
-    private String projectDescription = "";
-    private String projectTasks = "";
+import java.util.ArrayList;
+
+public class AddProjectOutputData {
+    private ArrayList<String> project = new ArrayList<String>();
 
 
     public AddProjectOutputData(String projectID, String projectTitle, String projectDescription, String projectTasks) {
-        this.projectID = projectID;
-        this.projectTitle = projectTitle;
-        this.projectDescription = projectDescription;
-        this.projectTasks = projectTasks;
-    }
+        this.project.add(projectID);
+        this.project.add(projectTitle);
+        this.project.add(projectDescription);
+        this.project.add(projectTasks);
 
-    public String getProjectID () { return this.projectID; }
-    public String getProjectTitle () { return this.projectTitle; }
-    public String getProjectDescription () { return this.projectDescription; }
-    public String getProjectTasks () { return this.projectTasks; }
+    }
+    public ArrayList<String> getProject () { return this.project; }
 }
