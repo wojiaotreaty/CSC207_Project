@@ -7,10 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class AddProjectInteractor implements AddProjectInputBoundary {
     final AddProjectDataAccessInterface userDataAccessObject;
@@ -26,79 +24,92 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
 
     @Override
     public void execute(AddProjectInputData addProjectInputData) {
-        if (Objects.equals(addProjectInputData.getProjectTitle().strip(), "")) {
-            userPresenter.prepareFailView("Project is missing a title.");
-        } else if (Objects.equals(addProjectInputData.getProjectDetails().strip(), "")) {
-            userPresenter.prepareFailView("Project details are missing.");
-        } else if (Objects.equals(addProjectInputData.getProjectDeadline().strip(), "")) {
-            userPresenter.prepareFailView("Project is missing a deadline.");
-        } else {
-            LocalDateTime now = LocalDateTime.now();
 
-            String url = "https://api.openai.com/v1/chat/completions";
-            String apiKey;
+        String url = "https://api.openai.com/v1/chat/completions";
+        String apiKey;
 
-            try (BufferedReader br = new BufferedReader(new FileReader("../apikey.txt"))) {
-                apiKey = br.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            String model = "gpt-3.5-turbo";
-
-            ArrayList<HashMap<String, String>> tasks = new ArrayList<HashMap<String, String>>();
-            try {
-                URL obj = new URI(url).toURL();
-                HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Authorization", "Bearer " + apiKey);
-                connection.setRequestProperty("Content-Type", "application/json");
-
-                // The request body
-                String body = "{\"model\": \"" + model + "\", \"messages\": " +
-                        "[{\"role\": \"user\", \"content\": \"Here are the details of a project I am working on: Project Title: " +
-                        addProjectInputData.getProjectTitle() + ". Project Description: " + addProjectInputData.getProjectDetails() +
-                        ". Project Deadline: " + addProjectInputData.getProjectDeadline() + ". Given this project, " +
-                        "break it down into smaller subtasks. I want your response formatted EXACTLY in the following " +
-                        "way: ;<insert task name>, <insert brief task description>, <insert task deadline>; another task;" +
-                        " .... Do not include an opening or closing sentence in your response.\"}]}";
-                connection.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-                writer.write(body);
-                writer.flush();
-                writer.close();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-
-                StringBuilder response = new StringBuilder();
-
-                while ((line = br.readLine()) != null) {
-                    response.append(line);
-                }
-                br.close();
-
-                String[] tasksArray = extractMessageFromJSONResponse(response.toString()).split(";", 0);
-
-                for (String task : tasksArray) {
-                    String[] taskAttributes = task.split(",");
-                    HashMap<String, String> taskMap = new HashMap<String, String>();
-                    taskMap.put("TaskName", taskAttributes[0]);
-                    taskMap.put("TaskDescription", taskAttributes[1]);
-                    taskMap.put("TaskDeadline", taskAttributes[2]);
-
-                    tasks.add(taskMap);
-                }
-
-            } catch (IOException | URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-            Project project = projectFactory.create(addProjectInputData.getProjectTitle(), tasks);
-
-            userDataAccessObject.saveTasks(project);
-            //TODO: why are we returning taskMap? That should be directly applied to the calendar, not returned to the user.
-            AddProjectOutputData addProjectOutputData = new AddProjectOutputData(now.toString(), false);
-            userPresenter.prepareSuccessView(addProjectOutputData);
+        try (BufferedReader br = new BufferedReader(new FileReader("../apikey.txt"))) {
+            apiKey = br.readLine();
+        } catch (IOException e) {
+            userPresenter.prepareFailView("Failed to fetch API key: " + e.toString());
         }
+        String model = "gpt-3.5-turbo";
+
+        //A list of tasks. Each task is a list structured as follows: {Task Name, Task Desc, Task Deadline}
+        ArrayList<ArrayList<String>> tasks = new ArrayList<ArrayList<String>>();
+        StringBuilder tasksString = new StringBuilder();
+
+        try {
+            URL obj = new URI(url).toURL();
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+            connection.setRequestProperty("Content-Type", "application/json");
+
+            // The request body
+            String body = "{\"model\": \"" + model + "\", \"messages\": " +
+                    "[{\"role\": \"user\", \"content\": \"Here are the details of a project I am working on: Project Title: " +
+                    addProjectInputData.getProjectTitle() + ". Project Description: " + addProjectInputData.getProjectDetails() +
+                    ". Project Deadline: " + addProjectInputData.getProjectDeadline() + ". Given this project, " +
+                    "break it down into smaller subtasks. I want your response formatted EXACTLY in the following " +
+                    "way: ;<insert task name>@ <insert brief task description>@ <insert task deadline as YYYY/MM/DD>; another task;" +
+                    " .... Do not include an opening or closing sentence in your response.\"}]}";
+            connection.setDoOutput(true);
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+            writer.write(body);
+            writer.flush();
+            writer.close();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+
+            StringBuilder response = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            String[] tasksArray = extractMessageFromJSONResponse(response.toString()).split(";", 0);
+
+            for (String task : tasksArray) {
+                String[] taskAttributes = task.split("@");
+                ArrayList<String> taskList = new ArrayList<String>();
+                taskList.add(taskAttributes[0]);
+                tasksString.append(taskAttributes[0]).append('`');
+                taskList.add(taskAttributes[1]);
+                tasksString.append(taskAttributes[1]).append('`');
+                taskList.add(taskAttributes[2]);
+                tasksString.append(taskAttributes[0]).append("|uwu|");
+
+                tasksString.append(tasks.add(taskList));
+            }
+
+        } catch (IOException | URISyntaxException e) {
+            userPresenter.prepareFailView("Task generation failed: " + e.toString());
+        }
+
+        String projectID = userDataAccessObject.generateNewProjectId();
+        Project project = new Project(
+                projectID,
+                addProjectInputData.getProjectTitle(),
+                addProjectInputData.getProjectDetails(),
+                tasks
+                ) {
+        };
+
+        User user = userDataAccessObject.getCurrentUser();
+        user.addProject(project);
+        userDataAccessObject.saveUser(user);
+
+        AddProjectOutputData addProjectOutputData = new AddProjectOutputData(
+                projectID,
+                addProjectInputData.getProjectTitle(),
+                addProjectInputData.getProjectDetails(),
+                tasksString
+                );
+        userPresenter.prepareSuccessView(addProjectOutputData);
+
     }
 
     private String extractMessageFromJSONResponse(String response) {
