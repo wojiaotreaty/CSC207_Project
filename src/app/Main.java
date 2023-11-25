@@ -1,6 +1,6 @@
 package app;
 
-import data_access.UserDataAccessObject;
+import data_access.UsersDataAccessObject;
 import entity.UserFactory;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
@@ -42,12 +42,12 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
 
-        UserDataAccessObject userDataAccessObject;
-        try {
-            userDataAccessObject = new UserDataAccessObject("./users.csv", new UserFactory());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        UsersDataAccessObject userDataAccessObject;
+//        try {
+//            userDataAccessObject = new UsersDataAccessObject("./users.csv", new UserFactory());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel, userDataAccessObject);
         views.add(signupView, signupView.viewName);
