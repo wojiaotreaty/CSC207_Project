@@ -167,7 +167,8 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    JOptionPane.showMessageDialog(null, "Clicked on project: " + projectID);
+                    //TODO: PLACEHOLDER FOR VEDANTS PROJECT VIEW POPUP
+                    JOptionPane.showMessageDialog(null, "Clicked on project: " + projectData.getProjectTitle());
                 }
             });
         }
@@ -192,12 +193,5 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         DashboardState state = (DashboardState) evt.getNewValue();
         displayAllProjects();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            DashboardView dashboard = new DashboardView();
-            dashboard.setVisible(true);
-        });
     }
 }
