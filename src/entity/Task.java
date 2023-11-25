@@ -1,11 +1,12 @@
 package entity;
 
 import java.time.LocalDate;
+import java.lang.StringBuilder;
 
 public class Task {
     private String name;
-    private LocalDate deadline;
     private String description;
+    private LocalDate deadline;
     private boolean status;
 
     public Task(String name, LocalDate deadline, String description) {
@@ -40,5 +41,13 @@ public class Task {
 
     public boolean getStatus() {
         return status;
+    }
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(name).append("`");
+        s.append(description).append("`");
+        s.append(deadline.toString()).append("`");
+        s.append(status);
+        return String.valueOf(s);
     }
 }
