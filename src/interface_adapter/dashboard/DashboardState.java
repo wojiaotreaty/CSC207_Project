@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class DashboardState {
     private String username = "";
     private ArrayList<ProjectData> projects;
+    private String addProjectError = null;
 
     public DashboardState(DashboardState copy) {
         username = copy.username;
@@ -13,6 +14,9 @@ public class DashboardState {
     // Because of the previous copy constructor, the default constructor must be explicit.
     public DashboardState() {
     }
+
+    public String getAddProjectError() { return addProjectError; }
+    public void setAddProjectError(String error) { this.addProjectError = error; }
 
     public String getUsername() {
         return username;
