@@ -15,6 +15,12 @@ public class Project {
         this.description = description;
         tasks = new ArrayList<Task>();
     }
+    public Project(String id, String name, String description, ArrayList<Task> tasks) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.tasks = tasks;
+    }
 
     public String getDescription() {
         return description;
