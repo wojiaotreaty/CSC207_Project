@@ -38,7 +38,7 @@ public class ProjectsDataAccessObject {
         if (projectsCsvFile.length() == 0) {
 //            If no existing csv file exists, write a csv file that only contains the headers
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(projectsCsvFile))) {
-                writer.write(String.join(",", headers.keySet()));
+                writer.write(String.join("%%", headers.keySet()));
                 writer.newLine();
             }
         }
@@ -56,14 +56,14 @@ public class ProjectsDataAccessObject {
         try (BufferedReader reader = new BufferedReader(new FileReader(projectsCsvFile))) {
             String header = reader.readLine();
             // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-            assert header.equals("projectId,projectName,projectDes,projectTasks");
+            assert header.equals("projectId%%projectName%%projectDes%%projectTasks");
 
             ArrayList<String> projectIds = new ArrayList<>(Arrays.asList(ids));
             ArrayList<Project> result = new ArrayList<>();
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split(",");
+                String[] col = row.split("%%");
                 String currentId = String.valueOf(col[headers.get("username")]);
                 if (projectIds.contains(currentId)){
                     String currentName = String.valueOf(col[headers.get("projectName")]);
@@ -84,6 +84,7 @@ public class ProjectsDataAccessObject {
         }
     }
 
+    // TODO: update getTasksList to work with Task datatype & toString() method
     /**
      * Helper method for getProjects.
      */
@@ -103,7 +104,7 @@ public class ProjectsDataAccessObject {
         return tasksList;
     }
 
-    //    TODO: implement saveProjects
+    // TODO: update saveProjects to work with Task datatype & toString() method
     /**
      * For each project in projects: 
      * if the project already exists in the database, then it is updated; 
@@ -115,7 +116,7 @@ public class ProjectsDataAccessObject {
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split(",");
+                String[] col = row.split("&&");
                 String currentId = String.valueOf(col[headers.get("projectId")]);
                 
 //                Iterate through projects to see if there is a match in ids
