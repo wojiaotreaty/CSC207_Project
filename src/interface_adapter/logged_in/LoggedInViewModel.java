@@ -5,8 +5,12 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/*
+dashboard view model
+ */
+
 public class LoggedInViewModel extends ViewModel {
-    public final String TITLE_LABEL = "Logged In View";
+    public final String TITLE_LABEL = "dashboard";
 
     private LoggedInState state = new LoggedInState();
 
@@ -37,12 +41,4 @@ public class LoggedInViewModel extends ViewModel {
         return state;
     }
 
-
-    public String getLoggedInUser() {
-        return loggedInUser;
-    }
-
-    public void setLoggedInUser(String loggedInUser) {
-        this.loggedInUser = loggedInUser;
-    }
 }

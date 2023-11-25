@@ -1,5 +1,9 @@
 package interface_adapter.logged_in;
 
+
+/*
+ * dashboard state
+ */
 public class LoggedInState {
     private String username = "";
 

@@ -1,25 +1,22 @@
 package interface_adapter.login;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.signup.SignupState;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
-import use_case.signup.SignupOutputBoundary;
-import use_case.signup.SignupOutputData;
 
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
-    private final LoggedInViewModel loggedInViewModel;
+    private final DashboardViewModel dashboardViewModel;
     private ViewManagerModel viewManagerModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
-                          LoggedInViewModel loggedInViewModel,
+                          DashboardViewModel dashboardViewModel,
                           LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.loggedInViewModel = loggedInViewModel;
+        this.dashboardViewModel = dashboardViewModel;
         this.loginViewModel = loginViewModel;
     }
 
@@ -27,12 +24,13 @@ public class LoginPresenter implements LoginOutputBoundary {
     public void prepareSuccessView(LoginOutputData response) {
         // On success, switch to the logged in view.
 
-        LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setUsername(response.getUsername());
-        this.loggedInViewModel.setState(loggedInState);
-        this.loggedInViewModel.firePropertyChanged();
+        DashboardState dashboardState = dashboardViewModel.getState(); // DashboardState
+        dashboardState.setUsername(response.getUsername());
+        dashboardState.setProjects(response.getProjectData()); // give the list of projects for dashboard
+        this.dashboardViewModel.setState(dashboardState);
+        this.dashboardViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setActiveView(loggedInViewModel.getViewName());
+        this.viewManagerModel.setActiveView(dashboardViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
