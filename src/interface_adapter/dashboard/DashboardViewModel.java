@@ -1,4 +1,4 @@
-package interface_adapter.logged_in;
+package interface_adapter.dashboard;
 
 import interface_adapter.ViewModel;
 
@@ -6,22 +6,22 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /*
-dashboard view model
+mock dashboard view model
  */
 
-public class LoggedInViewModel extends ViewModel {
+public class DashboardViewModel extends ViewModel {
     public final String TITLE_LABEL = "dashboard";
 
-    private LoggedInState state = new LoggedInState();
+    private DashboardState state = new DashboardState();
 
     public static final String LOGOUT_BUTTON_LABEL = "Log out";
     private String loggedInUser;
 
-    public LoggedInViewModel() {
+    public DashboardViewModel() {
         super("logged in");
     }
 
-    public void setState(LoggedInState state) {
+    public void setState(DashboardState state) {
         this.state = state;
     }
 
@@ -37,7 +37,7 @@ public class LoggedInViewModel extends ViewModel {
         support.addPropertyChangeListener(listener);
     }
 
-    public LoggedInState getState() {
+    public DashboardState getState() {
         return state;
     }
 

@@ -1,7 +1,9 @@
 package entity;
 
 import java.util.ArrayList;
-
+/*
+Temporary User file that will be replaced with actual entity
+ */
 public class User implements UserInterface {
 
     private final String name;
@@ -10,8 +12,6 @@ public class User implements UserInterface {
 
     /**
      * Requires: password is valid.
-     * @param name
-     * @param password
      */
     User(String name, String password, ArrayList<Project> projects) {
         this.name = name;

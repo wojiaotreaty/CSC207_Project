@@ -1,23 +1,29 @@
-package interface_adapter.logged_in;
+package interface_adapter.dashboard;
 
+
+import java.util.ArrayList;
 
 /*
- * dashboard state
+ * mock dashboard state
  */
-public class LoggedInState {
+public class DashboardState {
     private String username = "";
+    private ArrayList<ArrayList<String>> projectData;
 
-    public LoggedInState(LoggedInState copy) {
+    public DashboardState(DashboardState copy) {
         username = copy.username;
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
-    public LoggedInState() {}
+    public DashboardState() {}
 
     public String getUsername() {
         return username;
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+    public void setProjects(ArrayList<ArrayList<String>> projectData){
+        this.projectData=projectData;
     }
 }

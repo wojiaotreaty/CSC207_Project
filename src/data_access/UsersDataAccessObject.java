@@ -16,6 +16,10 @@ import java.util.Map;
  * It DOES NOT have project information.
  */
 
+/*
+Copied from Bing's Dao implementation with signupDataAccessInterface and LoginDataAccessInterface
+ */
+
 public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface {
 
     //    This csv file connects user emails to the project IDs that it is associated with.

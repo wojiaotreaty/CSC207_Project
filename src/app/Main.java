@@ -1,19 +1,16 @@
 package app;
 
-import data_access.UsersDataAccessObject;
-import entity.UserFactory;
 import interface_adapter.login.LoginViewModel;
-import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.dashboard.DashboardViewModel; // <- will change to DashboardViewModel
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-import view.LoggedInView;
+import view.DashboardView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,7 +36,7 @@ public class Main {
         // results from the use case. The ViewModels are observable, and will
         // be observed by the Views.
         LoginViewModel loginViewModel = new LoginViewModel();
-        LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
+        DashboardViewModel dashboardViewModel = new DashboardViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
 
 //        UsersDataAccessObject userDataAccessObject;
@@ -55,8 +52,8 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel, loggedInViewModel, userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
-        views.add(loggedInView, loggedInView.viewName);
+        DashboardView dashboardView = new DashboardView(dashboardViewModel);
+        views.add(dashboardView, dashboardView.viewName); // don't know yet how the view will be added (factory?)
 
         viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();
