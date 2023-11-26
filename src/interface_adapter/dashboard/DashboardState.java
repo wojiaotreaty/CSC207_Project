@@ -6,6 +6,7 @@ public class DashboardState {
     private String username = "";
     private ArrayList<ProjectData> projects;
     private String addProjectError = null;
+    private String notificationMessage = null;
 
     public DashboardState(DashboardState copy) {
         username = copy.username;
@@ -52,5 +53,13 @@ public class DashboardState {
                 break;
             }
         }
+    }
+
+    public void setNotificationMessage(String notificationMessage) {
+        this.notificationMessage = notificationMessage;
+    }
+
+    public String getNotificationMessage() {
+        return notificationMessage;
     }
 }
