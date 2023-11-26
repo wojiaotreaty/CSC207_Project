@@ -21,14 +21,6 @@ public class DummyMain {
         // various cards, and the layout, and stitch them together.
 
         // The main application window.
-        JFrame application = new JFrame("Login Example");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        CardLayout cardLayout = new CardLayout();
-
-        // The various View objects. Only one view is visible at a time.
-        JPanel views = new JPanel(cardLayout);
-        application.add(views);
 
         DashboardViewModel dashboardViewModel = new DashboardViewModel();
 
@@ -38,9 +30,7 @@ public class DummyMain {
         DummyInteractor dummyInteractor = new DummyInteractor(dummyDAO, notificationPresenter);
         NotificationController notificationController = new NotificationController(dummyInteractor);
         DummyView dummyView = new DummyView(dashboardViewModel, notificationController);
-
-
-        application.pack();
-        application.setVisible(true);
+        
+        dummyView.setVisible(true);
     }
 }

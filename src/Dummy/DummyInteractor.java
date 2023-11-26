@@ -69,7 +69,7 @@ public class DummyInteractor implements NotificationInputBoundary {
         if (!duePlusOne.isEmpty() || !duePlusTwo.isEmpty() || !dueToday.isEmpty()) {
             // generates gpt query and executes the api call using helper functions
             String[] gptQuery = generateQuery(duePlusOne, duePlusTwo, dueToday);
-            String gptOutput = apiCall(gptQuery[0]);
+            //String gptOutput = apiCall(gptQuery[0]);
             // Creates output data and calls presenter
             NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + "gptOutput");
             notificationPresenter.prepareNotificationView(notificationOutputData);
@@ -83,7 +83,7 @@ public class DummyInteractor implements NotificationInputBoundary {
                                           HashMap<Project, ArrayList<Task>> today) {
         // initializes the StringBuilder and briefly explains to gpt the situation.
         StringBuilder m = new StringBuilder("I am working on some projects right now and these are some " +
-                "upcoming tasks I that are due. \n");
+                "upcoming tasks that are due. \n");
         StringBuilder q = new StringBuilder();
         // Note that all three if statements are essentially exactly the same as this one.
         // They just add information about the tasks due on their specific days.

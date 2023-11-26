@@ -14,7 +14,7 @@ public class DummyDAO implements NotificationUsersDataAccessInterface {
     public User getCurrentUser() {
         User user = new User("dummy", "dummy");
         Task task1 = new Task("task1", "the first task", LocalDate.now());
-        Task task2 = new Task("task2", "the second task", LocalDate.now().plusDays(1));
+        Task task2 = new Task("task2", "the second task, with a much much longer description to see what happens to the panel.", LocalDate.now().plusDays(1));
         Task task3 = new Task("task3", "the third task", LocalDate.now());
         Project project1 = new Project("1", "Project1", "The first project.");
         project1.addTask(task1);

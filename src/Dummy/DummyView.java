@@ -24,7 +24,7 @@ import javax.swing.text.MaskFormatter;
 public class DummyView extends JFrame implements PropertyChangeListener {
     private final DashboardViewModel dashboardViewModel;
     private JPanel dashboardPanel;
-    private ArrayList<ProjectData> projectsList;
+    private ArrayList<ProjectData> projectsList = new ArrayList<ProjectData>();
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
 
@@ -38,7 +38,6 @@ public class DummyView extends JFrame implements PropertyChangeListener {
 
         projectsList = dashboardState.getProjects();
 
-        displayAllProjects();
 
         setTitle("Project Dashboard");
         setSize(600, 400);
@@ -93,11 +92,14 @@ public class DummyView extends JFrame implements PropertyChangeListener {
         buttonPanel.add(toggleNotifications);
         add(buttonPanel, BorderLayout.NORTH);
 
+        displayAllProjects();
+
         Runnable sendNotification = () -> notificationController.execute(LocalDate.now());
         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {
+        projectsList = new ArrayList<>();
         if (projectsList.isEmpty()) {
             dashboardPanel.removeAll();
             JLabel emptyLabel = new JLabel("Click Add Project to add a project");
