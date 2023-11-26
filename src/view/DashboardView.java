@@ -95,7 +95,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         add(buttonPanel, BorderLayout.NORTH);
 
         Runnable sendNotification = () -> notificationController.execute(LocalDate.now());
-        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS)
+        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {

@@ -68,10 +68,10 @@ public class NotificationInteractor implements NotificationInputBoundary {
         // checks that at least one of the HashMaps is non-empty
         if (!duePlusOne.isEmpty() || !duePlusTwo.isEmpty() || !dueToday.isEmpty()) {
             // generates gpt query and executes the api call using helper functions
-            String gptQuery = generateQuery(duePlusOne, duePlusTwo, dueToday);
-            String gptOutput = apiCall(gptQuery);
+            String[] gptQuery = generateQuery(duePlusOne, duePlusTwo, dueToday);
+            String gptOutput = apiCall(gptQuery[0]);
             // Creates output data and calls presenter
-            NotificationOutputData notificationOutputData = new NotificationOutputData(gptOutput);
+            NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + gptOutput);
             notificationPresenter.prepareNotificationView(notificationOutputData);
         }
 
@@ -79,11 +79,12 @@ public class NotificationInteractor implements NotificationInputBoundary {
 
     }
     // Generates the string that will be used to query gpt
-    private static String generateQuery(HashMap<Project, ArrayList<Task>> one, HashMap<Project, ArrayList<Task>> two,
+    private static String[] generateQuery(HashMap<Project, ArrayList<Task>> one, HashMap<Project, ArrayList<Task>> two,
                                         HashMap<Project, ArrayList<Task>> today) {
         // initializes the StringBuilder and briefly explains to gpt the situation.
-        StringBuilder q = new StringBuilder("I am working on some projects right now and these are some " +
+        StringBuilder m = new StringBuilder("I am working on some projects right now and these are some " +
                 "upcoming tasks I that are due. \n");
+        StringBuilder q = new StringBuilder();
         // Note that all three if statements are essentially exactly the same as this one.
         // They just add information about the tasks due on their specific days.
         if (!today.isEmpty()) {
@@ -131,10 +132,11 @@ public class NotificationInteractor implements NotificationInputBoundary {
             }
             q.append("}\n");
         }
-        q.append("Briefly give me some advice for how I should get started, as well as some encouragement" +
+        m.append(q);
+        m.append("Briefly give me some advice for how I should get started, as well as some encouragement" +
                 "and motivation.\n");
-        q.append("IMPORTANT: mark the beginning and end of your response with \"|uwu|\"");
-        return String.valueOf(q);
+        m.append("IMPORTANT: mark the beginning and end of your response with \"|uwu|\"");
+        return new String[]{String.valueOf(m), String.valueOf(q)};
     }
     private static String apiCall(String query) {
         String url = "https://api.openai.com/v1/chat/completions";
