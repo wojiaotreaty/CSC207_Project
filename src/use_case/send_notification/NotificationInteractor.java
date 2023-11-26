@@ -83,7 +83,7 @@ public class NotificationInteractor implements NotificationInputBoundary {
                                         HashMap<Project, ArrayList<Task>> today) {
         // initializes the StringBuilder and briefly explains to gpt the situation.
         StringBuilder m = new StringBuilder("I am working on some projects right now and these are some " +
-                "upcoming tasks I that are due. \n");
+                "upcoming tasks that are due. \n");
         StringBuilder q = new StringBuilder();
         // Note that all three if statements are essentially exactly the same as this one.
         // They just add information about the tasks due on their specific days.
