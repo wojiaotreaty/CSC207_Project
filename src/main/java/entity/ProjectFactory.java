@@ -5,5 +5,5 @@ import java.util.HashMap;
 
 public interface ProjectFactory {
 
-    Project create(String projectId, String projectName, String projectDesc, ArrayList<HashMap<String, String>> tasks);
+    Project create(String projectId, String projectName, String projectDesc, ArrayList<Task> tasks);
 }

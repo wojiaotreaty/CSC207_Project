@@ -7,7 +7,6 @@ public interface Project {
     String getProjectID();
     String getProjectDesc();
 
-    ArrayList<HashMap<String, String>> getTasks();
+    ArrayList<Task> getTasks();
 
-    void addTask(ArrayList<HashMap<String, String>> task);
 }

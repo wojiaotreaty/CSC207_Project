@@ -2,10 +2,14 @@ package data_access;
 
 import entity.Project;
 import entity.ProjectFactory;
+import entity.Task;
+import entity.TaskFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -20,14 +24,18 @@ public class ProjectsDataAccessObject {
 
     private ProjectFactory projectFactory;
 
+    private TaskFactory taskFactory;
+
     Long numOfProjects;
 
     /**
      * Note that no Projects are built at time of DAO construction.
      * Instead, Projects are built only when they are needed.
      */
-    public ProjectsDataAccessObject(String projectsCsvPath, ProjectFactory projectFactory) throws IOException {
+    public ProjectsDataAccessObject(String projectsCsvPath, ProjectFactory projectFactory,
+                                    TaskFactory taskFactory) throws IOException {
         this.projectFactory = projectFactory;
+        this.taskFactory = taskFactory;
 
         projectsCsvFile = new File(projectsCsvPath);
         headers.put("projectId", 0);
@@ -69,7 +77,7 @@ public class ProjectsDataAccessObject {
                     String currentName = String.valueOf(col[headers.get("projectName")]);
                     String currentDes = String.valueOf(col[headers.get("projectDesc")]);
                     String currentTasks = String.valueOf(col[headers.get("projectTasks")]);
-                    ArrayList<HashMap<String, String>> tasksList = getTasksList(currentTasks);
+                    ArrayList<Task> tasksList = getTasksList(currentTasks);
 
                     Project newProject = projectFactory.create(currentId, currentName, currentDes, tasksList);
                     result.add(newProject);
@@ -84,27 +92,32 @@ public class ProjectsDataAccessObject {
         }
     }
 
-    // TODO: update getTasksList to work with Task datatype & toString() method
     /**
      * Helper method for getProjects.
      */
-    private ArrayList<HashMap<String, String>> getTasksList(String currentTasks) {
-        String[] rawTasksList = currentTasks.split("%");
+    private ArrayList<Task> getTasksList(String currentTasks) {
+        String[] rawTasksList = currentTasks.split("|uwu|");
 
-        ArrayList<HashMap<String, String>> tasksList = new ArrayList<>();
+        ArrayList<Task> tasksList = new ArrayList<>();
 
         for (String rawTask : rawTasksList){
-            String[] rawTaskInfo = rawTask.split("@");
-            HashMap<String, String> newTask = new HashMap<>();
-            newTask.put("TaskName", rawTaskInfo[0]);
-            newTask.put("TaskDescription", rawTaskInfo[1]);
-            newTask.put("TaskDeadline", rawTaskInfo[2]);
+            String[] rawTaskInfo = rawTask.split("`");
+            String taskName = rawTaskInfo[0];
+            String taskDesc = rawTaskInfo[1];
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDate taskDeadline = LocalDate.parse(rawTaskInfo[2], formatter);
+
+            Task newTask = taskFactory.create(taskName, taskDeadline, taskDesc);
+            if (rawTaskInfo[3].equals("true")){
+                newTask.setStatus(true);
+            }
+
             tasksList.add(newTask);
         }
         return tasksList;
     }
 
-    // TODO: update saveProjects to work with Task datatype & toString() method
+
     /**
      * For each project in projects: 
      * if the project already exists in the database, then it is updated; 
@@ -157,17 +170,14 @@ public class ProjectsDataAccessObject {
      */
     private String projectToString(Project project){
         StringBuilder resultBuilder = new StringBuilder();
-        resultBuilder.append(project.getProjectID()).append(",");
-        resultBuilder.append(project.getProjectID()).append(",");
-        resultBuilder.append(project.getProjectDesc()).append(",");
+        resultBuilder.append(project.getProjectID()).append("&&");
+        resultBuilder.append(project.getProjectID()).append("&&");
+        resultBuilder.append(project.getProjectDesc()).append("&&");
 
         StringBuilder rawTasks = new StringBuilder();
-        ArrayList<HashMap<String, String>> tasksToSave = project.getTasks();
-        for (HashMap<String, String> task: tasksToSave){
-            rawTasks.append(task.get("Taskname")).append("@");
-            rawTasks.append(task.get("TaskDescription")).append("@");
-            rawTasks.append(task.get("TaskDeadline")).append("@");
-            rawTasks.append("%");
+        ArrayList<Task> tasksToSave = project.getTasks();
+        for (Task task: tasksToSave){
+            rawTasks.append(task.toString()).append("|uwu|");
         }
 
         resultBuilder.append(rawTasks);
@@ -184,8 +194,7 @@ public class ProjectsDataAccessObject {
         return numOfProjects.toString();
     }
 
-    
-//    TODO: implement deleteProject
+
     public void deleteProject(String id){
         
         try (BufferedReader reader = new BufferedReader(new FileReader(projectsCsvFile))) {
@@ -193,7 +202,7 @@ public class ProjectsDataAccessObject {
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split(",");
+                String[] col = row.split("&&");
                 String currentId = String.valueOf(col[headers.get("projectId")]);
 
 //                If the id matches the id of the project that needs to be deleted,
