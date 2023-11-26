@@ -2,6 +2,9 @@ package use_case.login;
 
 import entity.User;
 import java.util.ArrayList;
+/*
+Missing Project entity
+ */
 
 public class LoginInteractor implements LoginInputBoundary {
     final LoginDataAccessInterface userDataAccessObject;
