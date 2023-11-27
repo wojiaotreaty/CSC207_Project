@@ -10,9 +10,9 @@ public class AddProjectController {
         this.addProjectUseCaseInteractor = addProjectUseCaseInteractor;
     }
 
-    public void execute(String projectTitle, String projectDetails, String projectDeadline) {
+    public void execute(String projectTitle, String projectDetails, String projectDeadline, String username) {
         AddProjectInputData addProjectInputData = new AddProjectInputData(
-                projectTitle, projectDetails, projectDeadline);
+                projectTitle, projectDetails, projectDeadline, username);
 
         addProjectUseCaseInteractor.execute(addProjectInputData);
     }

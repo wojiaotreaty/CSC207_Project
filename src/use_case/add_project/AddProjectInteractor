@@ -98,7 +98,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
                 ) {
         };
 
-        User user = userDataAccessObject.getCurrentUser();
+        User user = userDataAccessObject.getUser(addProjectInputData.getUsername());
         user.addProject(project);
         userDataAccessObject.saveUser(user);
 
