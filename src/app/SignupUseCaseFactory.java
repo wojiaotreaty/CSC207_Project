@@ -40,7 +40,7 @@ public class SignupUseCaseFactory {
         // Notice how we pass this method's parameters to the Presenter.
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
 
-        UsersFactory userFactory = new UsersFactory();
+        UsersFactory userFactory = new UsersFactory(); // Will be replaced with actual user entity class
 
         SignupInputBoundary userSignupInteractor = new SignupInteractor(
                 userDataAccessObject, signupOutputBoundary, userFactory);

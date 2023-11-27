@@ -32,7 +32,7 @@ public class LoginUseCaseFactory {
 
         try {
             LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, dashboardViewModel, userDataAccessObject);
-            return new LoginView(loginViewModel, loginController, signupViewModel, signupController);
+            return new LoginView(loginViewModel, loginController, signupViewModel, signupController, viewManagerModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -49,7 +49,7 @@ public class LoginUseCaseFactory {
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, dashboardViewModel, loginViewModel);
 
-        UserFactory userFactory = new UsersFactory();
+        UserFactory userFactory = new UsersFactory(); // Will be replaced with actual user entity class
 
         LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);

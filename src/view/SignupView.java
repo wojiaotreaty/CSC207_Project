@@ -14,7 +14,7 @@ import java.beans.PropertyChangeListener;
 
 public class SignupView extends JPanel implements ActionListener, PropertyChangeListener{
 
-    public final String viewName = "Signup Page";
+    public static String viewName = "Signup Page";
 
     private final SignupViewModel signupViewModel;
     private final JTextField usernameInputField = new JTextField(15);
@@ -43,20 +43,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
 
         signUp.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    if (evt.getSource().equals(signUp)) {
-                        SignupState currentState = signupViewModel.getState();
-
-                        signupController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword(),
-                                currentState.getRepeatPassword()
-                        );
-                    }
-                }
-
-            }
+            this
         );
 
         usernameInputField.addKeyListener(
@@ -131,7 +118,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(signUp)) {
+            SignupState currentState = signupViewModel.getState();
 
+            signupController.execute(
+                    currentState.getUsername(),
+                    currentState.getPassword(),
+                    currentState.getRepeatPassword()
+            );
+        }
     }
 
     @Override

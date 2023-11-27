@@ -4,8 +4,8 @@ import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupController;
-import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     public final String viewName = "log in";
     private final LoginViewModel loginViewModel;
     private final SignupViewModel signupViewModel;
+    private final ViewManagerModel viewManagerModel;
 
 
     final JTextField usernameInputField = new JTextField(15);
@@ -35,13 +36,14 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     private final LoginController loginController;
     private final SignupController signupController;
 
-    public LoginView(LoginViewModel loginViewModel, LoginController controller, SignupViewModel signupViewModel, SignupController signupController) {
+    public LoginView(LoginViewModel loginViewModel, LoginController controller, SignupViewModel signupViewModel, SignupController signupController, ViewManagerModel viewManagerModel) {
 
         this.loginController = controller;
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
         this.signupController = signupController;
         this.signupViewModel = signupViewModel;
+        this.viewManagerModel = viewManagerModel;
 
 
         JLabel title = new JLabel("Login Screen");
@@ -59,34 +61,11 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         buttons.add(signUp);
 
         logIn.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(logIn)) {
-                            LoginState currentState = loginViewModel.getState();
-
-                            loginController.execute(
-                                    currentState.getUsername(),
-                                    currentState.getPassword()
-                            );
-                        }
-                    }
-                }
+                this
         );
         signUp.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(signUp)) {
-                            SignupState currentState = signupViewModel.getState();
-
-                            signupController.execute(
-                                    currentState.getUsername(),
-                                    currentState.getPassword(),
-                                    currentState.getRepeatPassword()
-                            );
-                        }
-                    }
-                }
+                this
         );
 
 //        cancel.addActionListener(this);
@@ -139,7 +118,18 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
      * React to a button click that results in evt.
      */
     public void actionPerformed(ActionEvent evt) {
-        System.out.println("Click " + evt.getActionCommand());
+
+            if (evt.getSource().equals(logIn)) {
+                LoginState currentState = loginViewModel.getState();
+
+                loginController.execute(
+                        currentState.getUsername(),
+                        currentState.getPassword()
+                );
+            } else if (evt.getSource().equals(signUp)) {
+                viewManagerModel.setActiveView(SignupView.viewName);
+                viewManagerModel.firePropertyChanged();
+            }
     }
 
     @Override
