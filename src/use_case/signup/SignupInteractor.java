@@ -3,12 +3,10 @@ package use_case.signup;
 import entity.User;
 import entity.UserFactory;
 
-import java.time.LocalDateTime;
-
 public class SignupInteractor implements SignupInputBoundary {
-    final SignupDataAccessInterface userDataAccessObject;
-    final SignupOutputBoundary userPresenter;
-    final UserFactory userFactory;
+    private final SignupDataAccessInterface userDataAccessObject;
+    private final SignupOutputBoundary userPresenter;
+    private final UserFactory userFactory;
 
     public SignupInteractor(SignupDataAccessInterface signupDataAccessInterface,
                             SignupOutputBoundary signupOutputBoundary,

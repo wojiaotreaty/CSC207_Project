@@ -7,9 +7,9 @@ Missing Project entity
  */
 
 public class LoginInteractor implements LoginInputBoundary {
-    final LoginDataAccessInterface userDataAccessObject;
-    final LoginOutputBoundary loginPresenter;
-    public ArrayList<ArrayList<String>> projectData;
+    private final LoginDataAccessInterface userDataAccessObject;
+    private final LoginOutputBoundary loginPresenter;
+    private ArrayList<ArrayList<String>> projectData;
 
     public LoginInteractor(LoginDataAccessInterface userDataAccessInterface,
                            LoginOutputBoundary loginOutputBoundary) {
