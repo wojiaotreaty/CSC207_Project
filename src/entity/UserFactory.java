@@ -1,10 +1,9 @@
 package entity;
 
-public class UserFactory implements UserFactoryInterface {
+/**
+ * This file is a placeholder for DAO functionality.
+ */
+public interface UserFactory {
 
-    @Override
-    public User create(String username, String password) {
-//        return new User(username, password, projects);
-        return new User(); //based off of how entities are made
-    }
+    User create(String username, String password);
 }

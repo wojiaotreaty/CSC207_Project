@@ -1,7 +1,6 @@
 package app;
 
 import entity.UserFactory;
-import entity.UserFactoryInterface;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel; // <- will later change to dashboard
 import interface_adapter.login.LoginController;
@@ -50,7 +49,7 @@ public class LoginUseCaseFactory {
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, dashboardViewModel, loginViewModel);
 
-        UserFactoryInterface userFactory = new UserFactory();
+        UserFactory userFactory = new UsersFactory();
 
         LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
