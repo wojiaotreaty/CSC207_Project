@@ -43,7 +43,7 @@ public class SignupUseCaseFactory {
         UsersFactory userFactory = new UsersFactory(); // Will be replaced with actual user entity class
 
         SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
+                userDataAccessObject, signupOutputBoundary, userFactory); //usersFactory will implement UserFactory
 
 
         return new SignupController(userSignupInteractor);
