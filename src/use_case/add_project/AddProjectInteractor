@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AddProjectInteractor implements AddProjectInputBoundary {
-    final AddProjectDataAccessInterface userDataAccessObject;
-    final AddProjectOutputBoundary userPresenter;
-    final ProjectFactory projectFactory;
+    final private AddProjectDataAccessInterface userDataAccessObject;
+    final private AddProjectOutputBoundary userPresenter;
+    final private ProjectFactory projectFactory;
 
     public AddProjectInteractor(AddProjectDataAccessInterface addProjectDataAccessInterface,
                             AddProjectOutputBoundary addProjectOutputBoundary, ProjectFactory projectFactory) {
