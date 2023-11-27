@@ -125,7 +125,8 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
                         addProjectController.execute(
                                 projectName,
                                 projectDescription,
-                                deadline
+                                deadline,
+                                dashboardViewModel.getState().getUsername()
                         );
 
                         popupFrame.dispose();
