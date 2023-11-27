@@ -41,7 +41,7 @@ public class LoginInteractor implements LoginInputBoundary {
 
                     }
                     ArrayList<String> projectList = new ArrayList<String>();
-                    projectList.add(project.getID()); // project id
+                    projectList.add(project.getId()); // project id
                     projectList.add(project.getName()); // project name
                     projectList.add(project.getDesc()); // project description
                     projectList.add(stringTasks); // project tasks
