@@ -10,8 +10,8 @@ public class NotificationController {
     public NotificationController(NotificationInputBoundary notificationInteractor) {
         this.notificationInteractor = notificationInteractor;
     }
-    public void execute(LocalDate date) {
-        NotificationInputData notificationInputData = new NotificationInputData(date);
+    public void execute(LocalDate date, String currentUser) {
+        NotificationInputData notificationInputData = new NotificationInputData(date, currentUser);
         notificationInteractor.execute(notificationInputData);
     }
 }

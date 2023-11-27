@@ -76,7 +76,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == toggleNotifications) {
                     if (scheduledFuture == null) {
-                        Runnable sendNotification = () -> notificationController.execute(LocalDate.now());
+                        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
                         toggleNotifications.setText("Notifications Off");
                     }
@@ -90,11 +90,11 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.add(addProjectButton);
         buttonPanel.add(toggleNotifications);
+        buttonPanel.add(addProjectButton);
         add(buttonPanel, BorderLayout.NORTH);
 
-        Runnable sendNotification = () -> notificationController.execute(LocalDate.now());
+        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 

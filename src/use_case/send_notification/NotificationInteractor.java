@@ -27,7 +27,7 @@ public class NotificationInteractor implements NotificationInputBoundary {
     @Override
     public void execute(NotificationInputData notificationInputData) {
         // Pulls current user from DAO and extracts their projects
-        User user = notificationUsersDataAccessInterface.getCurrentUser();
+        User user = notificationUsersDataAccessInterface.getUser(notificationInputData.getCurrentUser());
         ArrayList<Project> projects = user.getProjects();
         // Initializes date and check dates for two days after today
         LocalDate date = notificationInputData.getDate();
