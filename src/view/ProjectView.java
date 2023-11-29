@@ -1,7 +1,4 @@
 package view;
-
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
-
 public class ProjectView extends JFrame implements PropertyChangeListener {
     private final ProjectViewModel projectViewModel;
     private JPanel projectpanel;
@@ -30,15 +26,19 @@ public class ProjectView extends JFrame implements PropertyChangeListener {
         popupFrame.setSize(400, 250);
 
         JPanel popupPanel = new JPanel(new GridLayout(4, 2));
-        JLabel l = new JLabel();
-        l.setText(project.getProjectTitle());
+        // The project title
+        JTextField Title = new JTextField(project.getProjectName());
+        popupFrame.add(Title);
+        // The project description
         JTextArea textArea = new JTextArea(5, 20);
         JScrollPane scrollPane = new JScrollPane(popupPanel);
         textArea.setEditable(false);
         textArea.append(project.getProjectDescritpion() + "\n");
+        // The list of tasks along with their deadlines and descriptions and status
         JCheckBox status = null;
         for (String task : project.getTasks()) {
             String[] arrOfStr = task.split("|uwu|");
+
             String taskName = arrOfStr[0];
             String taskDescription = arrOfStr[1];
             String taskDeadline = arrOfStr[2];
