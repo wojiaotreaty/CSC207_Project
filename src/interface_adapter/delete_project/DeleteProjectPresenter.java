@@ -23,7 +23,7 @@ public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     @Override
     public void prepareSuccessView(DeleteProjectOutputData deleteProjectOutputData) {
 //        On success, update deleteProjectViewModel to reflect that.
-        DeleteProjectState deleteprojectState = deleteProjectViewModel.getState();
+        DeleteProjectState deleteProjectState = deleteProjectViewModel.getState();
         state.setDeletedProjectId(deleteProjectOutputData.getProjectId());
         state.setDeletedProjectName(deleteProjectOutputData.getProjectName());
 
