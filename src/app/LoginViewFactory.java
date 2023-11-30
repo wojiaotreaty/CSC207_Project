@@ -17,10 +17,10 @@ import view.LoginView;
 import javax.swing.*;
 import java.io.IOException;
 
-public class LoginUseCaseFactory {
+public class LoginViewFactory {
 
     /** Prevent instantiation. */
-    private LoginUseCaseFactory() {}
+    private LoginViewFactory() {}
 
     public static LoginView create(
             ViewManagerModel viewManagerModel,

@@ -14,12 +14,12 @@ import view.SignupView;
 import javax.swing.*;
 import java.io.IOException;
 
-public class SignupUseCaseFactory {
+public class SignupViewFactory {
 
     /**
      * Prevent instantiation.
      */
-    private SignupUseCaseFactory() {
+    private SignupViewFactory() {
     }
 
     public static SignupView create(
