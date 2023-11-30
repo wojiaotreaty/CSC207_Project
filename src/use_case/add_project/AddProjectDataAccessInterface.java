@@ -1,9 +1,9 @@
 package use_case.add_project;
 
-import entity.Project;
+import entity.User;
 
 public interface AddProjectDataAccessInterface {
-    User getCurrentUser();
+    User getUser(String username);
     boolean saveUser(User user);
     String generateNewProjectId();
 }
