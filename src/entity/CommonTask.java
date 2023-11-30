@@ -17,18 +17,6 @@ public class CommonTask implements TaskInterface {
         this.deadline = deadline;
         status = false;
     }
-    public CommonTask(ArrayList<String> info) {
-        name = info.get(0);
-        description = info.get(1);
-        deadline = LocalDate.parse(info.get(2));
-        status = false;
-    }
-    public CommonTask(HashMap<String, String> info) {
-        name = info.get("title");
-        description = info.get("description");
-        deadline = LocalDate.parse(info.get("deadline"));
-        status = false;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -41,9 +29,6 @@ public class CommonTask implements TaskInterface {
     }
     public void setStatus(boolean status) {
         this.status = status;
-    }
-    public void setId(String id) {
-        this.id = id;
     }
     public String getName() {
         return name;
@@ -58,19 +43,6 @@ public class CommonTask implements TaskInterface {
 
     public boolean getStatus() {
         return status;
-    }
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public String toStringUwu() {
-        StringBuilder s = new StringBuilder();
-        s.append(name).append("|uwu|");
-        s.append(description).append("|uwu|");
-        s.append(deadline.toString()).append("|uwu|");
-        s.append(status);
-        return String.valueOf(s);
     }
 
     public String toString() {
