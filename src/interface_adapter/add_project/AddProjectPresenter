@@ -15,7 +15,7 @@ public class AddProjectPresenter implements AddProjectOutputBoundary {
     public void prepareSuccessView(AddProjectOutputData response) {
         DashboardState dashboardState = dashboardViewModel.getState();
         dashboardState.setAddProjectError(null);
-        dashboardState.addProjectData(response);
+        dashboardState.addProjectData(response.getProject());
 
         addProjectViewModel.firePropertyChanged();
     }
