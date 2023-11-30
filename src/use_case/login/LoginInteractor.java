@@ -1,5 +1,9 @@
 package use_case.login;
 
+import entity.Project;
+import entity.Task;
+import entity.User;
+
 import java.util.ArrayList;
 /*
 Missing Project entity
@@ -40,9 +44,9 @@ public class LoginInteractor implements LoginInputBoundary {
 
                     }
                     ArrayList<String> projectList = new ArrayList<String>();
-                    projectList.add(project.getId()); // project id
-                    projectList.add(project.getName()); // project name
-                    projectList.add(project.getDesc()); // project description
+                    projectList.add(project.getProjectId()); // project id
+                    projectList.add(project.getProjectName()); // project name
+                    projectList.add(project.getProjectDescription()); // project description
                     projectList.add(stringTasks.toString()); // project tasks
                     projectData.add(projectList);
                 }

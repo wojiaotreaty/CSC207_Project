@@ -22,12 +22,13 @@ public class CommonUser implements User {
     public String getPassword() {
         return password;
     }
+
     public ArrayList<Project> getProjects() {
         return (ArrayList<Project>) projects.clone();
     }
     public Project deleteProject(String id) {
         for (Project project : projects) {
-            if (project.getId().equals(id)) {
+            if (project.getProjectId().equals(id)) {
                 projects.remove(project);
                 return project;
             }

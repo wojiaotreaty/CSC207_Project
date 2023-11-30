@@ -16,18 +16,22 @@ public class CommonProject implements Project {
         this.tasks = tasks;
     }
 
-    public String getDesc() {
-        return description;
+    public String getProjectName() {
+        return this.name;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getProjectId() {
+        return this.id;
     }
+
+    @Override
+    public String getProjectDescription() {
+        return this.description;
+    }
+
     public ArrayList<Task> getTasks() {
         return (ArrayList<Task>) tasks.clone();
-    }
-    public String getId() {
-        return id;
     }
     // adds task to tasks such that it is the first task with its deadline chronologically.
     public void addTask(Task task) {
