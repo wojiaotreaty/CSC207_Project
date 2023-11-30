@@ -2,14 +2,19 @@ package entity;
 
 import java.util.ArrayList;
 
-public class User {
+public class UwuUser implements User {
     private final String username;
     private final String password;
     private final ArrayList<Project> projects;
-    public User(String username, String password) {
+    public UwuUser(String username, String password) {
         this.username = username;
         this.password = password;
         this.projects = new ArrayList<Project>();
+    }
+    public UwuUser(String username, String password, ArrayList<Project> projects) {
+        this.username = username;
+        this.password = password;
+        this.projects = projects;
     }
     public String getUsername() {
         return username;

@@ -3,26 +3,26 @@ package entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Project {
+public class UwuProject implements Project {
     private final String id;
     private final String name;
     private final String description;
     private ArrayList<Task> tasks;
 
-    public Project(String id, String name, String description) {
+    public UwuProject(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
         tasks = new ArrayList<Task>();
     }
-    public Project(String id, String name, String description, ArrayList<Task> tasks) {
+    public UwuProject(String id, String name, String description, ArrayList<Task> tasks) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.tasks = tasks;
     }
 
-    public String getDescription() {
+    public String getDesc() {
         return description;
     }
 
