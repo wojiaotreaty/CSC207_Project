@@ -6,11 +6,13 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
+
+import static java.lang.StringUTF16.lastIndexOf;
+
 public class ProjectView extends JFrame implements PropertyChangeListener {
     private final ProjectViewModel projectViewModel;
     private JPanel projectpanel;
     private ProjectData project;
-
     public ProjectView(ProjectViewModel projectViewModel, RefactorProjectController refactorProjectController) {
         this.projectViewModel = projectViewModel;
 
@@ -20,11 +22,9 @@ public class ProjectView extends JFrame implements PropertyChangeListener {
 
         project = projectState.getProject();
     }
-
     private void ProjectPopup() throws ParseException {
         JFrame popupFrame = new JFrame("Project");
         popupFrame.setSize(400, 250);
-
         JPanel popupPanel = new JPanel(new BoxLayout(popupPanel, BoxLayout.Y_AXIS));
         // The project title
         JLabel Title=new JLabel("Project Name");
@@ -43,10 +43,10 @@ public class ProjectView extends JFrame implements PropertyChangeListener {
         popupPanel.add(textArea);
         popupPanel.add(description);
         // The list of tasks along with their deadlines and descriptions and status
-
         for (String task : project.getTasks()) {
+            StringBuilder mutableTask=new StringBuilder();
+            mutableTask = mutableTask.append(task);
             String[] arrOfStr = task.split("|uwu|");
-
             String taskName = arrOfStr[0];
             String taskDescription = arrOfStr[1];
             String taskDeadline = arrOfStr[2];
@@ -65,44 +65,40 @@ public class ProjectView extends JFrame implements PropertyChangeListener {
             JPanel panel2= new JPanel(new GridLayout(2,1));
             panel1.add(tDeadline);
             panel1.add(deadline);
-            // Create a check box which is always checked if the task Status is 1
+            // Create a check-box which is always checked if the task Status is true
+            JCheckBox status = new JCheckBox("status");
             if (taskStatus.equals("true")){
-                JCheckBox status = new JCheckBox("status",true);
+               status.setSelected(true);
+               status.setEnabled(false);
             }
             else{
-                JCheckBox status = new JCheckBox("status",true);
+                status.setSelected(false);
             }
+            // Adding the name,deadline,status of the task in a flowLayout from left to right
+            JPanel labelsPanel = new JPanel(new FlowLayout());
+            labelsPanel.add(panel1);
+            labelsPanel.add(panel2);
+            labelsPanel.add(status);
+            popupPanel.add(labelsPanel);
+            // The Task Description area
+            JTextArea tDescription = new JTextArea(5, 20);
+            tDescription.append(taskDescription + "\n");
+            tDescription.setEditable(false);
+            popupPanel.add(tDescription);
+            // Action Listener for the check-box status to notify the backend when the user marks
+            // a task as completed.
+            StringBuilder finalMutableTask = mutableTask;
+            status.addActionListener(new ActionListener() {
 
-            JPanel labelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            labelsPanel.add(label1);
-            labelsPanel.add(label2);
-
-            mainPanel.add(labelsPanel, BorderLayout.SOUTH);
-            JTextArea taskdescription = new JTextArea(5, 20);
-            textArea.setEditable(false);
-            textArea.append(taskName + "       " + "deadline:" + taskDeadline + "\n" + taskDescription + "\n");
-            status = new JCheckBox();
-            popupPanel.add(status);
-            popupPanel.add(taskdescription);
-            popupPanel.add(textArea);
-            popupPanel.add(l);
-            if (taskStatus[0] == "1") {
-                status = new JCheckBox("Status", true);
-            } else {
-                status = new JCheckBox("Status");
-            }
-
-            JCheckBox finalStatus = status;
-            ActionListener actionListener = new ActionListener() {
-                public void actionPerformed(ActionEvent actionEvent) {
-                    if (finalStatus.getModel().isSelected()) {
-                        taskStatus[0] = "1";
-                    } else {
-                        taskStatus[0] = "0";
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (status.isSelected()){
+                        //TODO:Make a change to the DAO and a call to Dashboard View's interactor
+                        finalMutableTask.setCharAt(finalMutableTask.length()-1,'1');
                     }
                 }
-            };
-            status.addActionListener(actionListener);
+            });
+            status.addActionListener(ActionListener);
         }
 
 
@@ -124,7 +120,6 @@ public class ProjectView extends JFrame implements PropertyChangeListener {
         popupFrame.setVisible(true);
                 )}
 
-    ;
 
     public void propertyChange(PropertyChangeEvent evt) {
         RefactorProjectState state = (RefactorprojectState) evt.getNewValue();
