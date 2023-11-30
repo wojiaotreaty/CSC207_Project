@@ -6,7 +6,12 @@ import entity.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupViewModel;
+import use_case.login.LoginDataAccessInterface;
+import use_case.signup.SignupDataAccessInterface;
+import view.LoginView;
+import view.SignupView;
 import view.ViewManager;
 
 import javax.swing.*;
@@ -48,7 +53,23 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        SignupView signupView = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+                usersDataAccessObject);
+        views.add(signupView, signupView.viewName);
+
+        LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+                )
+
+//        LoginView create(
+//                ViewManagerModel viewManagerModel,
+//                LoginViewModel loginViewModel,
+//                SignupViewModel signupViewModel,
+//                SignupController signupController,
+//                DashboardViewModel dashboardViewModel,
+//                LoginDataAccessInterface userDataAccessObject)
 
 
-    }
+
+
+        }
 }
