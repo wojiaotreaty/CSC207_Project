@@ -32,10 +32,11 @@ import java.util.Objects;
         public void execute(RefactorProjectInputData refactorProjectInputData) {
             // Getting the time right now
             LocalDateTime now = LocalDateTime.now();
-            int projectID = refactorProjectInputData.getProjectID();
+            String  projectID = refactorProjectInputData.id;
             // getting the project from the DAO
-            String [] l= {Integer.toString(projectID)};
-            Project project =  getProjects(l)[0];
+            String [] l= {projectID};
+            Project project;
+            project = userDataAccessObject.getProjects(l).get(0);
             ArrayList<Task> tasks = project.getTasks();
             int taskIndex = 0;
 
@@ -48,16 +49,23 @@ import java.util.Objects;
             LocalDate deadline = completedTask.getDeadline();
             // assuming the TasksDeadline is in "YYYY-MM-DD" format
             // claculating the time difference between the current date and the deadline date
-            long timeDifference = deadline.until(now, ChronoUnit.MILLIS)
+            long timeDifference = deadline.until(now, ChronoUnit.MILLIS);
             double deciDays = timeDifference / 86400000;
             long days = Math.round(deciDays);
-            ArrayList<LocalDate> dates = new ArrayList<>();
+            ArrayList<String> list_task = new ArrayList<String>();
             for (int i = taskIndex; i < tasks.size(); i++) {
                 LocalDate taskDeadline = tasks.get(i).getDeadline();
                 LocalDate shiftedTaskDeadline = taskDeadline.minusDays(days);
-                tasks.get(i).setDeadline(shiftedTaskDeadline);
+                Task task=tasks.get(i);
+                task.setDeadline(shiftedTaskDeadline);
+
+                String t=task.toStringUwu();
+                list_task.add(t);
+                userDataAccessObject.setTaskDeadline(projectID,tasks.get(i).getId(),shiftedTaskDeadline);
             }
             // TODO:Update the project entities
+            RefactorProjectOutputData refactorProjectOutputData = new RefactorProjectOutputData(list_task);
+            userPresenter.prepareSuccessView(refactorProjectOutputData);
 
         }
     }
