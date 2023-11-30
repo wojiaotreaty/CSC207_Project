@@ -1,7 +1,5 @@
 package interface_adapter.signup;
 
-import interface_adapter.ViewModel;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 

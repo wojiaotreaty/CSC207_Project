@@ -2,7 +2,6 @@ package app;
 
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.dashboard.DashboardViewModel; // <- will later change to dashboard
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;

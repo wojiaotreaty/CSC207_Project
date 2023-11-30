@@ -1,6 +1,5 @@
 package use_case.login;
 
-import entity.User;
 import java.util.ArrayList;
 /*
 Missing Project entity
