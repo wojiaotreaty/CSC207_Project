@@ -14,12 +14,4 @@ public class SignupOutputData {
         return username;
     }
 
-//    public String getCreationTime() {
-//        return creationTime;
-//    }
-//
-//    public void setCreationTime(String creationTime) {
-//        this.creationTime = creationTime;
-//    }
-
 }

@@ -30,20 +30,20 @@ public class LoginInteractor implements LoginInputBoundary {
 
                 User user = userDataAccessObject.getUser(loginInputData.getUsername());
 
-                ArrayList<Project> listofproject = user.getProjects(); // get arraylist of projects
-                for (Project project: listofproject) {
+                ArrayList<Project> listOfProject = user.getProjects(); // get arraylist of projects
+                for (Project project: listOfProject) {
                     ArrayList<Task> tasks = project.getTasks(); // return arraylist of tasks for the project
-                    String stringTasks = "";
+                    StringBuilder stringTasks = new StringBuilder();
                     for (Task task : tasks) {
-                        stringTasks = stringTasks.concat(task.toString());
-                        stringTasks = stringTasks.concat("|uwu|");
+                        stringTasks = stringTasks.append(task.toString());
+                        stringTasks = stringTasks.append("|uwu|");
 
                     }
                     ArrayList<String> projectList = new ArrayList<String>();
                     projectList.add(project.getId()); // project id
                     projectList.add(project.getName()); // project name
                     projectList.add(project.getDesc()); // project description
-                    projectList.add(stringTasks); // project tasks
+                    projectList.add(stringTasks.toString()); // project tasks
                     projectData.add(projectList);
                 }
 

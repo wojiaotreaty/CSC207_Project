@@ -1,5 +1,6 @@
 package app;
 
+import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupController;
@@ -40,7 +41,7 @@ public class SignupViewFactory {
         // Notice how we pass this method's parameters to the Presenter.
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
 
-        UsersFactory userFactory = new UsersFactory(); // Will be replaced with actual user entity class
+        UsersFactory userFactory = new CommonUserFactory(); // Will be replaced with actual user entity class
 
         SignupInputBoundary userSignupInteractor = new SignupInteractor(
                 userDataAccessObject, signupOutputBoundary, userFactory); //usersFactory will implement UserFactory
