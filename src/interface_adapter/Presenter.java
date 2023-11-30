@@ -2,21 +2,29 @@ package interface_adapter;
 
 import use_case.RefactorProject.RefactorProjectOutputBoundary;
 import use_case.RefactorProject.RefactorProjectOutputData;
-
+import interface_adapter.dashboard;
 public class Presenter implements RefactorProjectOutputBoundary {
-    private final ProjectViewModel projectViewModel;
+    private final DashboardViewModel dashboardViewModel;
 
-    public Presenter(ProjectViewModel projectViewModel) {
-        this.projectViewModel = projectViewModel;
+    public Presenter(DashBoardViewModel dashboardViewModel) {
+        this.dashboardViewModel = dashboardViewModel;
     }
 
     @Override
     public void prepareSuccessView(RefactorProjectOutputData response) {
-        ProjectState projectState = projectViewModel.getState();
+        DashboardState dashboardState = dashboardViewModel.getState();
         projectState.setRefactorProjectError(null);
 
         ProjectState.setTasks(response.getTask());
 
         projectViewModel.firePropertyChanged();
     }
+    @Override
+    public void prepareFailView(String error) {
+        ProjectState projectState = projectViewModel.getState();
+        projectState.setRefactorProjectError(error);
+
+        projectViewModel.firePropertyChanged();
+    }
+
 }
