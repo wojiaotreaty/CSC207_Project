@@ -1,6 +1,7 @@
 package use_case.add_project;
 import entity.Project;
 import entity.Task;
+import entity.User;
 import entity.ProjectFactory;
 import entity.TaskFactory;
 
