@@ -5,7 +5,7 @@ import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CommonTask implements TaskInterface {
+public class CommonTask implements Task {
     private String name;
     private String description;
     private LocalDate deadline;
