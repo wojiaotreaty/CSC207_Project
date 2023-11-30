@@ -6,9 +6,9 @@ public class OpenProjectOutputData {
     private final String projectId;
     private final String name;
     private final String description;
-    private final ArrayList<String[]> tasks;
+    private final ArrayList<String> tasks;
     public OpenProjectOutputData(String projectId, String name, String description,
-                                 ArrayList<String[]> tasks) {
+                                 ArrayList<String> tasks) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -27,7 +27,7 @@ public class OpenProjectOutputData {
         return description;
     }
 
-    public ArrayList<String[]> getTasks() {
+    public ArrayList<String> getTasks() {
         return tasks;
     }
 }
