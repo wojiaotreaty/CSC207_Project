@@ -1,9 +1,9 @@
 package use_case.add_project;
-import entity.ProjectInterface;
-import entity.TaskInterface;
-import entity.UserInterface;
-import entity.ProjectFactoryInterface;
-import entity.TaskFactoryInterface;
+import entity.Project;
+import entity.Task;
+import entity.User;
+import entity.ProjectFactory;
+import entity.TaskFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -15,12 +15,12 @@ import java.util.ArrayList;
 public class AddProjectInteractor implements AddProjectInputBoundary {
     final private AddProjectDataAccessInterface userDataAccessObject;
     final private AddProjectOutputBoundary userPresenter;
-    final private ProjectFactoryInterface projectFactory;
-    final private TaskFactoryInterface taskFactory;
+    final private ProjectFactory projectFactory;
+    final private TaskFactory taskFactory;
 
     public AddProjectInteractor(AddProjectDataAccessInterface addProjectDataAccessInterface,
-                            AddProjectOutputBoundary addProjectOutputBoundary,
-                                ProjectFactoryInterface projectFactory,
+                                AddProjectOutputBoundary addProjectOutputBoundary,
+                                ProjectFactory projectFactory,
                                 TaskFactoryInterface taskFactory) {
         this.userDataAccessObject = addProjectDataAccessInterface;
         this.userPresenter = addProjectOutputBoundary;
