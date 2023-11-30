@@ -8,5 +8,4 @@ public interface Project {
     String getProjectDesc();
 
     ArrayList<Task> getTasks();
-
 }
