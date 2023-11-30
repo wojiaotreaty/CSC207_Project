@@ -90,29 +90,37 @@ public class NotificationInteractor implements NotificationInputBoundary {
         if (!today.isEmpty()) {
             // Curly brackets, {}, are used to encompass tasks due on the same day and
             // related to the same project.
-            q.append("These tasks are due today: {\n");
+            m.append("These tasks are due today: {\n");
+            q.append("These tasks are due today: \n")
             for (Project project : today.keySet()) {
                 // The project description is omitted to save space in the call. I aim to have
                 // gpt give a relatively brief response, and I feel that the task descriptions
                 // along with the project title should be enough information to give some
                 // quick advice and a motivational statement.
-                q.append("For Project: ").append(project.getName()).append(" {\n");
+                m.append("For Project: ").append(project.getName()).append(" {\n");
+                q.append("     For Project: ").append(project.getName()).append("\n");
                 ArrayList<Task> tasks = today.get(project);
                 for (Task task : tasks) {
-                    q.append("Task Name: ").append(task.getName()).append(", ");
+                    m.append("Task Name: ").append(task.getName()).append(", ");
+                    m.append("Task Description: ").append(task.getDescription()).append("\n");
+                    q.append("     Task Name: ").append(task.getName()).append(", ");
                     q.append("Task Description: ").append(task.getDescription()).append("\n");
                 }
-                q.append("}\n");
+                m.append("}\n");
             }
-            q.append("}\n");
+            m.append("}\n");
         }
         if (!one.isEmpty()) {
-            q.append("These tasks are due tomorrow: {\n");
+            m.append("These tasks are due tomorrow: {\n");
+            q.append("These tasks are due tomorrow: \n");
             for (Project project : one.keySet()) {
-                q.append("For Project: ").append(project.getName()).append(" {\n");
+                m.append("For Project: ").append(project.getName()).append(" {\n");
+                q.append("     For Project: ").append(project.getName()).append("\n");
                 ArrayList<Task> tasks = one.get(project);
                 for (Task task : tasks) {
-                    q.append("Task Name: ").append(task.getName()).append(", ");
+                    m.append("Task Name: ").append(task.getName()).append(", ");
+                    m.append("Task Description: ").append(task.getDescription()).append("\n");
+                    q.append("     Task Name: ").append(task.getName()).append(", ");
                     q.append("Task Description: ").append(task.getDescription()).append("\n");
                 }
                 q.append("}\n");
@@ -120,19 +128,22 @@ public class NotificationInteractor implements NotificationInputBoundary {
             q.append("}\n");
         }
         if (!two.isEmpty()) {
-            q.append("These tasks are due the day after tomorrow: {\n");
+            m.append("These tasks are due the day after tomorrow: {\n");
+            q.append("These tasks are due the day after tomorrow: \n");
             for (Project project : two.keySet()) {
-                q.append("For Project: ").append(project.getName()).append(" {\n");
+                m.append("For Project: ").append(project.getName()).append(" {\n");
+                q.append("     For Project: ").append(project.getName()).append("\n");
                 ArrayList<Task> tasks = two.get(project);
                 for (Task task : tasks) {
-                    q.append("Task Name: ").append(task.getName()).append(", ");
+                    m.append("Task Name: ").append(task.getName()).append(", ");
+                    m.append("Task Description: ").append(task.getDescription()).append("\n");
+                    q.append("     Task Name: ").append(task.getName()).append(", ");
                     q.append("Task Description: ").append(task.getDescription()).append("\n");
                 }
                 q.append("}\n");
             }
             q.append("}\n");
         }
-        m.append(q);
         m.append("Briefly give me some advice for how I should get started, as well as some encouragement" +
                 "and motivation.\n");
         m.append("IMPORTANT: mark the beginning and end of your response with \"|uwu|\"");
@@ -179,7 +190,7 @@ public class NotificationInteractor implements NotificationInputBoundary {
             return extractMessage(response.toString());
 
         } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
+            return "GPT had an Oopsie, but it wishes you good luck on your tasks.";
         }
     }
     private static String extractMessage(String response) {
