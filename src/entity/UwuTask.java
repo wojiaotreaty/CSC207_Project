@@ -10,12 +10,14 @@ public class UwuTask implements Task {
     private String description;
     private LocalDate deadline;
     private boolean status;
+    private String id;
 
-    public UwuTask(String name, LocalDate deadline, String description) {
+    public UwuTask(String name, LocalDate deadline, String description, String id) {
         this.name = name;
         this.description = description;
         this.deadline = deadline;
         status = false;
+        this.id = id;
     }
     public UwuTask(ArrayList<String> info) {
         name = info.get(0);
@@ -42,6 +44,9 @@ public class UwuTask implements Task {
     public void setStatus(boolean status) {
         this.status = status;
     }
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
@@ -56,6 +61,20 @@ public class UwuTask implements Task {
     public boolean getStatus() {
         return status;
     }
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toStringUwu() {
+        StringBuilder s = new StringBuilder();
+        s.append(name).append("|uwu|");
+        s.append(description).append("|uwu|");
+        s.append(deadline.toString()).append("|uwu|");
+        s.append(status);
+        return String.valueOf(s);
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(name).append("`");
