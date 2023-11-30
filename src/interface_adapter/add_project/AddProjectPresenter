@@ -3,9 +3,6 @@ package interface_adapter.dashboard;
 import use_case.add_project.AddProjectOutputBoundary;
 import use_case.add_project.AddProjectOutputData;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class AddProjectPresenter implements AddProjectOutputBoundary {
 
     private final DashboardViewModel dashboardViewModel;
