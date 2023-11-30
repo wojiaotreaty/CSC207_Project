@@ -7,6 +7,7 @@ public class ProjectState {
     private String projectDescription;
     private ArrayList<String> tasks;
     private String projectTitle;
+    private String projectID;
     private String refactorProjectError = null;
 
     public ProjectState(ProjectState copy) {
@@ -38,7 +39,7 @@ public class ProjectState {
         return tasks;
     }
 
-    public void setTasks(ArrayList<String> tasks) {
+    public static void setTasks(ArrayList<String> tasks) {
         tasks = tasks;
     }
     public void setTaskStatus(int index, int status )
@@ -63,5 +64,12 @@ public class ProjectState {
 
     public void setProjectTitle(String projectTitle) {
         this.projectTitle = projectTitle;
+    }
+
+    public String getProjectID() {
+        return projectID;
+    }
+    public void setProjectID(String ID){
+       this.projectID=ID;
     }
 }
