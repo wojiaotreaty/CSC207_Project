@@ -17,6 +17,7 @@ import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -53,20 +54,14 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        SignupView signupView = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+        HashMap<SignupView, SignupController> map = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 usersDataAccessObject);
+        SignupView signupView = (SignupView) map.keySet().toArray()[0];
         views.add(signupView, signupView.viewName);
 
         LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                )
-
-//        LoginView create(
-//                ViewManagerModel viewManagerModel,
-//                LoginViewModel loginViewModel,
-//                SignupViewModel signupViewModel,
-//                SignupController signupController,
-//                DashboardViewModel dashboardViewModel,
-//                LoginDataAccessInterface userDataAccessObject)
+                map.get(signupView), dashboardViewModel, usersDataAccessObject);
+        views.add(loginView);
 
 
 
