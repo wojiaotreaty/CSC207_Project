@@ -32,7 +32,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
     public void execute(AddProjectInputData addProjectInputData) {
 
         String url = "https://api.openai.com/v1/chat/completions";
-        String apiKey;
+        String apiKey = null;
 
         try (BufferedReader br = new BufferedReader(new FileReader("../apikey.txt"))) {
             apiKey = br.readLine();
@@ -42,7 +42,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
         String model = "gpt-3.5-turbo";
 
         //A list of tasks. Each task is a list structured as follows: {Task Name, Task Desc, Task Deadline}
-        ArrayList<Task> tasks = new <ArrayList<Task>>);
+        ArrayList<Task> tasks = new <ArrayList<Task>();
         StringBuilder tasksString = new StringBuilder();
 
         try {
