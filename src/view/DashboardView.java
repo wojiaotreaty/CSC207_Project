@@ -96,11 +96,11 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        // ***Added
+        // ***Added toggleNotification button to buttonPanel
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
         add(buttonPanel, BorderLayout.NORTH);
-
+        // ***Automatically sets notifications to be sent periodically
         Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
@@ -237,6 +237,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
             JOptionPane.showMessageDialog(this, state.getAddProjectError());
             state.setAddProjectError(null);
         }
+        // ***Displays JOptionPane if there is a notification to be displayed.
         if (state.getNotificationMessage() != null) {
             JOptionPane.showMessageDialog(this, state.getNotificationMessage());
             state.setNotificationMessage(null);
