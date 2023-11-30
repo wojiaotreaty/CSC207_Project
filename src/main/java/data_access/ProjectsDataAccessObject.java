@@ -184,12 +184,7 @@ public class ProjectsDataAccessObject {
         return String.valueOf(resultBuilder);
     }
 
-    /**
-     * WARNING: for each generateNewProjectId() call, there MUST be 1 new project added!!
-     * (This can be changed later but will require a lot of work.)
-     * @return a unique projectId that is not in use for any other project.
-     */
-    public String generateNewProjectId(){
+    public String generateNewProjectIdHelper(){
         numOfProjects = numOfProjects + 1;
         return numOfProjects.toString();
     }

@@ -18,15 +18,9 @@ public class UsersDataAccessObject {
 
 //    This csv file connects user emails to the project IDs that it is associated with.
     private final File usersCsvFile;
-
     private final Map<String, Integer> headers = new LinkedHashMap<>();
-
     private UserFactory userFactory;
-
     private ProjectsDataAccessObject projectsDAO;
-
-    private User currentUser;
-
 
     /**
      * Note that no Users are built at time of DAO construction.
@@ -50,19 +44,13 @@ public class UsersDataAccessObject {
         }
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    public User getCurrentUser(){
-        return currentUser;
-    }
-
     /**
-     * Use this method when you are only operating on the currentUser.
+     * WARNING: for each generateNewProjectId() call, there MUST be 1 new project added!!
+     * (This can be changed later but will require a lot of work.)
+     * @return a unique projectId that is not in use for any other project.
      */
-    public void saveUser(){
-        saveUser(currentUser);
+    String generateNewProjectId(){
+        return projectsDAO.generateNewProjectIdHelper();
     }
 
     /**
