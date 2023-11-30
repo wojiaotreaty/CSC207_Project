@@ -13,7 +13,7 @@ public class NotificationPresenter implements NotificationOutputBoundary {
     @Override
     public void prepareNotificationView(NotificationOutputData notificationOutputData) {
         DashboardState dashboardState = dashboardViewModel.getState();
-        dashboardState.setNotificationMessage(notificationOutputData.getGptResponse());
+        dashboardState.setNotificationMessage(notificationOutputData.getMessage());
         dashboardViewModel.setState(dashboardState);
         dashboardViewModel.firePropertyChanged();
     }

@@ -29,6 +29,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
 
+    // ***Added notificationController to the constructor.
     public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
                          NotificationController notificationController) {
         this.dashboardViewModel = dashboardViewModel;
@@ -58,10 +59,12 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         updateEmptyDashboardLabel();
 
         JButton addProjectButton = new JButton("Add Project");
+        // ***Created toggleNotifications button
         JButton toggleNotifications = new JButton("Notifications Off");
         addProjectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // ***Added check for addProjectButton
                 if (e.getSource() == addProjectButton) {
                     try {
                         showAddProjectPopup();
@@ -71,15 +74,18 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
                 }
             }
         });
+        // ***Added actionListener to toggleNotification button
         toggleNotifications.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == toggleNotifications) {
+                    // If notifications are turned off, start them up again using scheduleAtFixedRate
                     if (scheduledFuture == null) {
                         Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
                         toggleNotifications.setText("Notifications Off");
                     }
+                    // Else, stop the scheduled notifications.
                     else {
                         scheduledFuture.cancel(true);
                         scheduledFuture = null;
@@ -90,6 +96,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        // ***Added
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
         add(buttonPanel, BorderLayout.NORTH);

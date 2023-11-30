@@ -1,11 +1,11 @@
 package use_case.send_notification;
 public class NotificationOutputData {
-    private final String gptResponse;
-    public NotificationOutputData(String gptResponse) {
-        this.gptResponse = gptResponse;
+    private final String message;
+    public NotificationOutputData(String message) {
+        this.message = message;
     }
 
-    public String getGptResponse() {
-        return gptResponse;
+    public String getMessage() {
+        return message;
     }
 }
