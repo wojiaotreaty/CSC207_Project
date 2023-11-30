@@ -11,7 +11,7 @@ public class DeleteProjectController {
         this.deleteProjectUseCaseInteractor = deleteProjectUseCaseInteractor;
     }
 
-    public void execute(String projectId){
-        deleteProjectUseCaseInteractor.execute(new DeleteProjectInputData(projectId));
+    public void execute(String username, String projectId){
+        deleteProjectUseCaseInteractor.execute(new DeleteProjectInputData(username, projectId));
     }
 }

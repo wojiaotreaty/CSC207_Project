@@ -17,9 +17,9 @@ public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
     @Override
     public void execute(DeleteProjectInputData deleteProjectInputData) {
         String projectId = deleteProjectInputData.getProjectId();
-        User currentUser = userDataAccessObject.getCurrentUser();
+        User user = userDataAccessObject.getUser(deleteProjectInputData.getUsername());
 
-        Project deletedProject = currentUser.deleteProject(projectId);
+        Project deletedProject = user.deleteProject(projectId);
 
 //        TODO: delete this block after testing; THIS SHOULD NEVER HAPPEN
         if (deletedProject == null){

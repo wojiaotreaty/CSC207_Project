@@ -9,12 +9,6 @@ public class DeleteProjectState {
 
     DeleteProjectState() {}
 
-//    TODO: determine if this alternative constructor is necessary
-    DeleteProjectState(DeleteProjectState copy){
-        deletedProjectId = copy.deletedProjectId;
-        deletedProjectName = copy.deletedProjectName;
-    }
-
     void setDeletedProjectId(String deletedProjectId){
         this.deletedProjectId = deletedProjectId;
     }
@@ -28,6 +22,6 @@ public class DeleteProjectState {
     }
 
     String getDeletedProjectName(){
-        return this.deletedProjectId;
+        return this.deletedProjectName;
     }
 }

@@ -4,7 +4,7 @@ import entity.User;
 
 public interface DeleteProjectDataAccessInterface {
 
-    User getCurrentUser();
+    User getUser(String userId);
 
     void saveUser();
 }
