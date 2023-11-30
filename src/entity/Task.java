@@ -5,27 +5,25 @@ import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class UwuTask implements Task {
+public class Task implements TaskInterface {
     private String name;
     private String description;
     private LocalDate deadline;
     private boolean status;
-    private String id;
 
-    public UwuTask(String name, LocalDate deadline, String description, String id) {
+    public Task(String name, LocalDate deadline, String description) {
         this.name = name;
         this.description = description;
         this.deadline = deadline;
         status = false;
-        this.id = id;
     }
-    public UwuTask(ArrayList<String> info) {
+    public Task(ArrayList<String> info) {
         name = info.get(0);
         description = info.get(1);
         deadline = LocalDate.parse(info.get(2));
         status = false;
     }
-    public UwuTask(HashMap<String, String> info) {
+    public Task(HashMap<String, String> info) {
         name = info.get("title");
         description = info.get("description");
         deadline = LocalDate.parse(info.get("deadline"));

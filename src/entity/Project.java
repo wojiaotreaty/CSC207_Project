@@ -3,19 +3,19 @@ package entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class UwuProject implements Project {
+public class Project implements ProjectInterface {
     private final String id;
     private final String name;
     private final String description;
     private ArrayList<Task> tasks;
 
-    public UwuProject(String id, String name, String description) {
+    public Project(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
         tasks = new ArrayList<Task>();
     }
-    public UwuProject(String id, String name, String description, ArrayList<Task> tasks) {
+    public Project(String id, String name, String description, ArrayList<Task> tasks) {
         this.id = id;
         this.name = name;
         this.description = description;
