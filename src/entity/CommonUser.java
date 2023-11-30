@@ -2,16 +2,16 @@ package entity;
 
 import java.util.ArrayList;
 
-public class User implements UserInterface {
+public class CommonUser implements User {
     private final String username;
     private final String password;
     private final ArrayList<Project> projects;
-    public User(String username, String password) {
+    public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
         this.projects = new ArrayList<Project>();
     }
-    public User(String username, String password, ArrayList<Project> projects) {
+    public CommonUser(String username, String password, ArrayList<Project> projects) {
         this.username = username;
         this.password = password;
         this.projects = projects;
