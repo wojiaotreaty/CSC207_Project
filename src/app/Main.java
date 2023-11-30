@@ -1,9 +1,17 @@
 package app;
 
+import data_access.ProjectsDataAccessObject;
+import data_access.UsersDataAccessObject;
+import entity.*;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupViewModel;
+import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,11 +32,23 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
 
+        UserFactory userFactory = new CommonUserFactory();
+        ProjectFactory projectFactory = new CommonProjectFactory();
+        TaskFactory taskFactory = new CommonTaskFactory();
 
 
-        ProjectsDataAccessObject(String projectsCsvPath, ProjectFactory projectFactory,
-                TaskFactory taskFactory);
+        ProjectsDataAccessObject projectsDAO;
+        UsersDataAccessObject usersDataAccessObject;
+        try {
+            projectsDAO = new ProjectsDataAccessObject("./projects.csv",
+                    projectFactory, taskFactory);
+            usersDataAccessObject = new UsersDataAccessObject("./users.csv",
+                    userFactory, projectsDAO);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        UsersDataAccessObject(String usersCsvPath, UserFactory userFactory, ProjectsDataAccessObject projectsDAO)
+
+
     }
 }
