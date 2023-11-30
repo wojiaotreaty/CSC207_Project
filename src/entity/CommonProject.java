@@ -9,12 +9,6 @@ public class CommonProject implements Project {
     private final String description;
     private ArrayList<Task> tasks;
 
-    public CommonProject(String id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        tasks = new ArrayList<Task>();
-    }
     public CommonProject(String id, String name, String description, ArrayList<Task> tasks) {
         this.id = id;
         this.name = name;
