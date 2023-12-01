@@ -81,7 +81,10 @@ public class ProjectsDataAccessObject {
                 }
             }
 
-            assert projectIds.size() == result.size();
+            if (projectIds.size() != result.size()){
+                throw new NoSuchElementException("Not all project ids were found when getting projects.");
+            }
+
             return result;
 
         } catch (IOException e){
