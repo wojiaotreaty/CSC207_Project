@@ -40,6 +40,12 @@ public class UsersDataAccessObjectTest {
         this.dummyProjectsTenMore = DataAccessObjectTestHelper.getDummyProjectsTenMore(PROJECT_FACTORY, TASK_FACTORY);
 
         this.dummyUser1 = USER_FACTORY.create("username1", "password1");
+        usersDAO.saveUser(dummyUser1);
+        for (Project dummyProject : dummyProjectsTen) {
+            dummyUser1.addProject(dummyProject);
+        }
+        usersDAO.saveUser(dummyUser1);
+
         this.dummyUser2 = USER_FACTORY.create("username2", "password2");
     }
 
@@ -50,10 +56,6 @@ public class UsersDataAccessObjectTest {
 
     @Test
     public void testSaveUserExisted(){
-        usersDAO.saveUser(dummyUser1);
-        for (Project dummyProject : dummyProjectsTen) {
-            dummyUser1.addProject(dummyProject);
-        }
         assert usersDAO.saveUser(dummyUser1);
     }
 
@@ -64,12 +66,14 @@ public class UsersDataAccessObjectTest {
 
     @Test
     public void testGetUserExists(){
-        assertEquals(usersDAO.getUser("username1"), dummyUser1);
-        assertEquals(usersDAO.getUser("username2"), dummyUser2);
+        usersDAO.saveUser(dummyUser2);
+        assertEquals(dummyUser1, usersDAO.getUser("username1"));
+        assertEquals(dummyUser2, usersDAO.getUser("username2"));
     }
 
     @Test
     public void testGenerateNewProjectIdAdding(){
+        usersDAO.saveUser(dummyUser2);
         for (int i = 10; i < 20; i++){
             Project matchingProject = dummyProjectsTenMore.get(i - 10);
 
@@ -79,6 +83,7 @@ public class UsersDataAccessObjectTest {
                     matchingProject.getProjectDescription(), matchingProject.getTasks());
 
             dummyUser2.addProject(projectToAdd);
+            usersDAO.saveUser(dummyUser2);
         }
 
         ArrayList<Project> userProjects = dummyUser2.getProjects();
@@ -91,21 +96,21 @@ public class UsersDataAccessObjectTest {
     @Test
     public void testGenerateNewProjectIdDeleting(){
         ArrayList<Integer> leftoverIdNums = new ArrayList<>();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 10; i++){
             leftoverIdNums.add(i + 1);
         }
 
         while (!leftoverIdNums.isEmpty()){
-            Integer i = (int) (Math.random() * 20) + 1;
+            Integer i = (int) (Math.random() * 10) + 1;
             if (leftoverIdNums.contains(i)){
                 leftoverIdNums.remove(i);
-                int maxPlusOne = leftoverIdNums.get(leftoverIdNums.size() - 1) + 1;
-
-                if (i <= 10){
-                    dummyUser1.deleteProject(i.toString());
-                } else {
-                    dummyUser2.deleteProject(i.toString());
+                int maxPlusOne = 1;
+                if (!leftoverIdNums.isEmpty()){
+                    maxPlusOne = leftoverIdNums.get(leftoverIdNums.size() - 1) + 1;
                 }
+
+                dummyUser1.deleteProject(i.toString());
+                usersDAO.saveUser(dummyUser1);
 
                 assertEquals(String.valueOf(maxPlusOne), usersDAO.generateNewProjectId());
             }

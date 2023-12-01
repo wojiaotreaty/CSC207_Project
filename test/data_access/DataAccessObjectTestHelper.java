@@ -35,7 +35,7 @@ public class DataAccessObjectTestHelper {
 
         for (int i = 10; i < 20; i++){
             String id = String.valueOf(i + 1);
-            LocalDate dummyDate = LocalDate.parse("2023-06-21S");
+            LocalDate dummyDate = LocalDate.parse("2023-06-21");
             Task dummyTask = taskFactory.create("task "  + id, dummyDate, "dummy task desc");
             ArrayList<Task> dummyTaskList = new ArrayList<>();
             dummyTaskList.add(dummyTask);

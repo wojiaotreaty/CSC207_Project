@@ -37,6 +37,20 @@ public class CommonUser implements User {
                 Objects.equals(password, that.password) && Objects.equals(projects, that.projects);
     }
 
+    @Override
+    public String toString(){
+
+        String output = "";
+        output += "Username: " + this.username + "\n";
+
+        StringBuilder projectListString = new StringBuilder();
+        for (Project project : this.projects){
+            projectListString.append("\t").append(project.getProjectId()).append("\n");
+        }
+        output += "Projects: " + "\n" + projectListString;
+        return output;
+    }
+
     public Project deleteProject(String id) {
         for (Project project : projects) {
             if (project.getProjectId().equals(id)) {
