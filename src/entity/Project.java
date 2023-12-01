@@ -1,2 +1,5 @@
-package entity;public class Project {
+package entity;
+
+public class Project {
+
 }
