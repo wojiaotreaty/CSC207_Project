@@ -76,9 +76,7 @@ public class UsersDataAccessObjectTest {
 
     @Test
     public void testGenerateNewProjectId(){
-        for (int i = 0; i < 10; i++){
-            username2
-        }
+
 
         for (int i = 0; i < 10; i++){
             String id = projectsDAO.generateNewProjectIdHelper();

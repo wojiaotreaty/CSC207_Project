@@ -84,7 +84,7 @@ public class ProjectsDataAccessObjectTest {
                 String[] ids = leftoverIds.toArray(new String[0]);
 
                 ArrayList<Project> returnedProjects = projectsDAO.getProjects(ids);
-                for (int j = 0; j < 10; j++){
+                for (int j = 0; j < dummyProjects.size(); j++){
                     assertEquals(dummyProjects.get(j), returnedProjects.get(j));
                 }
             }
@@ -92,16 +92,10 @@ public class ProjectsDataAccessObjectTest {
 
 //        Remake dummyProjects
         this.dummyProjects = DataAccessObjectTestHelper.getDummyProjectsTen(PROJECT_FACTORY, TASK_FACTORY);
-
-        projectsDAO.saveProjects(dummyProjects);
     }
 
     @Test
-    public void testGenerateNewProjectIdHelper(){
-        for (int i = 0; i < 10; i++){
-            projectsDAO.deleteProject(String.valueOf(i + 1));
-        }
-
+    public void testGenerateNewProjectIdHelperAdding(){
         for (int i = 0; i < 10; i++){
             String id = projectsDAO.generateNewProjectIdHelper();
             assertEquals(String.valueOf(i + 1), id);
@@ -115,6 +109,27 @@ public class ProjectsDataAccessObjectTest {
         ArrayList<Project> returnedProjects = projectsDAO.getProjects(dummyIds);
         for (int j = 0; j < 10; j++){
             assertEquals(dummyProjects.get(j), returnedProjects.get(j));
+        }
+    }
+
+    @Test
+    public void testGenerateNewProjectIdHelperDeleting(){
+        projectsDAO.saveProjects(dummyProjects);
+        ArrayList<Integer> leftoverIdNums = new ArrayList<>();
+        for (int i = 0; i < dummyIds.length; i++){
+            leftoverIdNums.add(Integer.parseInt(dummyIds[i]));
+        }
+
+        while (!leftoverIdNums.isEmpty()){
+            int i = (int) (Math.random() * 10) + 1;
+            if (leftoverIdNums.contains(i)){
+                leftoverIdNums.remove(i);
+                int max = leftoverIdNums.get(leftoverIdNums.size() - 1);
+
+                projectsDAO.deleteProject(String.valueOf(i));
+
+                assertEquals(String.valueOf(max), projectsDAO.generateNewProjectIdHelper());
+            }
         }
     }
 
