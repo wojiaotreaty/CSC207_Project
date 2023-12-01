@@ -4,6 +4,7 @@ import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
+import interface_adapter.send_notification.NotificationController;
 
 
 import javax.swing.*;
@@ -13,15 +14,25 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import javax.swing.text.MaskFormatter;
 
 public class DashboardView extends JFrame implements PropertyChangeListener {
     private final DashboardViewModel dashboardViewModel;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
+    private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> scheduledFuture = null;
 
-    public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController) {
+    // ***Added notificationController to the constructor.
+    public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
+                         NotificationController notificationController) {
+      
         this.dashboardViewModel = dashboardViewModel;
 
         DashboardState dashboardState = dashboardViewModel.getState();
@@ -49,20 +60,50 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         updateEmptyDashboardLabel();
 
         JButton addProjectButton = new JButton("Add Project");
+        // ***Created toggleNotifications button
+        JButton toggleNotifications = new JButton("Notifications Off");
         addProjectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    showAddProjectPopup();
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
+                // ***Added check for addProjectButton
+                if (e.getSource() == addProjectButton) {
+                    try {
+                        showAddProjectPopup();
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+        // ***Added actionListener to toggleNotification button
+        toggleNotifications.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == toggleNotifications) {
+                    // If notifications are turned off, start them up again using scheduleAtFixedRate
+                    if (scheduledFuture == null) {
+                        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+                        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+                        toggleNotifications.setText("Notifications Off");
+                    }
+                    // Else, stop the scheduled notifications.
+                    else {
+                        scheduledFuture.cancel(true);
+                        scheduledFuture = null;
+                        toggleNotifications.setText("Notifications On");
+                    }
                 }
             }
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        // ***Added toggleNotification button to buttonPanel
+        buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
         add(buttonPanel, BorderLayout.NORTH);
+        // ***Automatically sets notifications to be sent periodically
+        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {
@@ -196,6 +237,11 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
         if (state.getAddProjectError() != null) {
             JOptionPane.showMessageDialog(this, state.getAddProjectError());
+        }
+        // ***Displays JOptionPane if there is a notification to be displayed.
+        if (state.getNotificationMessage() != null) {
+            JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+            state.setNotificationMessage(null);
         }
         displayAllProjects();
     }
