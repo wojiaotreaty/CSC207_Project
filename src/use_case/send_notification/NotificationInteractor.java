@@ -91,14 +91,14 @@ public class NotificationInteractor implements NotificationInputBoundary {
             // Curly brackets, {}, are used to encompass tasks due on the same day and
             // related to the same project.
             m.append("These tasks are due today: {\n");
-            q.append("These tasks are due today: \n")
+            q.append("These tasks are due today: \n");
             for (Project project : today.keySet()) {
                 // The project description is omitted to save space in the call. I aim to have
                 // gpt give a relatively brief response, and I feel that the task descriptions
                 // along with the project title should be enough information to give some
                 // quick advice and a motivational statement.
-                m.append("For Project: ").append(project.getName()).append(" {\n");
-                q.append("     For Project: ").append(project.getName()).append("\n");
+                m.append("For Project: ").append(project.getProjectName()).append(" {\n");
+                q.append("     For Project: ").append(project.getProjectName()).append("\n");
                 ArrayList<Task> tasks = today.get(project);
                 for (Task task : tasks) {
                     m.append("Task Name: ").append(task.getName()).append(", ");
@@ -114,8 +114,8 @@ public class NotificationInteractor implements NotificationInputBoundary {
             m.append("These tasks are due tomorrow: {\n");
             q.append("These tasks are due tomorrow: \n");
             for (Project project : one.keySet()) {
-                m.append("For Project: ").append(project.getName()).append(" {\n");
-                q.append("     For Project: ").append(project.getName()).append("\n");
+                m.append("For Project: ").append(project.getProjectName()).append(" {\n");
+                q.append("     For Project: ").append(project.getProjectName()).append("\n");
                 ArrayList<Task> tasks = one.get(project);
                 for (Task task : tasks) {
                     m.append("Task Name: ").append(task.getName()).append(", ");
@@ -131,8 +131,8 @@ public class NotificationInteractor implements NotificationInputBoundary {
             m.append("These tasks are due the day after tomorrow: {\n");
             q.append("These tasks are due the day after tomorrow: \n");
             for (Project project : two.keySet()) {
-                m.append("For Project: ").append(project.getName()).append(" {\n");
-                q.append("     For Project: ").append(project.getName()).append("\n");
+                m.append("For Project: ").append(project.getProjectName()).append(" {\n");
+                q.append("     For Project: ").append(project.getProjectName()).append("\n");
                 ArrayList<Task> tasks = two.get(project);
                 for (Task task : tasks) {
                     m.append("Task Name: ").append(task.getName()).append(", ");
