@@ -8,4 +8,5 @@ public interface Task {
     void setStatus(boolean status);
 
     LocalDate getDeadline();
+    void setDeadline(LocalDate deadline);
 }

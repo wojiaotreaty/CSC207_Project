@@ -37,6 +37,8 @@ public class CommonTask implements Task {
     public LocalDate getDeadline() {
         return deadline;
     }
+
+
     public String getDescription() {
         return description;
     }

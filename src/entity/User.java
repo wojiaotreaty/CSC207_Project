@@ -6,6 +6,7 @@ public interface User {
     String getUsername();
     String getPassword();
     ArrayList<Project> getProjects();
+    Project getProject(String id);
 
     // NOTE: we can either do this, or make the deleteProject() in User take a Project.
     // I think this approach makes more sense but am amenable to changes

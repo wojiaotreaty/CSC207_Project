@@ -22,6 +22,14 @@ public class CommonUser implements User {
     public String getPassword() {
         return password;
     }
+    public Project getProject(String id) {
+        for (Project project : projects) {
+            if (project.getProjectId().equals(id)) {
+                return project;
+            }
+        }
+        return null;
+    }
 
     public ArrayList<Project> getProjects() {
         return (ArrayList<Project>) projects.clone();
