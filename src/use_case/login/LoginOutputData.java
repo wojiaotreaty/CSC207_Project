@@ -17,12 +17,7 @@ public class LoginOutputData {
     public LoginOutputData(String username, ArrayList<ArrayList<String>> projects, boolean useCaseFailed) {
         this.username = username;
         this.useCaseFailed = useCaseFailed;
-        if (projects != null) {
-            this.projects = projects;
-        }
-        else {
-            this.projects = new ArrayList<ArrayList<String>>();
-        }
+        this.projects = projects;
     }
 
     public String getUsername() {
