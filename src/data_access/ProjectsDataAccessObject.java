@@ -26,8 +26,6 @@ public class ProjectsDataAccessObject {
 
     private TaskFactory taskFactory;
 
-    Long numOfProjects;
-
     /**
      * Note that no Projects are built at time of DAO construction.
      * Instead, Projects are built only when they are needed.
@@ -50,7 +48,6 @@ public class ProjectsDataAccessObject {
                 writer.newLine();
             }
         }
-        numOfProjects = (long) Files.readAllLines(projectsCsvFile.toPath(), StandardCharsets.UTF_8).size() - 1;
 
     }
 
@@ -185,8 +182,12 @@ public class ProjectsDataAccessObject {
     }
 
     public String generateNewProjectIdHelper(){
-        numOfProjects = numOfProjects + 1;
-        return numOfProjects.toString();
+        try {
+            long numOfProjects = (long) Files.readAllLines(projectsCsvFile.toPath(), StandardCharsets.UTF_8).size() - 1;
+            return String.valueOf(numOfProjects);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
