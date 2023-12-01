@@ -61,8 +61,8 @@ public class DashboardViewFactory {
 
         return new NotificationController(notificationInteractor);
     }
-    private static DeleteProjectController createDeleteProjectUseCase(DashboardViewModel dashboardViewModel,
+    private static DeleteProjectController createDeleteProjectUseCase(DeleteProjectViewModel deleteprojectViewModel,
                                                                       DeleteProjectDataAccessInterface deleteProjectDataAccessInterface) throws IOException {
-        DeleteProjectOutputBoundary deleteProjectOutputBoundary = new DeleteProjectPresenter()
+        DeleteProjectOutputBoundary deleteProjectOutputBoundary = new DeleteProjectPresenter(deleteprojectViewModel)
     }
 }
