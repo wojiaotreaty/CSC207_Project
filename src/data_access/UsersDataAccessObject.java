@@ -79,12 +79,12 @@ public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDa
 
             String row;
             while ((row = reader.readLine()) != null) {
-                userExists = true;
                 String[] col = row.split("%%");
                 String currentName = String.valueOf(col[headers.get("username")]);
 
 //                if the user exists, overwrite it in the modified file content
                 if (currentName.equals(username)){
+                    userExists = true;
                     String password = String.valueOf(col[headers.get("password")]);
 
                     if (user.getProjects().isEmpty()){
