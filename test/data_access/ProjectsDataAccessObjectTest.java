@@ -71,13 +71,14 @@ public class ProjectsDataAccessObjectTest {
     // Deletes the 10 dummyProjects in the database right now, then adds them back
     @Test
     public void testDeleteProjects(){
+        projectsDAO.saveProjects(dummyProjects);
         ArrayList<String> leftoverIds = new ArrayList<>(List.of(dummyIds));
 
         while (!leftoverIds.isEmpty()){
             int i = (int) (Math.random() * 10) + 1;
             if (leftoverIds.contains(String.valueOf(i))){
                 leftoverIds.remove(String.valueOf(i));
-                dummyProjects.remove(i);
+                dummyProjects.removeIf(project -> project.getProjectId().equals(String.valueOf(i)));
 
                 projectsDAO.deleteProject(String.valueOf(i));
 
@@ -101,8 +102,9 @@ public class ProjectsDataAccessObjectTest {
             assertEquals(String.valueOf(i + 1), id);
 
             ArrayList<Project> projectsToAdd = new ArrayList<>();
-            projectsToAdd.add(
-                    PROJECT_FACTORY.create(id, "Project " + i, "dummy", new ArrayList<>()));
+            Project matchingDummy = dummyProjects.get(i);
+            projectsToAdd.add(PROJECT_FACTORY.create(id, matchingDummy.getProjectName(),
+                    matchingDummy.getProjectDescription(), matchingDummy.getTasks()));
             projectsDAO.saveProjects(projectsToAdd);
         }
 
@@ -116,7 +118,7 @@ public class ProjectsDataAccessObjectTest {
     public void testGenerateNewProjectIdHelperDeleting(){
         projectsDAO.saveProjects(dummyProjects);
         ArrayList<Integer> leftoverIdNums = new ArrayList<>();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 10; i++){
             leftoverIdNums.add(i + 1);
         }
 
@@ -124,7 +126,10 @@ public class ProjectsDataAccessObjectTest {
             Integer i = (int) (Math.random() * 10) + 1;
             if (leftoverIdNums.contains(i)){
                 leftoverIdNums.remove(i);
-                int maxPlusOne = leftoverIdNums.get(leftoverIdNums.size() - 1) + 1;
+                int maxPlusOne = 1;
+                if (!leftoverIdNums.isEmpty()){
+                    maxPlusOne = leftoverIdNums.get(leftoverIdNums.size() - 1) + 1;
+                }
 
                 projectsDAO.deleteProject(String.valueOf(i));
 

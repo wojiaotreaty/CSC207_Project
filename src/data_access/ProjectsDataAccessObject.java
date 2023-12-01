@@ -181,7 +181,7 @@ public class ProjectsDataAccessObject {
     private String projectToString(Project project){
         StringBuilder resultBuilder = new StringBuilder();
         resultBuilder.append(project.getProjectId()).append("%%");
-        resultBuilder.append(project.getProjectId()).append("%%");
+        resultBuilder.append(project.getProjectName()).append("%%");
         resultBuilder.append(project.getProjectDescription()).append("%%");
 
         StringBuilder rawTasks = new StringBuilder();
@@ -204,8 +204,9 @@ public class ProjectsDataAccessObject {
             }
 
             String[] col = lastLine.split("%%");
-            String currentId = String.valueOf(col[headers.get("projectId")]);
-            int largestIdPlusOne = Integer.parseInt(currentId) + 1;
+            String lastId = String.valueOf(col[headers.get("projectId")]);
+            if (lastId.equals("projectId")) return "1";
+            int largestIdPlusOne = Integer.parseInt(lastId) + 1;
             return Integer.toString(largestIdPlusOne);
 
         } catch (IOException e){
@@ -226,12 +227,10 @@ public class ProjectsDataAccessObject {
 
 //                If the id matches the id of the project that needs to be deleted,
 //                Remove the corresponding row in the modified output
-                if (id.equals(currentId)){
-                    row = "";
+                if (!id.equals(currentId)){
+                    inputBuffer.append(row);
+                    inputBuffer.append('\n');
                 }
-
-                inputBuffer.append(row);
-                inputBuffer.append('\n');
             }
 
             reader.close();
