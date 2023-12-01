@@ -53,11 +53,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         projectsList = dashboardState.getProjects();
 
 
-//        setTitle("Project Dashboard");
-//        setSize(600, 400);
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setLayout(new BorderLayout());
-//        setResizable(false);
+
+//        this.setSize(600, 400);
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.setLayout(new BorderLayout());
+//        this.setResizable(false);
 
         dashboardPanel = new JPanel();
         dashboardPanel.setLayout(new BoxLayout(dashboardPanel, BoxLayout.Y_AXIS));
@@ -107,11 +107,17 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setPreferredSize(new Dimension(600, 50));
+        scrollPane.setPreferredSize(new Dimension(600, 350));
         // ***Added toggleNotification button to buttonPanel
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         this.add(buttonPanel);
         this.add(scrollPane);
+
+        this.setPreferredSize(new Dimension(600, 400));
 
         displayAllProjects();
 //        add(buttonPanel, BorderLayout.NORTH);

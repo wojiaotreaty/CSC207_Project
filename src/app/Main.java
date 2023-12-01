@@ -74,6 +74,10 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         application.pack();
+        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        application.setSize(600, 400);
+        application.setLayout(new BorderLayout());
+        application.setResizable(false);
         application.setVisible(true);
         }
 }

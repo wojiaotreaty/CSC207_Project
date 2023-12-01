@@ -111,6 +111,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         this.add(passwordInfo);
         this.add(passwordErrorField);
         this.add(buttons);
+        this.setPreferredSize(new Dimension(600, 400));
     }
 
     /**
