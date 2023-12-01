@@ -1,6 +1,7 @@
 package use_case.signup;
 
 import entity.UserFactory;
+import entity.User;
 
 public class SignupInteractor implements SignupInputBoundary {
     private final SignupDataAccessInterface userDataAccessObject;
