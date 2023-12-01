@@ -10,7 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddProjectInteractor implements AddProjectInputBoundary {
     final private AddProjectDataAccessInterface userDataAccessObject;
@@ -58,8 +60,8 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
                     addProjectInputData.getProjectTitle() + ". Project Description: " + addProjectInputData.getProjectDetails() +
                     ". Project Deadline: " + addProjectInputData.getProjectDeadline() + ". Given this project, " +
                     "break it down into smaller subtasks. I want your response formatted EXACTLY in the following " +
-                    "way: ;<insert task name>@ <insert brief task description>@ <insert task deadline as YYYY-MM-DD>; another task;" +
-                    " .... Do not include an opening or closing sentence in your response.\"}]}";
+                    "way: <insert task name>~<insert brief task description>~<insert task deadline as YYYY-MM-DD>" +
+                    " .... with each task on the next line. Do not include an opening or closing sentence in your response.\"}]}";
             connection.setDoOutput(true);
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(body);
@@ -76,15 +78,18 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
             }
             br.close();
 
-            String[] tasksArray = extractMessageFromJSONResponse(response.toString()).split(";", 0);
+
+            String tasksAsString = extractContentString(String.valueOf(response));
+
+            String [] tasksArray = tasksAsString.split("\\\\n");
 
             for (String task : tasksArray) {
-                String[] taskAttributes = task.split("@");
+                String[] taskAttributes = task.split("~");
                 tasksString.append(taskAttributes[0]).append('`');
                 tasksString.append(taskAttributes[1]).append('`');
                 tasksString.append(taskAttributes[2]).append("|uwu|");
 
-                Tast task = taskFactory.create(taskAttributes[0], taskAttributes[2], taskAttributes[1]);
+                Task task = taskFactory.create(taskAttributes[0], LocalDate.parse(taskAttributes[2].strip()), taskAttributes[1]);
                 tasks.add(task);
 
             }
@@ -115,10 +120,10 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
 
     }
 
-    private String extractMessageFromJSONResponse(String response) {
-        int start = response.indexOf("content")+ 11;
+    private String extractContentString(String response) {
+        int start = response.indexOf("content") + 11;
 
-        int end = response.indexOf("\"", start);
+        int end = response.indexOf("}", start) - 7;
 
         return response.substring(start, end);
     }
