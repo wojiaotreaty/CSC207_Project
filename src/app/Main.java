@@ -66,7 +66,7 @@ public class Main {
                 map.get(signupView), dashboardViewModel, usersDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         views.add(dashboardView, dashboardViewModel.getViewName());
 
 
