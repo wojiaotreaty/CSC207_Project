@@ -3,6 +3,7 @@ package data_access;
 import entity.User;
 import entity.UserFactory;
 import entity.Project;
+import use_case.add_project.AddProjectDataAccessInterface;
 import use_case.delete_project.DeleteProjectDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.send_notification.NotificationUsersDataAccessInterface;
@@ -18,7 +19,7 @@ import java.util.Map;
  * It DOES NOT have project information.
  */
 
-public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface  {
+public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface {
 
 //    This csv file connects user emails to the project IDs that it is associated with.
     private final File usersCsvFile;
@@ -53,7 +54,7 @@ public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDa
      * (This can be changed later but will require a lot of work.)
      * @return a unique projectId that is not in use for any other project.
      */
-    String generateNewProjectId(){
+    public String generateNewProjectId(){
         return projectsDAO.generateNewProjectIdHelper();
     }
 

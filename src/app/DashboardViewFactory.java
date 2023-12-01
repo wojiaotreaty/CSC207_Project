@@ -1,13 +1,21 @@
 package app;
 
 import entity.CommonProjectFactory;
+import entity.CommonTaskFactory;
+import entity.TaskFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.add_project.AddProjectController;
+import interface_adapter.dashboard.AddProjectPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectPresenter;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
 import interface_adapter.send_notification.NotificationPresenter;
+import use_case.add_project.AddProjectDataAccessInterface;
+import use_case.add_project.AddProjectInputBoundary;
+import use_case.add_project.AddProjectInteractor;
+import use_case.add_project.AddProjectOutputBoundary;
 import use_case.delete_project.DeleteProjectDataAccessInterface;
 import use_case.delete_project.DeleteProjectInputBoundary;
 import use_case.delete_project.DeleteProjectInteractor;
@@ -51,9 +59,10 @@ public class DashboardViewFactory {
         AddProjectOutputBoundary addProjectOutputBoundary = new AddProjectPresenter(dashboardViewModel);
 
         ProjectFactory projectFactory = new CommonProjectFactory();
+        TaskFactory taskFactory = new CommonTaskFactory();
 
         AddProjectInputBoundary addProjectInteractor = new AddProjectInteractor(
-                addProjectDataAccessInterface, addProjectOutputBoundary, projectFactory);
+                addProjectDataAccessInterface, addProjectOutputBoundary, projectFactory, taskFactory);
 
         return new AddProjectController(addProjectInteractor);
     }
