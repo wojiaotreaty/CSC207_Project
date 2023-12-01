@@ -1,6 +1,7 @@
 package app;
 
 import entity.CommonProjectFactory;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectPresenter;
@@ -8,6 +9,8 @@ import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
 import interface_adapter.send_notification.NotificationPresenter;
 import use_case.delete_project.DeleteProjectDataAccessInterface;
+import use_case.delete_project.DeleteProjectInputBoundary;
+import use_case.delete_project.DeleteProjectInteractor;
 import use_case.delete_project.DeleteProjectOutputBoundary;
 import use_case.send_notification.NotificationInputBoundary;
 import use_case.send_notification.NotificationInteractor;
@@ -24,6 +27,7 @@ public class DashboardViewFactory {
 
     public static DashboardView create(DashboardViewModel dashboardViewModel,
                                        DeleteProjectViewModel deleteProjectViewModel,
+                                       ViewManagerModel viewManagerModel,
                                        AddProjectDataAccessInterface addProjectDataAccessInterface,
                                        NotificationUsersDataAccessInterface notificationUsersDataAccessInterface,
                                        DeleteProjectDataAccessInterface deleteProjectDataAccessInterface) {
@@ -31,8 +35,8 @@ public class DashboardViewFactory {
         try {
             AddProjectController addProjectController = createAddProjectUseCase(dashboardViewModel, addProjectDataAccessInterface);
             NotificationController notificationController = createNotificationUseCase(dashboardViewModel, notificationUsersDataAccessInterface);
-            DeleteProjectController deleteProjectController =
-            return new DashboardView(dashboardViewModel, addProjectController, notificationController);
+            DeleteProjectController deleteProjectController = createDeleteProjectUseCase(deleteProjectViewModel, dashboardViewModel, viewManagerModel, deleteProjectDataAccessInterface);
+            return new DashboardView(dashboardViewModel, addProjectController, notificationController, deleteProjectController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not instantiate DashboardView.");
         }
@@ -62,7 +66,13 @@ public class DashboardViewFactory {
         return new NotificationController(notificationInteractor);
     }
     private static DeleteProjectController createDeleteProjectUseCase(DeleteProjectViewModel deleteprojectViewModel,
+                                                                      DashboardViewModel dashboardViewModel,
+                                                                      ViewManagerModel viewManagerModel,
                                                                       DeleteProjectDataAccessInterface deleteProjectDataAccessInterface) throws IOException {
-        DeleteProjectOutputBoundary deleteProjectOutputBoundary = new DeleteProjectPresenter(deleteprojectViewModel)
+        DeleteProjectOutputBoundary deleteProjectOutputBoundary = new DeleteProjectPresenter(deleteprojectViewModel, dashboardViewModel, viewManagerModel);
+
+        DeleteProjectInputBoundary deleteprojectInteractor = new DeleteProjectInteractor(deleteProjectDataAccessInterface, deleteProjectOutputBoundary);
+
+        return new DeleteProjectController(deleteprojectInteractor);
     }
 }
