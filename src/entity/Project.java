@@ -10,3 +10,4 @@ public interface Project {
 
     ArrayList<Task> getTasks();
 }
+
