@@ -7,7 +7,7 @@ import java.beans.PropertyChangeSupport;
 
 public class DashboardViewModel extends ViewModel {
   
-    public final String viewName = "Project Dashboard";
+    private final String viewName = "Project Dashboard";
 
     private DashboardState state = new DashboardState();
 

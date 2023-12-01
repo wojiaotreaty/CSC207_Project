@@ -4,6 +4,7 @@ import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
+import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.send_notification.NotificationController;
 
 
@@ -31,7 +32,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
     // ***Added notificationController to the constructor.
     public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
-                         NotificationController notificationController) {
+                         NotificationController notificationController, DeleteProjectController deleteProjectController) {
       
         this.dashboardViewModel = dashboardViewModel;
 

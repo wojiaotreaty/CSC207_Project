@@ -5,11 +5,13 @@ import data_access.UsersDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupViewModel;
 import use_case.login.LoginDataAccessInterface;
 import use_case.signup.SignupDataAccessInterface;
+import view.DashboardView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
@@ -37,6 +39,7 @@ public class Main {
         DashboardViewModel dashboardViewModel = new DashboardViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
+        DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
 
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
@@ -61,9 +64,10 @@ public class Main {
 
         LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 map.get(signupView), dashboardViewModel, usersDataAccessObject);
-        views.add(loginView);
+        views.add(loginView, loginView.viewName);
 
-
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, usersDataAccessObject, usersDataAccessObject);
+        views.add(dashboardView, dashboardViewModel.getViewName());
 
 
 
