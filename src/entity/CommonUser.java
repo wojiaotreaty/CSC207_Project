@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CommonUser implements User {
     private final String username;
@@ -26,6 +27,16 @@ public class CommonUser implements User {
     public ArrayList<Project> getProjects() {
         return (ArrayList<Project>) projects.clone();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommonUser that = (CommonUser) o;
+        return Objects.equals(username, that.username) &&
+                Objects.equals(password, that.password) && Objects.equals(projects, that.projects);
+    }
+
     public Project deleteProject(String id) {
         for (Project project : projects) {
             if (project.getProjectId().equals(id)) {
