@@ -70,7 +70,10 @@ public class Main {
         views.add(dashboardView, dashboardViewModel.getViewName());
 
 
+        viewManagerModel.setActiveView(signupView.viewName);
+        viewManagerModel.firePropertyChanged();
 
-
+        application.pack();
+        application.setVisible(true);
         }
 }
