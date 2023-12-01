@@ -38,7 +38,7 @@ public class ProjectsDataAccessObject {
         projectsCsvFile = new File(projectsCsvPath);
         headers.put("projectId", 0);
         headers.put("projectName", 1);
-        headers.put("projectDes", 2);
+        headers.put("projectDesc", 2);
         headers.put("projectTasks", 3);
 
         if (projectsCsvFile.length() == 0) {
@@ -61,7 +61,7 @@ public class ProjectsDataAccessObject {
         try (BufferedReader reader = new BufferedReader(new FileReader(projectsCsvFile))) {
             String header = reader.readLine();
             // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-            assert header.equals("projectId%%projectName%%projectDes%%projectTasks");
+            assert header.equals("projectId%%projectName%%projectDesc%%projectTasks");
 
             ArrayList<String> projectIds = new ArrayList<>(Arrays.asList(ids));
             ArrayList<Project> result = new ArrayList<>();
@@ -69,7 +69,7 @@ public class ProjectsDataAccessObject {
             String row;
             while ((row = reader.readLine()) != null) {
                 String[] col = row.split("%%");
-                String currentId = String.valueOf(col[headers.get("username")]);
+                String currentId = String.valueOf(col[headers.get("projectId")]);
                 if (projectIds.contains(currentId)){
                     String currentName = String.valueOf(col[headers.get("projectName")]);
                     String currentDes = String.valueOf(col[headers.get("projectDesc")]);
@@ -81,8 +81,11 @@ public class ProjectsDataAccessObject {
                 }
             }
 
-            if (projectIds.size() != result.size()){
+            if (projectIds.size() > result.size()){
                 throw new NoSuchElementException("Not all project ids were found when getting projects.");
+            }
+            if (projectIds.size() < result.size()){
+                throw new RuntimeException("List of project ids contain duplicates.");
             }
 
             return result;
@@ -96,16 +99,20 @@ public class ProjectsDataAccessObject {
      * Helper method for getProjects.
      */
     private ArrayList<Task> getTasksList(String currentTasks) {
-        String[] rawTasksList = currentTasks.split("|uwu|");
+        String[] rawTasksList = currentTasks.split("[|]uwu[|]");
 
         ArrayList<Task> tasksList = new ArrayList<>();
 
-        for (String rawTask : rawTasksList){
+        for (int i = 0; i < rawTasksList.length; i++){
+            String rawTask = rawTasksList[i];
+//            Get rid of the |uwu| at the end if this is the last task
+            if (i == rawTasksList.length - 1){
+                rawTask = rawTask.substring(0, rawTask.length() - "[|]uwu[|]".length());
+            }
             String[] rawTaskInfo = rawTask.split("`");
             String taskName = rawTaskInfo[0];
             String taskDesc = rawTaskInfo[1];
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            LocalDate taskDeadline = LocalDate.parse(rawTaskInfo[2], formatter);
+            LocalDate taskDeadline = LocalDate.parse(rawTaskInfo[2]);
 
             Task newTask = taskFactory.create(taskName, taskDeadline, taskDesc);
             if (rawTaskInfo[3].equals("true")){
@@ -123,13 +130,16 @@ public class ProjectsDataAccessObject {
      * if the project already exists in the database, then it is updated; 
      * if the project does not already exist in the database, then a new entry is added.
      */
-    public void saveProjects(ArrayList<Project> projectsToSave) {
+    public void saveProjects(ArrayList<Project> projects) {
+
+        ArrayList<Project> projectsToSave = (ArrayList<Project>) projects.clone();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(projectsCsvFile))) {
             StringBuffer inputBuffer = new StringBuffer();
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split("&&");
+                String[] col = row.split("%%");
                 String currentId = String.valueOf(col[headers.get("projectId")]);
                 
 //                Iterate through projects to see if there is a match in ids
@@ -170,14 +180,14 @@ public class ProjectsDataAccessObject {
      */
     private String projectToString(Project project){
         StringBuilder resultBuilder = new StringBuilder();
-        resultBuilder.append(project.getProjectId()).append("&&");
-        resultBuilder.append(project.getProjectId()).append("&&");
-        resultBuilder.append(project.getProjectDescription()).append("&&");
+        resultBuilder.append(project.getProjectId()).append("%%");
+        resultBuilder.append(project.getProjectId()).append("%%");
+        resultBuilder.append(project.getProjectDescription()).append("%%");
 
         StringBuilder rawTasks = new StringBuilder();
         ArrayList<Task> tasksToSave = project.getTasks();
         for (Task task: tasksToSave){
-            rawTasks.append(task.toString()).append("|uwu|");
+            rawTasks.append(task.toString()).append("[|]uwu[|]");
         }
 
         resultBuilder.append(rawTasks);
@@ -186,7 +196,7 @@ public class ProjectsDataAccessObject {
 
     public String generateNewProjectIdHelper(){
         try {
-            long numOfProjects = (long) Files.readAllLines(projectsCsvFile.toPath(), StandardCharsets.UTF_8).size() - 1;
+            long numOfProjects = Files.readAllLines(projectsCsvFile.toPath(), StandardCharsets.UTF_8).size();
             return String.valueOf(numOfProjects);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -195,13 +205,13 @@ public class ProjectsDataAccessObject {
 
 
     public void deleteProject(String id){
-        
+
         try (BufferedReader reader = new BufferedReader(new FileReader(projectsCsvFile))) {
             StringBuffer inputBuffer = new StringBuffer();
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split("&&");
+                String[] col = row.split("%%");
                 String currentId = String.valueOf(col[headers.get("projectId")]);
 
 //                If the id matches the id of the project that needs to be deleted,

@@ -3,12 +3,14 @@ package data_access;
 import entity.CommonProjectFactory;
 import entity.CommonTaskFactory;
 import entity.Project;
+import entity.Task;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,7 +25,8 @@ public class ProjectsDataAccessObjectTest {
 
     private ProjectsDataAccessObject projectsDAO;
 
-    private ArrayList<Project> dummyProjects;
+    private ArrayList<Project> dummyProjects = new ArrayList<>();
+    private ArrayList<ArrayList<Task>> dummyTaskListList = new ArrayList<>();
     private String[] dummyIds;
 
     /**
@@ -38,21 +41,37 @@ public class ProjectsDataAccessObjectTest {
             System.out.println("ERROR: IOexception when creating ProjectDAO");
         }
 
-//        This creates 10 Projects with ids 1 - 10 in dummyProjects to use for tests.
+
+        //        This creates 10 Projects with ids 1 - 10 in dummyProjects to use for tests.
         for (int i = 0; i < 10; i++){
             String id = String.valueOf(i + 1);
-            Project project = PROJECT_FACTORY.create(id, "Project " + i, "dummy", new ArrayList<>());
-            dummyProjects.add(project);
+            LocalDate dummyDate = LocalDate.parse("2023-04-20");
+            Task dummyTask = TASK_FACTORY.create("task "  + id, dummyDate, "dummy task desc");
+            ArrayList<Task> dummyTaskList = new ArrayList<>();
+            dummyTaskList.add(dummyTask);
+            Project project = PROJECT_FACTORY.create(id, "Project " + id,
+                    "dummy project desc", dummyTaskList);
+            this.dummyProjects.add(project);
+            this.dummyTaskListList.add(dummyTaskList);
         }
-        dummyIds = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-//        adds 10 projects into the database
+        this.dummyIds = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    }
+
+    @Test
+    public void testSaveProjects(){
+        //        adds 10 projects into the database
         projectsDAO.saveProjects(dummyProjects);
+        assert(!dummyProjects.isEmpty());
     }
 
     @Test
     public void testGetProjectsSuccess() {
-        assertEquals(projectsDAO.getProjects(dummyIds), dummyProjects);
+        projectsDAO.saveProjects(dummyProjects);
+        ArrayList<Project> returnedProjects = projectsDAO.getProjects(dummyIds);
+        for (int i = 0; i < 10; i++){
+            assertEquals(dummyProjects.get(i), returnedProjects.get(i));
+        }
     }
 
     @Test
@@ -71,14 +90,18 @@ public class ProjectsDataAccessObjectTest {
 
         while (!leftoverIds.isEmpty()){
             int i = (int) (Math.random() * 10) + 1;
-            if (leftoverIds.contains(i)){
+            if (leftoverIds.contains(String.valueOf(i))){
                 leftoverIds.remove(String.valueOf(i));
                 dummyProjects.remove(i);
 
                 projectsDAO.deleteProject(String.valueOf(i));
 
                 String[] ids = leftoverIds.toArray(new String[0]);
-                assertEquals(projectsDAO.getProjects(ids), dummyProjects);
+
+                ArrayList<Project> returnedProjects = projectsDAO.getProjects(ids);
+                for (int j = 0; j < 10; j++){
+                    assertEquals(dummyProjects.get(j), returnedProjects.get(j));
+                }
             }
         }
 
@@ -100,7 +123,7 @@ public class ProjectsDataAccessObjectTest {
 
         for (int i = 0; i < 10; i++){
             String id = projectsDAO.generateNewProjectIdHelper();
-            assertEquals(id, String.valueOf(i + 1));
+            assertEquals(String.valueOf(i + 1), id);
 
             ArrayList<Project> projectsToAdd = new ArrayList<>();
             projectsToAdd.add(
@@ -108,13 +131,16 @@ public class ProjectsDataAccessObjectTest {
             projectsDAO.saveProjects(projectsToAdd);
         }
 
-        assertEquals(projectsDAO.getProjects(dummyIds), dummyProjects);
+        ArrayList<Project> returnedProjects = projectsDAO.getProjects(dummyIds);
+        for (int j = 0; j < 10; j++){
+            assertEquals(dummyProjects.get(j), returnedProjects.get(j));
+        }
     }
 
     @Test
     public void testSaveProjectsExisted(){
         projectsDAO.saveProjects(dummyProjects);
-        assertEquals(projectsDAO.generateNewProjectIdHelper(), "11");
+        assertEquals("11", projectsDAO.generateNewProjectIdHelper());
     }
 
     @After

@@ -38,7 +38,7 @@ public class UsersDataAccessObject {
         if (usersCsvFile.length() == 0) {
 //            If no existing csv file exists, write a csv file that only contains the headers
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(usersCsvFile))) {
-                writer.write(String.join("&&", headers.keySet()));
+                writer.write(String.join("%%", headers.keySet()));
                 writer.newLine();
             }
         }
@@ -73,7 +73,7 @@ public class UsersDataAccessObject {
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split("&&");
+                String[] col = row.split("%%");
                 String currentName = String.valueOf(col[headers.get("username")]);
 
 //                if the user exists, overwrite it in the modified file content
@@ -98,7 +98,7 @@ public class UsersDataAccessObject {
                         projectIDs.append(id).append(";");
                     }
 
-                    row = username + "&&" + password + "&&" + projectIDs;
+                    row = username + "%%" + password + "%%" + projectIDs;
                     userExists = true;
                 }
 
@@ -109,7 +109,7 @@ public class UsersDataAccessObject {
 //            if user does not exist, append it in the modified file content
 //            ProjectID is set to -1 to indicate there are no projects associated with the user
             if (!userExists){
-                inputBuffer.append(username + "&&" + user.getPassword() + "&&" + "-1").append('\n');
+                inputBuffer.append(username + "%%" + user.getPassword() + "%%" + "-1").append('\n');
             }
 
             reader.close();
@@ -135,11 +135,11 @@ public class UsersDataAccessObject {
         try (BufferedReader reader = new BufferedReader(new FileReader(usersCsvFile))) {
             String header = reader.readLine();
             // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-            assert header.equals("username&&password&&projectIDs");
+            assert header.equals("username%%password%%projectIDs");
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split("&&");
+                String[] col = row.split("%%");
                 String currentName = String.valueOf(col[headers.get("username")]);
                 String currentPassword = String.valueOf(col[headers.get("password")]);
                 if (currentName.equals(username)){
