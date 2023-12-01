@@ -1,9 +1,8 @@
-package view;
+package Dummy;
 
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
-import interface_adapter.add_project.AddProjectController;
 import interface_adapter.send_notification.NotificationController;
 
 
@@ -22,17 +21,15 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.swing.text.MaskFormatter;
 
-public class DashboardView extends JFrame implements PropertyChangeListener {
+public class DummyView extends JFrame implements PropertyChangeListener {
     private final DashboardViewModel dashboardViewModel;
     private JPanel dashboardPanel;
-    private ArrayList<ProjectData> projectsList;
+    private ArrayList<ProjectData> projectsList = new ArrayList<ProjectData>();
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
 
-    // ***Added notificationController to the constructor.
-    public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
+    public DummyView(DashboardViewModel dashboardViewModel,
                          NotificationController notificationController) {
-      
         this.dashboardViewModel = dashboardViewModel;
 
         DashboardState dashboardState = dashboardViewModel.getState();
@@ -41,7 +38,6 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
         projectsList = dashboardState.getProjects();
 
-        displayAllProjects();
 
         setTitle("Project Dashboard");
         setSize(600, 400);
@@ -60,12 +56,10 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         updateEmptyDashboardLabel();
 
         JButton addProjectButton = new JButton("Add Project");
-        // ***Created toggleNotifications button
         JButton toggleNotifications = new JButton("Notifications Off");
         addProjectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // ***Added check for addProjectButton
                 if (e.getSource() == addProjectButton) {
                     try {
                         showAddProjectPopup();
@@ -75,18 +69,15 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
                 }
             }
         });
-        // ***Added actionListener to toggleNotification button
         toggleNotifications.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == toggleNotifications) {
-                    // If notifications are turned off, start them up again using scheduleAtFixedRate
                     if (scheduledFuture == null) {
                         Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
                         toggleNotifications.setText("Notifications Off");
                     }
-                    // Else, stop the scheduled notifications.
                     else {
                         scheduledFuture.cancel(true);
                         scheduledFuture = null;
@@ -97,16 +88,18 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        // ***Added toggleNotification button to buttonPanel
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
         add(buttonPanel, BorderLayout.NORTH);
-        // ***Automatically sets notifications to be sent periodically
+
+        displayAllProjects();
+
         Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {
+        projectsList = new ArrayList<>();
         if (projectsList.isEmpty()) {
             dashboardPanel.removeAll();
             JLabel emptyLabel = new JLabel("Click Add Project to add a project");
@@ -163,12 +156,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
                 if (!projectDescription.isEmpty()) {
                     if (deadline.matches("\\d{4}/\\d{2}/\\d{2}")) {
 
-                        addProjectController.execute(
-                                projectName,
-                                projectDescription,
-                                deadline,
-                                dashboardViewModel.getState().getUsername()
-                        );
+                        ;
 
                         popupFrame.dispose();
                     } else {
@@ -202,9 +190,9 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
         public ProjectPanel(ProjectData projectData) {
             this.projectData = projectData;
-            setMinimumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-            setMaximumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-            setPreferredSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+            setMinimumSize(new Dimension((int) (DummyView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+            setMaximumSize(new Dimension((int) (DummyView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+            setPreferredSize(new Dimension((int) (DummyView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
             setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 10));
 
             addMouseListener(new java.awt.event.MouseAdapter() {
@@ -237,8 +225,8 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
         if (state.getAddProjectError() != null) {
             JOptionPane.showMessageDialog(this, state.getAddProjectError());
+            state.setAddProjectError(null);
         }
-        // ***Displays JOptionPane if there is a notification to be displayed.
         if (state.getNotificationMessage() != null) {
             JOptionPane.showMessageDialog(this, state.getNotificationMessage());
             state.setNotificationMessage(null);
