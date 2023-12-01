@@ -32,6 +32,7 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
     // ***Added notificationController to the constructor.
     public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
                          NotificationController notificationController) {
+      
         this.dashboardViewModel = dashboardViewModel;
 
         DashboardState dashboardState = dashboardViewModel.getState();
@@ -165,7 +166,8 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
                         addProjectController.execute(
                                 projectName,
                                 projectDescription,
-                                deadline
+                                deadline,
+                                dashboardViewModel.getState().getUsername()
                         );
 
                         popupFrame.dispose();
@@ -235,7 +237,6 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
         if (state.getAddProjectError() != null) {
             JOptionPane.showMessageDialog(this, state.getAddProjectError());
-            state.setAddProjectError(null);
         }
         // ***Displays JOptionPane if there is a notification to be displayed.
         if (state.getNotificationMessage() != null) {
