@@ -19,11 +19,6 @@ public class UsersDataAccessObjectTest {
     private final CommonTaskFactory TASK_FACTORY = new CommonTaskFactory();
     private final CommonUserFactory USER_FACTORY = new CommonUserFactory();
 
-    private final String username1 = "username1";
-    private final String username2 = "username2";
-    private final String password1 = "password1";
-    private final String password2 = "password2";
-
     private User dummyUser1;
     private User dummyUser2;
     private UsersDataAccessObject usersDAO;
@@ -44,8 +39,8 @@ public class UsersDataAccessObjectTest {
         this.dummyProjectsTen = DataAccessObjectTestHelper.getDummyProjectsTen(PROJECT_FACTORY, TASK_FACTORY);
         this.dummyProjectsTenMore = DataAccessObjectTestHelper.getDummyProjectsTenMore(PROJECT_FACTORY, TASK_FACTORY);
 
-        this.dummyUser1 = USER_FACTORY.create(username1, password1);
-        this.dummyUser2 = USER_FACTORY.create(username2, password2);
+        this.dummyUser1 = USER_FACTORY.create("username1", "password1");
+        this.dummyUser2 = USER_FACTORY.create("username2", "password2");
     }
 
     @Test
