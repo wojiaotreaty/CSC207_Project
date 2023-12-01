@@ -3,7 +3,7 @@ package use_case.add_project;
 import java.util.ArrayList;
 
 public class AddProjectOutputData {
-    private ArrayList<String> project = new ArrayList<String>();
+    final private ArrayList<String> project = new ArrayList<String>();
 
 
     public AddProjectOutputData(String projectID, String projectTitle, String projectDescription, String projectTasks) {
