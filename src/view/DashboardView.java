@@ -116,8 +116,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         displayAllProjects();
 //        add(buttonPanel, BorderLayout.NORTH);
         // ***Automatically sets notifications to be sent periodically
-        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
-        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+//        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+//        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {
