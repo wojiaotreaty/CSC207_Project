@@ -60,7 +60,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 //        this.setResizable(false);
 
         dashboardPanel = new JPanel();
-        dashboardPanel.setLayout(new BoxLayout(dashboardPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(dashboardPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
