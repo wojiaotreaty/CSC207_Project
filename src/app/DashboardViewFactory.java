@@ -5,7 +5,7 @@ import entity.CommonTaskFactory;
 import entity.TaskFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.add_project.AddProjectController;
-import interface_adapter.dashboard.AddProjectPresenter;
+import interface_adapter.add_project.AddProjectPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectPresenter;
