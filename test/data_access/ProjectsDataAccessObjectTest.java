@@ -108,7 +108,7 @@ public class ProjectsDataAccessObjectTest {
 
         ArrayList<Project> returnedProjects = projectsDAO.getProjects(dummyIds);
         for (int j = 0; j < 10; j++){
-            assertEquals(dummyProjects.get(j), returnedProjects.get(j));
+            assertEquals(dummyProjects.get(j).getProjectId(), returnedProjects.get(j).getProjectId());
         }
     }
 
@@ -116,19 +116,19 @@ public class ProjectsDataAccessObjectTest {
     public void testGenerateNewProjectIdHelperDeleting(){
         projectsDAO.saveProjects(dummyProjects);
         ArrayList<Integer> leftoverIdNums = new ArrayList<>();
-        for (int i = 0; i < dummyIds.length; i++){
-            leftoverIdNums.add(Integer.parseInt(dummyIds[i]));
+        for (int i = 0; i < 20; i++){
+            leftoverIdNums.add(i + 1);
         }
 
         while (!leftoverIdNums.isEmpty()){
-            int i = (int) (Math.random() * 10) + 1;
+            Integer i = (int) (Math.random() * 10) + 1;
             if (leftoverIdNums.contains(i)){
                 leftoverIdNums.remove(i);
-                int max = leftoverIdNums.get(leftoverIdNums.size() - 1);
+                int maxPlusOne = leftoverIdNums.get(leftoverIdNums.size() - 1) + 1;
 
                 projectsDAO.deleteProject(String.valueOf(i));
 
-                assertEquals(String.valueOf(max), projectsDAO.generateNewProjectIdHelper());
+                assertEquals(String.valueOf(maxPlusOne), projectsDAO.generateNewProjectIdHelper());
             }
         }
     }

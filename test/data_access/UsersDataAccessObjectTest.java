@@ -27,8 +27,8 @@ public class UsersDataAccessObjectTest {
     private User dummyUser1;
     private User dummyUser2;
     private UsersDataAccessObject usersDAO;
-    private ArrayList<Project> dummyProjects;
-    private String[] dummyIds;
+    private ArrayList<Project> dummyProjectsTen;
+    private ArrayList<Project> dummyProjectsTenMore;
 
 
     @Before
@@ -41,9 +41,8 @@ public class UsersDataAccessObjectTest {
             System.out.println("ERROR: IOexception when creating ProjectDAO");
         }
 
-        this.dummyProjects = DataAccessObjectTestHelper.getDummyProjectsTen(PROJECT_FACTORY, TASK_FACTORY);
-
-        this.dummyIds = DataAccessObjectTestHelper.getDummyIdTen();
+        this.dummyProjectsTen = DataAccessObjectTestHelper.getDummyProjectsTen(PROJECT_FACTORY, TASK_FACTORY);
+        this.dummyProjectsTenMore = DataAccessObjectTestHelper.getDummyProjectsTenMore(PROJECT_FACTORY, TASK_FACTORY);
 
         this.dummyUser1 = USER_FACTORY.create(username1, password1);
         this.dummyUser2 = USER_FACTORY.create(username2, password2);
@@ -51,16 +50,16 @@ public class UsersDataAccessObjectTest {
 
     @Test
     public void testSaveUserNew(){
-        assert !usersDAO.saveUser(dummyUser1);
+        assert !usersDAO.saveUser(dummyUser2);
     }
 
     @Test
     public void testSaveUserExisted(){
-        usersDAO.saveUser(dummyUser2);
-        for (Project dummyProject : dummyProjects) {
-            dummyUser2.addProject(dummyProject);
+        usersDAO.saveUser(dummyUser1);
+        for (Project dummyProject : dummyProjectsTen) {
+            dummyUser1.addProject(dummyProject);
         }
-        assert usersDAO.saveUser(dummyUser2);
+        assert usersDAO.saveUser(dummyUser1);
     }
 
     @Test
@@ -75,22 +74,46 @@ public class UsersDataAccessObjectTest {
     }
 
     @Test
-    public void testGenerateNewProjectId(){
+    public void testGenerateNewProjectIdAdding(){
+        for (int i = 10; i < 20; i++){
+            Project matchingProject = dummyProjectsTenMore.get(i - 10);
 
+            String generatedId = usersDAO.generateNewProjectId();
 
-        for (int i = 0; i < 10; i++){
-            String id = projectsDAO.generateNewProjectIdHelper();
-            assertEquals(String.valueOf(i + 1), id);
+            Project projectToAdd = PROJECT_FACTORY.create(generatedId, matchingProject.getProjectName(),
+                    matchingProject.getProjectDescription(), matchingProject.getTasks());
 
-            ArrayList<Project> projectsToAdd = new ArrayList<>();
-            projectsToAdd.add(
-                    PROJECT_FACTORY.create(id, "Project " + i, "dummy", new ArrayList<>()));
-            projectsDAO.saveProjects(projectsToAdd);
+            dummyUser2.addProject(projectToAdd);
         }
 
-        ArrayList<Project> returnedProjects = projectsDAO.getProjects(dummyIds);
-        for (int j = 0; j < 10; j++){
-            assertEquals(dummyProjects.get(j), returnedProjects.get(j));
+        ArrayList<Project> userProjects = dummyUser2.getProjects();
+
+        for (int i = 0; i < 10; i++){
+            assertEquals(dummyProjectsTenMore.get(i).getProjectId(), userProjects.get(i).getProjectId());
+        }
+    }
+
+    @Test
+    public void testGenerateNewProjectIdDeleting(){
+        ArrayList<Integer> leftoverIdNums = new ArrayList<>();
+        for (int i = 0; i < 20; i++){
+            leftoverIdNums.add(i + 1);
+        }
+
+        while (!leftoverIdNums.isEmpty()){
+            Integer i = (int) (Math.random() * 20) + 1;
+            if (leftoverIdNums.contains(i)){
+                leftoverIdNums.remove(i);
+                int maxPlusOne = leftoverIdNums.get(leftoverIdNums.size() - 1) + 1;
+
+                if (i <= 10){
+                    dummyUser1.deleteProject(i.toString());
+                } else {
+                    dummyUser2.deleteProject(i.toString());
+                }
+
+                assertEquals(String.valueOf(maxPlusOne), usersDAO.generateNewProjectId());
+            }
         }
     }
 
