@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import entity.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class AddProjectInteractorUnitTest {
 
     @Test
@@ -28,7 +31,18 @@ public class AddProjectInteractorUnitTest {
                         "which serves as an aid for time management and organizing deadlines. Upon adding a project, the" +
                         "application will split the project into smaller deadlines which help the user to stay on track.",
                         addProjectOutputData.getProject().get(2));
-                assertNotNull(addProjectOutputData.getProject().get(3));
+
+                try {
+                    ArrayList<ArrayList<String>> projectTasks = new ArrayList<>();
+
+                    String[] tasks = addProjectOutputData.getProject().get(3).split("[|]uwu[|]");
+                    for (String task : tasks) {
+                        String[] taskComponents = task.split("`");
+                        projectTasks.add((ArrayList<String>) Arrays.asList(taskComponents));
+                    }
+                } catch (Error e) {
+                    fail("Text completion generated did not match the given restrictions.");
+                }
             }
 
             @Override
