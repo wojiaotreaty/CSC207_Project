@@ -52,7 +52,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
         projectsList = dashboardState.getProjects();
 
-        displayAllProjects();
 
 //        setTitle("Project Dashboard");
 //        setSize(600, 400);
@@ -113,6 +112,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         buttonPanel.add(addProjectButton);
         this.add(buttonPanel);
         this.add(scrollPane);
+
+        displayAllProjects();
 //        add(buttonPanel, BorderLayout.NORTH);
         // ***Automatically sets notifications to be sent periodically
         Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
