@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -99,7 +98,6 @@ public class ProjectsDataAccessObjectTest {
             projectsDAO.deleteProject(String.valueOf(i + 1));
         }
 
-        deleteAll();
         for (int i = 0; i < 10; i++){
             String id = projectsDAO.generateNewProjectIdHelper();
             assertEquals(id, String.valueOf(i + 1));
