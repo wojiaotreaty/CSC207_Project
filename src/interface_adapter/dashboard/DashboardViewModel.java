@@ -6,8 +6,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class DashboardViewModel extends ViewModel {
-  
-    private final String viewName = "Project Dashboard";
 
     private DashboardState state = new DashboardState();
 
@@ -31,8 +29,5 @@ public class DashboardViewModel extends ViewModel {
 
     public DashboardState getState() {
         return state;
-    }
-    public String getViewName() {
-        return this.viewName;
     }
 }

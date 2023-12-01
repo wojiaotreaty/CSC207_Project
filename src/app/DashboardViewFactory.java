@@ -36,7 +36,7 @@ public class DashboardViewFactory {
             AddProjectController addProjectController = createAddProjectUseCase(dashboardViewModel, addProjectDataAccessInterface);
             NotificationController notificationController = createNotificationUseCase(dashboardViewModel, notificationUsersDataAccessInterface);
             DeleteProjectController deleteProjectController = createDeleteProjectUseCase(deleteProjectViewModel, dashboardViewModel, viewManagerModel, deleteProjectDataAccessInterface);
-            return new DashboardView(dashboardViewModel, addProjectController, notificationController, deleteProjectController);
+            return new DashboardView(dashboardViewModel, deleteProjectViewModel, addProjectController, notificationController, deleteProjectController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not instantiate DashboardView.");
         }

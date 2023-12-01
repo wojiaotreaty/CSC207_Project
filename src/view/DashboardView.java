@@ -5,6 +5,7 @@ import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
 import interface_adapter.delete_project.DeleteProjectController;
+import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
 
 
@@ -23,18 +24,21 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.swing.text.MaskFormatter;
 
-public class DashboardView extends JFrame implements PropertyChangeListener {
+public class DashboardView extends JPanel implements ActionListener, PropertyChangeListener {
+    public final String viewName = "dashboard";
     private final DashboardViewModel dashboardViewModel;
+    private final DeleteProjectViewModel deleteProjectViewModel;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
 
     // ***Added notificationController to the constructor.
-    public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
+    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
                          NotificationController notificationController, DeleteProjectController deleteProjectController) {
       
         this.dashboardViewModel = dashboardViewModel;
+        this.deleteProjectViewModel = deleteProjectViewModel;
 
         DashboardState dashboardState = dashboardViewModel.getState();
 
