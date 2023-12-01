@@ -3,14 +3,12 @@ package data_access;
 import entity.CommonProjectFactory;
 import entity.CommonTaskFactory;
 import entity.Project;
-import entity.Task;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,7 +24,6 @@ public class ProjectsDataAccessObjectTest {
     private ProjectsDataAccessObject projectsDAO;
 
     private ArrayList<Project> dummyProjects = new ArrayList<>();
-    private ArrayList<ArrayList<Task>> dummyTaskListList = new ArrayList<>();
     private String[] dummyIds;
 
     /**
@@ -41,21 +38,9 @@ public class ProjectsDataAccessObjectTest {
             System.out.println("ERROR: IOexception when creating ProjectDAO");
         }
 
+        this.dummyProjects = DataAccessObjectTestHelper.getDummyProjectsTen(PROJECT_FACTORY, TASK_FACTORY);
 
-        //        This creates 10 Projects with ids 1 - 10 in dummyProjects to use for tests.
-        for (int i = 0; i < 10; i++){
-            String id = String.valueOf(i + 1);
-            LocalDate dummyDate = LocalDate.parse("2023-04-20");
-            Task dummyTask = TASK_FACTORY.create("task "  + id, dummyDate, "dummy task desc");
-            ArrayList<Task> dummyTaskList = new ArrayList<>();
-            dummyTaskList.add(dummyTask);
-            Project project = PROJECT_FACTORY.create(id, "Project " + id,
-                    "dummy project desc", dummyTaskList);
-            this.dummyProjects.add(project);
-            this.dummyTaskListList.add(dummyTaskList);
-        }
-
-        this.dummyIds = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        this.dummyIds = DataAccessObjectTestHelper.getDummyIdTen();
     }
 
     @Test
@@ -106,11 +91,7 @@ public class ProjectsDataAccessObjectTest {
         }
 
 //        Remake dummyProjects
-        for (int i = 0; i < 10; i++){
-            String id = String.valueOf(i + 1);
-            Project project = PROJECT_FACTORY.create(id, "Project " + i, "dummy", new ArrayList<>());
-            dummyProjects.add(project);
-        }
+        this.dummyProjects = DataAccessObjectTestHelper.getDummyProjectsTen(PROJECT_FACTORY, TASK_FACTORY);
 
         projectsDAO.saveProjects(dummyProjects);
     }
