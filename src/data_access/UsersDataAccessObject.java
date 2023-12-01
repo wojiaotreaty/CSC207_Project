@@ -3,6 +3,9 @@ package data_access;
 import entity.User;
 import entity.UserFactory;
 import entity.Project;
+import use_case.delete_project.DeleteProjectDataAccessInterface;
+import use_case.login.LoginDataAccessInterface;
+import use_case.signup.SignupDataAccessInterface;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,7 +17,7 @@ import java.util.Map;
  * It DOES NOT have project information.
  */
 
-public class UsersDataAccessObject {
+public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface {
 
 //    This csv file connects user emails to the project IDs that it is associated with.
     private final File usersCsvFile;
