@@ -5,9 +5,6 @@ import entity.Task;
 import entity.User;
 
 import java.util.ArrayList;
-import entity.User;
-import entity.Project;
-import entity.Task;
 
 public class LoginInteractor implements LoginInputBoundary {
     private final LoginDataAccessInterface userDataAccessObject;
