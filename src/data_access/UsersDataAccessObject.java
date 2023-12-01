@@ -82,7 +82,7 @@ public class UsersDataAccessObject {
 
                     ArrayList<String> newProjectIds = new ArrayList<>();
                     for (Project project : user.getProjects()){
-                        newProjectIds.add(project.getProjectID());
+                        newProjectIds.add(project.getProjectId());
                     }
 
 //                    Check for deleted projects

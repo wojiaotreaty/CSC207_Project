@@ -1,7 +1,11 @@
 package entity;
 
-public interface Task {
-    public String toString();
+import java.time.LocalDate;
 
-    public void setStatus(boolean status);
+public interface Task {
+    String toString();
+
+    void setStatus(boolean status);
+
+    LocalDate getDeadline();
 }

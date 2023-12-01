@@ -1,5 +1,9 @@
 package use_case.login;
 
+import entity.Project;
+import entity.Task;
+import entity.User;
+
 import java.util.ArrayList;
 import entity.User;
 import entity.Project;

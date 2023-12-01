@@ -136,7 +136,7 @@ public class ProjectsDataAccessObject {
                 for (int i = 0; i < projectsToSave.size(); i++){
                     Project projToSave = projectsToSave.get(i);
                     
-                    if (projToSave.getProjectID().equals(currentId)){
+                    if (projToSave.getProjectId().equals(currentId)){
                         row = projectToString(projToSave);
                         projectsToSave.remove(i);
                         i--;
@@ -170,9 +170,9 @@ public class ProjectsDataAccessObject {
      */
     private String projectToString(Project project){
         StringBuilder resultBuilder = new StringBuilder();
-        resultBuilder.append(project.getProjectID()).append("&&");
-        resultBuilder.append(project.getProjectID()).append("&&");
-        resultBuilder.append(project.getProjectDesc()).append("&&");
+        resultBuilder.append(project.getProjectId()).append("&&");
+        resultBuilder.append(project.getProjectId()).append("&&");
+        resultBuilder.append(project.getProjectDescription()).append("&&");
 
         StringBuilder rawTasks = new StringBuilder();
         ArrayList<Task> tasksToSave = project.getTasks();

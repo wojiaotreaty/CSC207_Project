@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface Project {
-    String getProjectID();
-    String getProjectDesc();
+    String getProjectId();
+    String getProjectDescription();
+    String getProjectName();
 
     ArrayList<Task> getTasks();
 }
