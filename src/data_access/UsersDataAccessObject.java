@@ -21,7 +21,6 @@ public class UsersDataAccessObject {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private UserFactory userFactory;
     private ProjectsDataAccessObject projectsDAO;
-
     /**
      * Note that no Users are built at time of DAO construction.
      * Instead, the currentUser (only) is built on successful login.
@@ -45,9 +44,11 @@ public class UsersDataAccessObject {
     }
 
     /**
-     * WARNING: for each generateNewProjectId() call, there MUST be 1 new project added!!
-     * (This can be changed later but will require a lot of work.)
-     * @return a unique projectId that is not in use for any other project.
+     * WARNING: always generates the same ID unless the number of projects in the database
+     * changes AND IS SAVED.
+     * To add projects in bulk (entity side) without saving, you can increment the return value from this method by one
+     * for each additional project.
+     * @return a unique projectId that is not in use for any other project THAT IS SAVED.
      */
     String generateNewProjectId(){
         return projectsDAO.generateNewProjectIdHelper();

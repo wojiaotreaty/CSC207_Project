@@ -195,11 +195,21 @@ public class ProjectsDataAccessObject {
     }
 
     public String generateNewProjectIdHelper(){
-        try {
-            long numOfProjects = Files.readAllLines(projectsCsvFile.toPath(), StandardCharsets.UTF_8).size();
-            return String.valueOf(numOfProjects);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try (BufferedReader reader = new BufferedReader(new FileReader(projectsCsvFile))){
+            String lastLine = "";
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null)
+            {
+                lastLine = currentLine;
+            }
+
+            String[] col = lastLine.split("%%");
+            String currentId = String.valueOf(col[headers.get("projectId")]);
+            int largestIdPlusOne = Integer.parseInt(currentId) + 1;
+            return Integer.toString(largestIdPlusOne);
+
+        } catch (IOException e){
+            throw new RuntimeException("ERROR: problem reading file when generating new project id");
         }
     }
 
