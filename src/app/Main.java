@@ -65,7 +65,7 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
         DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
-        views.add(dashboardView, dashboardViewModel.getViewName());
+        views.add(dashboardView, dashboardView.viewName);
 
 
         viewManagerModel.setActiveView(loginView.viewName);
