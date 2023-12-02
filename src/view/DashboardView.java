@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.text.MaskFormatter;
 
 public class DashboardView extends JPanel implements PropertyChangeListener {
-    public final String viewName = "dashboard";
+    public final String viewName = "Project Dashboard";
     private final DashboardViewModel dashboardViewModel;
     private final DeleteProjectViewModel deleteProjectViewModel;
     private JPanel dashboardPanel;
