@@ -1,40 +1,30 @@
 package use_case.add_project;
 
 import app.DashboardViewFactory;
-import app.LoginViewFactory;
-import app.Main;
-import app.SignupViewFactory;
 import data_access.ProjectsDataAccessObject;
 import data_access.UsersDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.signup.SignupViewModel;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import view.DashboardView;
-import view.LoginView;
-import view.SignupView;
 import view.ViewManager;
+import view.DashboardView.ProjectPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-
-import static org.junit.Assert.assertNotNull;
+import java.util.Objects;
 
 public class AddProjectEndToEndTest {
 
-    static String message = "";
-    static boolean popUpDiscovered = false;
-
-    public void goToDashboardView() throws IOException {
+    public void goToDashboardView() {
         JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,9 +49,9 @@ public class AddProjectEndToEndTest {
         ProjectsDataAccessObject projectsDAO;
         UsersDataAccessObject usersDataAccessObject = null;
         try {
-            projectsDAO = new ProjectsDataAccessObject("./projects.csv",
+            projectsDAO = new ProjectsDataAccessObject("./projects_test.csv",
                     projectFactory, taskFactory);
-            usersDataAccessObject = new UsersDataAccessObject("./users.csv",
+            usersDataAccessObject = new UsersDataAccessObject("./users_test.csv",
                     userFactory, projectsDAO);
 
             User user = new CommonUser("foobar", "baz");
@@ -88,7 +78,6 @@ public class AddProjectEndToEndTest {
         application.setVisible(true);
     }
 
-
     public JButton getFirstAddProjectButton() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
@@ -108,9 +97,9 @@ public class AddProjectEndToEndTest {
 
         JPanel jp2 = (JPanel) jp.getComponent(0);
 
-        DashboardView sv = (DashboardView) jp2.getComponent(0);
+        DashboardView dv = (DashboardView) jp2.getComponent(0);
 
-        JPanel buttons = (JPanel) sv.getComponent(0);
+        JPanel buttons = (JPanel) dv.getComponent(0);
 
         return (JButton) buttons.getComponent(1); // this should be the first add project button
     }
@@ -138,7 +127,6 @@ public class AddProjectEndToEndTest {
         }
 
         return null;
-
     }
 
     /**
@@ -157,16 +145,46 @@ public class AddProjectEndToEndTest {
         assert(secondAddProjectButton.getText().equals("Add Project"));
     }
 
+    private JPanel getFirstProjectPanel() {
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame) {
+                if (!Objects.equals(((JFrame) window).getTitle(), "Add Project")) {
+                    app = (JFrame) window;
+                }
+            }
+        }
+
+        assertNotNull(app); // found the window?
+
+        Component root = app.getComponent(0);
+
+        Component cp = ((JRootPane) root).getContentPane();
+
+        JPanel jp = (JPanel) cp;
+
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+
+        DashboardView dv = (DashboardView) jp2.getComponent(0);
+
+        JScrollPane projectScrollPane = (JScrollPane) dv.getComponent(1);
+        JViewport projectScrollPaneViewPort = (JViewport) projectScrollPane.getComponent(0);
+        JPanel projectPanel = (JPanel) projectScrollPaneViewPort.getComponent(0);
+
+        return (JPanel) projectPanel.getComponent(0); // this should be the first project panel
+    }
+
     /**
      *
-     * Test that pressing the second Add Project Button will all fields filled will call
+     * Test that clicking the second Add Project Button will all fields filled will call
      * the add project use case interactor. This test first starts the program at the DashboardView,
      * navigates to the window with the second Add Project button, fill all required fields,
      * then clicks the Add Project button. Finally, checks that the project has visually been
      * added to the DashboardView.
      */
     @Test
-    public void testAddProject() throws IOException {
+    public void testAddProject() {
         goToDashboardView();
 
         JButton firstAddProjectButton = getFirstAddProjectButton();
@@ -188,34 +206,39 @@ public class AddProjectEndToEndTest {
 
                     JPanel jp2 = (JPanel) jp.getComponent(0);
 
+                    JTextField nameField = (JTextField) jp2.getComponent(1);
+                    nameField.setText("Test Project");
+
+                    JScrollPane descriptionScrollPane = (JScrollPane) jp2.getComponent(3);
+                    JViewport descriptionScrollPaneViewPort = (JViewport) descriptionScrollPane.getComponent(0);
+                    JTextArea descriptionField = (JTextArea) descriptionScrollPaneViewPort.getComponent(0);
+
+                    descriptionField.setText("Create a Junit5 end to end test for an add project use case of a test project.");
+
+                    JFormattedTextField deadlineField = (JFormattedTextField) jp2.getComponent(5);
+                    deadlineField.setText("2023/12/07");
+
                     JButton secondAddProjectButton = (JButton) jp2.getComponent(7); // this should be the second add project button
                     secondAddProjectButton.doClick();
                 }
             }
         }
 
-
-
-        try {
-            int lines = countLines();
-            System.out.println("lines left = " + lines);
-            assert(lines <= 1);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        JPanel projectPanel = getFirstProjectPanel();
+        ProjectData projectData = ((ProjectPanel) projectPanel).getProjectData();
+        assertEquals(projectData.getProjectTitle(), "Test Project");
     }
 
-    private static int countLines() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("users.csv"));
-        int lineCount = 0;
-        while (reader.readLine() != null) {
-            lineCount++;
+    @AfterEach
+    public void cleanUp(){
+        File testProjectsDatabase = new File("./projects_test.csv");
+        if (!testProjectsDatabase.delete()){
+            System.out.println("./projects_test.csv did not delete properly after testing.");
         }
-        return lineCount;
+        File testUsersDatabase = new File("./users_test.csv");
+        if (!testUsersDatabase.delete()){
+            System.out.println("./users_test.csv did not delete properly after testing.");
+        }
     }
-
 }
 
