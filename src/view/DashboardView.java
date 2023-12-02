@@ -51,6 +51,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         dashboardViewModel.addPropertyChangeListener(this);
 
         projectsList = dashboardState.getProjects();
+//        projectsList = new ArrayList<ProjectData>();
+//        projectsList.add(new ProjectData("1", "P", "Desc", "tasks"));
 
 
 
@@ -60,13 +62,14 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 //        this.setResizable(false);
 
         dashboardPanel = new JPanel();
+        dashboardPanel.setLayout(new BoxLayout(dashboardPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(dashboardPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 //        add(scrollPane, BorderLayout.CENTER);
 
-        updateEmptyDashboardLabel();
+
 
         JButton addProjectButton = new JButton("Add Project");
         // ***Created toggleNotifications button
@@ -106,19 +109,25 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setPreferredSize(new Dimension(600, 50));
-        scrollPane.setPreferredSize(new Dimension(600, 350));
+        buttonPanel.setPreferredSize(new Dimension(600, 40));
+        scrollPane.setPreferredSize(new Dimension(600, 360));
         // ***Added toggleNotification button to buttonPanel
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+
         this.add(buttonPanel);
         this.add(scrollPane);
-
-        this.setPreferredSize(new Dimension(600, 400));
-
+//        updateEmptyDashboardLabel();
+//
+//        JLabel empty = new JLabel("test");
+//        dashboardPanel.add(empty);
+//        dashboardPanel.revalidate();
+//        dashboardPanel.repaint();
         displayAllProjects();
+
+
 //        add(buttonPanel, BorderLayout.NORTH);
         // ***Automatically sets notifications to be sent periodically
 //        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
@@ -150,8 +159,9 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             dashboardPanel.add(projectPanel);
             dashboardPanel.add(Box.createVerticalStrut(10));
             dashboardPanel.revalidate();
-            updateEmptyDashboardLabel();
+//            updateEmptyDashboardLabel();
         }
+        updateEmptyDashboardLabel();
     }
 
     private void showAddProjectPopup() throws ParseException {
@@ -221,10 +231,16 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
         public ProjectPanel(ProjectData projectData) {
             this.projectData = projectData;
-            setMinimumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-            setMaximumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-            setPreferredSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+//            setMinimumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+//            setMaximumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+//            setPreferredSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
+//            setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 10));
+
+            setMinimumSize(new Dimension(570, 100));
+            setMaximumSize(new Dimension(570, 100));
+            setPreferredSize(new Dimension(570, 100));
             setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 10));
+
 
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
