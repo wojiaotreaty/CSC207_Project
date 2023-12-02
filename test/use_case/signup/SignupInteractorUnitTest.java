@@ -105,4 +105,3 @@ class SignupInteractorUnitTest {
         interactor.execute(inputData);
     }
 }
-
