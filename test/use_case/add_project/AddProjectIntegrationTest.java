@@ -7,6 +7,8 @@ import data_access.UsersDataAccessObject;
 import entity.*;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,7 +24,7 @@ public class AddProjectIntegrationTest {
     private final CommonUserFactory USER_FACTORY = new CommonUserFactory();
     private UsersDataAccessObject usersDAO;
 
-    @Before
+    @BeforeEach
     public void init() {
         try {
             ProjectsDataAccessObject projectsDAO = new ProjectsDataAccessObject(
@@ -42,7 +44,7 @@ public class AddProjectIntegrationTest {
         AddProjectInputData inputData = new AddProjectInputData(
                 "CSC207 Group Project",
                 "Create an application, which makes use of Clean Architecture and SOLID Design principles, " +
-                        "which serves as an aid for time management and organizing deadlines. Upon adding a project, the" +
+                        "which serves as an aid for time management and organizing deadlines. Upon adding a project, the " +
                         "application will split the project into smaller deadlines which help the user to stay on track.",
                 "2023-12-04",
                 "foobar");
@@ -53,7 +55,7 @@ public class AddProjectIntegrationTest {
                 assertEquals("1", addProjectOutputData.getProject().get(0));
                 assertEquals("CSC207 Group Project", addProjectOutputData.getProject().get(1));
                 assertEquals("Create an application, which makes use of Clean Architecture and SOLID Design principles, " +
-                                "which serves as an aid for time management and organizing deadlines. Upon adding a project, the" +
+                                "which serves as an aid for time management and organizing deadlines. Upon adding a project, the " +
                                 "application will split the project into smaller deadlines which help the user to stay on track.",
                         addProjectOutputData.getProject().get(2));
 
@@ -63,7 +65,8 @@ public class AddProjectIntegrationTest {
                     String[] tasks = addProjectOutputData.getProject().get(3).split("[|]uwu[|]");
                     for (String task : tasks) {
                         String[] taskComponents = task.split("`");
-                        projectTasks.add((ArrayList<String>) Arrays.asList(taskComponents));
+
+                        projectTasks.add(new ArrayList<>(Arrays.asList(taskComponents)));
                     }
                 } catch (Error e) {
                     fail("Text completion generated did not match the given restrictions.");
@@ -88,7 +91,7 @@ public class AddProjectIntegrationTest {
         };
 
         AddProjectInputBoundary addProjectInteractor = new AddProjectInteractor(
-                (AddProjectDataAccessInterface) usersDAO,
+                this.usersDAO,
                 successPresenter,
                 new CommonProjectFactory(),
                 new CommonTaskFactory()
@@ -97,7 +100,7 @@ public class AddProjectIntegrationTest {
         addProjectInteractor.execute(inputData);
     }
 
-    @After
+    @AfterEach
     public void cleanUp(){
         File testProjectsDatabase = new File(PROJECTS_PATH);
         if (!testProjectsDatabase.delete()){
