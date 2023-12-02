@@ -1,20 +1,17 @@
 package use_case.send_notification;
+
 import entity.Project;
 import entity.Task;
 import entity.User;
-import use_case.send_notification.NotificationUsersDataAccessInterface;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NotificationInteractor implements NotificationInputBoundary {
     final NotificationUsersDataAccessInterface notificationUsersDataAccessInterface;
