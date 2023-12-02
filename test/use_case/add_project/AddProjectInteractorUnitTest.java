@@ -38,7 +38,8 @@ public class AddProjectInteractorUnitTest {
                     String[] tasks = addProjectOutputData.getProject().get(3).split("[|]uwu[|]");
                     for (String task : tasks) {
                         String[] taskComponents = task.split("`");
-                        projectTasks.add((ArrayList<String>) Arrays.asList(taskComponents));
+
+                        projectTasks.add(new ArrayList<>(Arrays.asList(taskComponents)));
                     }
                 } catch (Error e) {
                     fail("Text completion generated did not match the given restrictions.");
@@ -47,7 +48,7 @@ public class AddProjectInteractorUnitTest {
 
             @Override
             public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
+                fail("Use case failure is unexpected." + error);
             }
         };
 
