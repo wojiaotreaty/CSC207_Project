@@ -224,6 +224,8 @@ public class AddProjectEndToEndTest {
             }
         }
 
+        // Tests to see that as a result of the execution of the use case, a project panel was created
+        // on the DashboardView, and it was created with the correct Title.
         JPanel projectPanel = getFirstProjectPanel();
         ProjectData projectData = ((ProjectPanel) projectPanel).getProjectData();
         assertEquals(projectData.getProjectTitle(), "Test Project");
