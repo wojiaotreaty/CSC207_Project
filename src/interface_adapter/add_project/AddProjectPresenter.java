@@ -1,5 +1,7 @@
-package interface_adapter.dashboard;
+package interface_adapter.add_project;
 
+import interface_adapter.dashboard.DashboardState;
+import interface_adapter.dashboard.DashboardViewModel;
 import use_case.add_project.AddProjectOutputBoundary;
 import use_case.add_project.AddProjectOutputData;
 
@@ -17,13 +19,13 @@ public class AddProjectPresenter implements AddProjectOutputBoundary {
         dashboardState.setAddProjectError(null);
         dashboardState.addProjectData(response.getProject());
 
-        addProjectViewModel.firePropertyChanged();
+        dashboardViewModel.firePropertyChanged();
     }
     @Override
     public void prepareFailView(String error) {
         DashboardState dashboardState = dashboardViewModel.getState();
         dashboardState.setAddProjectError(error);
 
-        addProjectViewModel.firePropertyChanged();
+        dashboardViewModel.firePropertyChanged();
     }
 }

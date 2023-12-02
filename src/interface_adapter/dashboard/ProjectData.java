@@ -1,16 +1,23 @@
 package interface_adapter.dashboard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ProjectData {
     private String projectTitle = "";
     private String projectID = "";
     private String projectDescription = "";
-    private String projectTasks = "";
+    private ArrayList<ArrayList<String>> projectTasks = new ArrayList<>();
 
     public ProjectData(String projectID, String projectTitle, String projectDescription, String projectTasks) {
         this.projectTitle = projectTitle;
         this.projectID = projectID;
         this.projectDescription = projectDescription;
-        this.projectTasks = projectTasks;
+        String[] tasks = projectTasks.split("[|]uwu[|]");
+        for (String task : tasks) {
+            String[] taskComponents = task.split("`");
+            this.projectTasks.add((ArrayList<String>) Arrays.asList(taskComponents));
+        }
     }
 
     public String getProjectDescription() {
@@ -22,7 +29,7 @@ public class ProjectData {
     public String getProjectID() {
         return projectID;
     }
-    public String getProjectTasks() {
+    public ArrayList<ArrayList<String>> getProjectTasks() {
         return projectTasks;
     }
 }
