@@ -25,15 +25,12 @@ public class SignupViewFactory {
     private SignupViewFactory() {
     }
 
-    public static HashMap<SignupView, SignupController> create(
+    public static SignupView create(
             ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel, SignupDataAccessInterface userDataAccessObject) {
 
         try {
             SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel, loginViewModel, userDataAccessObject);
-            SignupView signupView = new SignupView(signupController, signupViewModel);
-            HashMap<SignupView, SignupController> map = new HashMap<SignupView, SignupController>();
-            map.put(signupView, signupController);
-            return map;
+            return new SignupView(signupController, signupViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }

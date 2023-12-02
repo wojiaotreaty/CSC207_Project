@@ -57,13 +57,11 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        HashMap<SignupView, SignupController> map = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+        SignupView signupView = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 usersDataAccessObject);
-        SignupView signupView = (SignupView) map.keySet().toArray()[0];
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                map.get(signupView), dashboardViewModel, usersDataAccessObject);
+        LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, dashboardViewModel, usersDataAccessObject);
         views.add(loginView, loginView.viewName);
 
         DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);

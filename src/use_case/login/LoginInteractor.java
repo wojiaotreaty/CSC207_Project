@@ -12,7 +12,7 @@ import entity.Task;
 public class LoginInteractor implements LoginInputBoundary {
     private final LoginDataAccessInterface userDataAccessObject;
     private final LoginOutputBoundary loginPresenter;
-    private ArrayList<ArrayList<String>> projectData;
+    private ArrayList<ArrayList<String>> projectData = new ArrayList<ArrayList<String>>();
 
     public LoginInteractor(LoginDataAccessInterface userDataAccessInterface,
                            LoginOutputBoundary loginOutputBoundary) {

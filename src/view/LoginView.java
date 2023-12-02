@@ -20,7 +20,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     public final String viewName = "log in";
     private final LoginViewModel loginViewModel;
-    private final SignupViewModel signupViewModel;
     private final ViewManagerModel viewManagerModel;
 
 
@@ -34,15 +33,12 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     final JButton logIn;
 //    final JButton cancel;
     private final LoginController loginController;
-    private final SignupController signupController;
 
-    public LoginView(LoginViewModel loginViewModel, LoginController controller, SignupViewModel signupViewModel, SignupController signupController, ViewManagerModel viewManagerModel) {
+    public LoginView(LoginViewModel loginViewModel, LoginController controller, ViewManagerModel viewManagerModel) {
 
         this.loginController = controller;
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
-        this.signupController = signupController;
-        this.signupViewModel = signupViewModel;
         this.viewManagerModel = viewManagerModel;
 
 
