@@ -224,7 +224,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         popupFrame.setVisible(true);
     }
 
-    private class ProjectPanel extends JPanel {
+    public class ProjectPanel extends JPanel {
         private final ProjectData projectData;
         private static final int PANEL_MIN_MAX_HEIGHT = 100;
         private static final int ARC_SIZE = 20;
@@ -249,6 +249,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 }
             });
         }
+
+        public ProjectData getProjectData() { return projectData; }
 
         @Override
         protected void paintComponent(Graphics g) {
