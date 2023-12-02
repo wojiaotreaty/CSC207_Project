@@ -10,14 +10,17 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 
 public class LoginInteractorIntegrationTest {
+    private String PROJECTS_PATH = "./projects_test.csv";
+    private String USERS_PATH = "./users_test.csv";
     private UserFactory userFactory = new CommonUserFactory();
     private ProjectFactory projectFactory = new CommonProjectFactory();
     private TaskFactory taskFactory = new CommonTaskFactory();
+
     @Test
     public void successTest() throws IOException {
         LoginInputData inputData = new LoginInputData("Daniel", "Password");
-        ProjectsDataAccessObject projectsDataAccessObject = new ProjectsDataAccessObject("testProject.csv", projectFactory, taskFactory);
-        LoginDataAccessInterface userData = new UsersDataAccessObject("testUser.csv", userFactory, projectsDataAccessObject);
+        ProjectsDataAccessObject projectsDataAccessObject = new ProjectsDataAccessObject(PROJECTS_PATH, projectFactory, taskFactory);
+        LoginDataAccessInterface userData = new UsersDataAccessObject(USERS_PATH, userFactory, projectsDataAccessObject);
 
         // Creates a Daniel User in the User DAO for test
         UserFactory factory = new CommonUserFactory();
@@ -44,8 +47,8 @@ public class LoginInteractorIntegrationTest {
     @Test
     public void failureWrongPasswordTest() throws IOException {
         LoginInputData inputData = new LoginInputData("Daniel", "Password");
-        ProjectsDataAccessObject projectsDataAccessObject = new ProjectsDataAccessObject("testProject.csv", projectFactory, taskFactory);
-        LoginDataAccessInterface userData = new UsersDataAccessObject("testUser.csv", userFactory, projectsDataAccessObject);
+        ProjectsDataAccessObject projectsDataAccessObject = new ProjectsDataAccessObject(PROJECTS_PATH, projectFactory, taskFactory);
+        LoginDataAccessInterface userData = new UsersDataAccessObject(USERS_PATH, userFactory, projectsDataAccessObject);
 
         // Creates a Daniel User in the User DAO for test but with a different password
         UserFactory factory = new CommonUserFactory();
@@ -72,8 +75,8 @@ public class LoginInteractorIntegrationTest {
     @Test
     public void failureUserDoesNotExistsTest() throws IOException {
         LoginInputData inputData = new LoginInputData("Daniel", "Password");
-        ProjectsDataAccessObject projectsDataAccessObject = new ProjectsDataAccessObject("testProject.csv", projectFactory, taskFactory);
-        LoginDataAccessInterface userData = new UsersDataAccessObject("testUser.csv", userFactory, projectsDataAccessObject);
+        ProjectsDataAccessObject projectsDataAccessObject = new ProjectsDataAccessObject(PROJECTS_PATH, projectFactory, taskFactory);
+        LoginDataAccessInterface userData = new UsersDataAccessObject(USERS_PATH, userFactory, projectsDataAccessObject);
 
         // No User object in the User DAO
         // This creates a presenter that tests whether the test case is as we expect.
