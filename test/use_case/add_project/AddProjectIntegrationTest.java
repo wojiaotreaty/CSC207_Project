@@ -50,7 +50,7 @@ public class AddProjectIntegrationTest {
         AddProjectOutputBoundary successPresenter = new AddProjectOutputBoundary() {
             @Override
             public void prepareSuccessView(AddProjectOutputData addProjectOutputData) {
-                assertEquals("100", addProjectOutputData.getProject().get(0));
+                assertEquals("1", addProjectOutputData.getProject().get(0));
                 assertEquals("CSC207 Group Project", addProjectOutputData.getProject().get(1));
                 assertEquals("Create an application, which makes use of Clean Architecture and SOLID Design principles, " +
                                 "which serves as an aid for time management and organizing deadlines. Upon adding a project, the" +
@@ -68,6 +68,17 @@ public class AddProjectIntegrationTest {
                 } catch (Error e) {
                     fail("Text completion generated did not match the given restrictions.");
                 }
+
+                assertEquals(usersDAO.getUser("foobar").getProjects().size(), 1);
+
+                Project addedProject = usersDAO.getUser("foobar").getProjects().get(0);
+                assertEquals(addedProject.getProjectId(), "1");
+                assertEquals(addedProject.getProjectDescription(), "Create an application, which makes use of " +
+                        "Clean Architecture and SOLID Design principles, which serves as an aid for time management and " +
+                        "organizing deadlines. Upon adding a project, the application will split the project into " +
+                        "smaller deadlines which help the user to stay on track.");
+                assertEquals(addedProject.getProjectName(), "CSC207 Group Project");
+                assertNotNull(addedProject.getTasks());
             }
 
             @Override
