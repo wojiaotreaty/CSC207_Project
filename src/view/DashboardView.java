@@ -278,6 +278,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             JOptionPane.showMessageDialog(this, state.getNotificationMessage());
             state.setNotificationMessage(null);
         }
+        projectsList = state.getProjects();
         displayAllProjects();
     }
 }
