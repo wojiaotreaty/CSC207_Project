@@ -87,7 +87,8 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
                 String[] taskAttributes = task.split("~");
                 tasksString.append(taskAttributes[0]).append('`');
                 tasksString.append(taskAttributes[1]).append('`');
-                tasksString.append(taskAttributes[2]).append("|uwu|");
+                tasksString.append(taskAttributes[2]).append('`');
+                tasksString.append("false").append("|uwu|");
 
                 Task taskObject = taskFactory.create(taskAttributes[0], LocalDate.parse(taskAttributes[2].strip()), taskAttributes[1]);
                 tasks.add(taskObject);
