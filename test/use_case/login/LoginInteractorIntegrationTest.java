@@ -3,8 +3,11 @@ package use_case.login;
 import data_access.ProjectsDataAccessObject;
 import data_access.UsersDataAccessObject;
 import entity.*;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -19,6 +22,7 @@ public class LoginInteractorIntegrationTest {
     private UsersDataAccessObject usersDAO;
     private ProjectsDataAccessObject projectsDAO;
 
+    @Before
     public void init() {
         try {
             ProjectsDataAccessObject projectsDAO = new ProjectsDataAccessObject(
@@ -103,6 +107,17 @@ public class LoginInteractorIntegrationTest {
 
         LoginInputBoundary interactor = new LoginInteractor(userData, failurePresenter);
         interactor.execute(inputData);
+    }
+    @After
+    public void cleanUp(){
+        File testProjectsDatabase = new File(PROJECTS_PATH);
+        if (!testProjectsDatabase.delete()){
+            System.out.println(PROJECTS_PATH + " did not delete properly after testing.");
+        }
+        File testUsersDatabase = new File(USERS_PATH);
+        if (!testUsersDatabase.delete()){
+            System.out.println(USERS_PATH + " did not delete properly after testing.");
+        }
     }
 
 }
