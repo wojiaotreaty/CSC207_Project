@@ -4,6 +4,8 @@ import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
+import interface_adapter.delete_project.DeleteProjectController;
+import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
 
 
@@ -22,18 +24,27 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.swing.text.MaskFormatter;
 
-public class DashboardView extends JFrame implements PropertyChangeListener {
+public class DashboardView extends JPanel implements PropertyChangeListener {
+    public final String viewName = "dashboard";
     private final DashboardViewModel dashboardViewModel;
+    private final DeleteProjectViewModel deleteProjectViewModel;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
+    private final AddProjectController addProjectController;
+    private final NotificationController notificationController;
+    private final DeleteProjectController deleteProjectController;
 
     // ***Added notificationController to the constructor.
-    public DashboardView(DashboardViewModel dashboardViewModel, AddProjectController addProjectController,
-                         NotificationController notificationController) {
+    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
+                         NotificationController notificationController, DeleteProjectController deleteProjectController) {
       
         this.dashboardViewModel = dashboardViewModel;
+        this.deleteProjectViewModel = deleteProjectViewModel;
+        this.addProjectController = addProjectController;
+        this.notificationController = notificationController;
+        this.deleteProjectController = deleteProjectController;
 
         DashboardState dashboardState = dashboardViewModel.getState();
 
@@ -41,21 +52,19 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
 
         projectsList = dashboardState.getProjects();
 
-        displayAllProjects();
 
-        setTitle("Project Dashboard");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-        setResizable(false);
+
+//        this.setSize(600, 400);
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.setLayout(new BorderLayout());
+//        this.setResizable(false);
 
         dashboardPanel = new JPanel();
-        dashboardPanel.setLayout(new BoxLayout(dashboardPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(dashboardPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        add(scrollPane, BorderLayout.CENTER);
+//        add(scrollPane, BorderLayout.CENTER);
 
         updateEmptyDashboardLabel();
 
@@ -97,13 +106,23 @@ public class DashboardView extends JFrame implements PropertyChangeListener {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setPreferredSize(new Dimension(600, 50));
+        scrollPane.setPreferredSize(new Dimension(600, 350));
         // ***Added toggleNotification button to buttonPanel
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
-        add(buttonPanel, BorderLayout.NORTH);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(buttonPanel);
+        this.add(scrollPane);
+
+        this.setPreferredSize(new Dimension(600, 400));
+
+        displayAllProjects();
+//        add(buttonPanel, BorderLayout.NORTH);
         // ***Automatically sets notifications to be sent periodically
-        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
-        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+//        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+//        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {

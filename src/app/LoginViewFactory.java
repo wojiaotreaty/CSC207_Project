@@ -26,14 +26,12 @@ public class LoginViewFactory {
     public static LoginView create(
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
-            SignupViewModel signupViewModel,
-            SignupController signupController,
             DashboardViewModel dashboardViewModel,
             LoginDataAccessInterface userDataAccessObject) {
 
         try {
             LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, dashboardViewModel, userDataAccessObject);
-            return new LoginView(loginViewModel, loginController, signupViewModel, signupController, viewManagerModel);
+            return new LoginView(loginViewModel, loginController, viewManagerModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }

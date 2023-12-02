@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class DashboardState {
     private String username = "";
-    private ArrayList<ProjectData> projects;
+    private ArrayList<ProjectData> projects = new ArrayList<ProjectData>();
     private String addProjectError = null;
     private String notificationMessage = null;
 
