@@ -36,7 +36,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
         String url = "https://api.openai.com/v1/chat/completions";
         String apiKey = null;
 
-        try (BufferedReader br = new BufferedReader(new FileReader("../apikey.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/apikey.txt"))) {
             apiKey = br.readLine();
         } catch (IOException e) {
             userPresenter.prepareFailView("Failed to fetch API key: " + e.toString());

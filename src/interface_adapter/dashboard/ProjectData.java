@@ -13,10 +13,12 @@ public class ProjectData {
         this.projectTitle = projectTitle;
         this.projectID = projectID;
         this.projectDescription = projectDescription;
+
         String[] tasks = projectTasks.split("[|]uwu[|]");
         for (String task : tasks) {
             String[] taskComponents = task.split("`");
-            this.projectTasks.add((ArrayList<String>) Arrays.asList(taskComponents));
+
+            this.projectTasks.add(new ArrayList<>(Arrays.asList(taskComponents)));
         }
     }
 
