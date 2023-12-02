@@ -6,5 +6,5 @@ public interface DeleteProjectDataAccessInterface {
 
     User getUser(String userId);
 
-    void saveUser();
+    boolean saveUser(User user);
 }

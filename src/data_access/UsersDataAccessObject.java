@@ -3,7 +3,12 @@ package data_access;
 import entity.User;
 import entity.UserFactory;
 import entity.Project;
+
+import use_case.add_project.AddProjectDataAccessInterface;
+import use_case.delete_project.DeleteProjectDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
+import use_case.send_notification.NotificationUsersDataAccessInterface;
+
 import use_case.signup.SignupDataAccessInterface;
 
 import java.io.*;
@@ -16,14 +21,15 @@ import java.util.Map;
  * It DOES NOT have project information.
  */
 
-public class UsersDataAccessObject implements LoginDataAccessInterface, SignupDataAccessInterface {
 
-//    This csv file connects user emails to the project IDs that it is associated with.
+public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface {
+
+
+    //    This csv file connects user emails to the project IDs that it is associated with.
     private final File usersCsvFile;
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private UserFactory userFactory;
     private ProjectsDataAccessObject projectsDAO;
-
     /**
      * Note that no Users are built at time of DAO construction.
      * Instead, the currentUser (only) is built on successful login.
@@ -40,18 +46,20 @@ public class UsersDataAccessObject implements LoginDataAccessInterface, SignupDa
         if (usersCsvFile.length() == 0) {
 //            If no existing csv file exists, write a csv file that only contains the headers
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(usersCsvFile))) {
-                writer.write(String.join("&&", headers.keySet()));
+                writer.write(String.join("%%", headers.keySet()));
                 writer.newLine();
             }
         }
     }
 
     /**
-     * WARNING: for each generateNewProjectId() call, there MUST be 1 new project added!!
-     * (This can be changed later but will require a lot of work.)
-     * @return a unique projectId that is not in use for any other project.
+     * WARNING: always generates the same ID unless the number of projects in the database
+     * changes AND IS SAVED.
+     * To add projects in bulk (entity side) without saving, you can increment the return value from this method by one
+     * for each additional project.
+     * @return a unique projectId that is not in use for any other project THAT IS SAVED.
      */
-    String generateNewProjectId(){
+    public String generateNewProjectId(){
         return projectsDAO.generateNewProjectIdHelper();
     }
 
@@ -75,33 +83,37 @@ public class UsersDataAccessObject implements LoginDataAccessInterface, SignupDa
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split("&&");
+                String[] col = row.split("%%");
                 String currentName = String.valueOf(col[headers.get("username")]);
 
 //                if the user exists, overwrite it in the modified file content
                 if (currentName.equals(username)){
+                    userExists = true;
                     String password = String.valueOf(col[headers.get("password")]);
 
-                    ArrayList<String> newProjectIds = new ArrayList<>();
-                    for (Project project : user.getProjects()){
-                        newProjectIds.add(project.getProjectId());
-                    }
+                    if (user.getProjects().isEmpty()){
+                        row = username + "%%" + password + "%%" + "-1";
+                    } else {
+                        ArrayList<String> newProjectIds = new ArrayList<>();
+                        for (Project project : user.getProjects()) {
+                            newProjectIds.add(project.getProjectId());
+                        }
 
 //                    Check for deleted projects
-                    String[] oldProjectIds = String.valueOf(col[headers.get("projectIDs")]).split(";");
-                    for (int i = 0; i < oldProjectIds.length; i++){
-                        if (!newProjectIds.contains(oldProjectIds[i])){
-                            projectsDAO.deleteProject(oldProjectIds[i]);
+                        String[] oldProjectIds = String.valueOf(col[headers.get("projectIDs")]).split(";");
+                        for (int i = 0; i < oldProjectIds.length; i++) {
+                            if (!newProjectIds.contains(oldProjectIds[i])) {
+                                projectsDAO.deleteProject(oldProjectIds[i]);
+                            }
                         }
-                    }
 //                    Create the new projectIDs string
-                    StringBuilder projectIDs = new StringBuilder();
-                    for (String id : newProjectIds) {
-                        projectIDs.append(id).append(";");
-                    }
+                        StringBuilder projectIDs = new StringBuilder();
+                        for (String id : newProjectIds) {
+                            projectIDs.append(id).append(";");
+                        }
 
-                    row = username + "&&" + password + "&&" + projectIDs;
-                    userExists = true;
+                        row = username + "%%" + password + "%%" + projectIDs;
+                    }
                 }
 
                 inputBuffer.append(row);
@@ -111,7 +123,7 @@ public class UsersDataAccessObject implements LoginDataAccessInterface, SignupDa
 //            if user does not exist, append it in the modified file content
 //            ProjectID is set to -1 to indicate there are no projects associated with the user
             if (!userExists){
-                inputBuffer.append(username + "&&" + user.getPassword() + "&&" + "-1").append('\n');
+                inputBuffer.append(username + "%%" + user.getPassword() + "%%" + "-1").append('\n');
             }
 
             reader.close();
@@ -137,11 +149,11 @@ public class UsersDataAccessObject implements LoginDataAccessInterface, SignupDa
         try (BufferedReader reader = new BufferedReader(new FileReader(usersCsvFile))) {
             String header = reader.readLine();
             // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-            assert header.equals("username&&password&&projectIDs");
+            assert header.equals("username%%password%%projectIDs");
 
             String row;
             while ((row = reader.readLine()) != null) {
-                String[] col = row.split("&&");
+                String[] col = row.split("%%");
                 String currentName = String.valueOf(col[headers.get("username")]);
                 String currentPassword = String.valueOf(col[headers.get("password")]);
                 if (currentName.equals(username)){

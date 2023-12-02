@@ -15,6 +15,7 @@ import view.SignupView;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class SignupViewFactory {
 

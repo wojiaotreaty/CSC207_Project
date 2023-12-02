@@ -1,29 +1,38 @@
 package use_case.login;
 
-import entity.CommonUser;
 import entity.CommonUserFactory;
 import entity.User;
 import entity.UserFactory;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class LoginInteractorUnitTest {
     class DummyUsersDataAccessObject implements LoginDataAccessInterface {
+        private ArrayList<User> users = new ArrayList<User>();
+
         @Override
         public User getUser(String username) {
-            return new CommonUser(username, "pwd");
+            for (User user: users) {
+                if (user.getUsername().equals(username)) {
+                    return user;
+                }
+            }
+            return null;
         }
 
         @Override
         public boolean saveUser(User user) {
+            users.add(user);
             return true;
         }
     }
 
 
     @Test
-    void successTest() {
+    public void successTest() {
         LoginInputData inputData = new LoginInputData("Daniel", "Password");
         LoginDataAccessInterface userData = new DummyUsersDataAccessObject();
 
@@ -50,7 +59,7 @@ public class LoginInteractorUnitTest {
     }
 
     @Test
-    void failureWrongPasswordTest() {
+    public void failureWrongPasswordTest() {
         LoginInputData inputData = new LoginInputData("Daniel", "Password");
         LoginDataAccessInterface userData = new DummyUsersDataAccessObject();
 
@@ -77,7 +86,7 @@ public class LoginInteractorUnitTest {
     }
 
     @Test
-    void failureUserDoesNotExistsTest() {
+    public void failureUserDoesNotExistsTest() {
         LoginInputData inputData = new LoginInputData("Daniel", "Password");
         LoginDataAccessInterface userData = new DummyUsersDataAccessObject();
 

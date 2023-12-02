@@ -16,4 +16,5 @@ public interface User {
      * @return the deleted project if successful, null if unsuccessful
      */
     Project deleteProject(String projectId);
+    void addProject(Project project);
 }
