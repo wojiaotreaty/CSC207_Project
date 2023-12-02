@@ -26,7 +26,7 @@ public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
             throw new RuntimeException("Issue occurred while deleting project");
         }
 
-        userDataAccessObject.saveUser();
+        userDataAccessObject.saveUser(user);
 
         String projectName = deletedProject.getProjectName();
         DeleteProjectOutputData deleteProjectOutputData = new DeleteProjectOutputData(projectId, projectName);

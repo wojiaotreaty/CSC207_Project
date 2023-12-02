@@ -4,6 +4,13 @@ import entity.User;
 import entity.UserFactory;
 import entity.Project;
 
+import use_case.add_project.AddProjectDataAccessInterface;
+import use_case.delete_project.DeleteProjectDataAccessInterface;
+import use_case.login.LoginDataAccessInterface;
+import use_case.send_notification.NotificationUsersDataAccessInterface;
+
+import use_case.signup.SignupDataAccessInterface;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,7 +21,9 @@ import java.util.Map;
  * It DOES NOT have project information.
  */
 
-public class UsersDataAccessObject {
+
+public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface {
+
 
     //    This csv file connects user emails to the project IDs that it is associated with.
     private final File usersCsvFile;
@@ -50,7 +59,7 @@ public class UsersDataAccessObject {
      * for each additional project.
      * @return a unique projectId that is not in use for any other project THAT IS SAVED.
      */
-    String generateNewProjectId(){
+    public String generateNewProjectId(){
         return projectsDAO.generateNewProjectIdHelper();
     }
 
@@ -74,12 +83,12 @@ public class UsersDataAccessObject {
 
             String row;
             while ((row = reader.readLine()) != null) {
-                userExists = true;
                 String[] col = row.split("%%");
                 String currentName = String.valueOf(col[headers.get("username")]);
 
 //                if the user exists, overwrite it in the modified file content
                 if (currentName.equals(username)){
+                    userExists = true;
                     String password = String.valueOf(col[headers.get("password")]);
 
                     if (user.getProjects().isEmpty()){
