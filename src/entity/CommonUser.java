@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class CommonUser implements User, Iterable<Project> {
+public class CommonUser implements User {
     private final String username;
     private final String password;
     private final ArrayList<Project> projects;
