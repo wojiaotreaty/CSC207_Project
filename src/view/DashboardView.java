@@ -30,6 +30,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final DeleteProjectViewModel deleteProjectViewModel;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
+    private boolean fromLogin = true;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
     private final AddProjectController addProjectController;
@@ -416,6 +417,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         if (state.getNotificationMessage() != null) {
             JOptionPane.showMessageDialog(this, state.getNotificationMessage());
             state.setNotificationMessage(null);
+        }
+        if (fromLogin) {
+            fromLogin = false;
+            Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+            scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
         }
         projectsList = state.getProjects();
         displayAllProjects();
