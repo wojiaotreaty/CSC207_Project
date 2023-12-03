@@ -4,4 +4,5 @@ import entity.User;
 
 public interface SetStatusUsersDataAccessInterface {
     User getUser(String username);
+    boolean saveUser(User user);
 }
