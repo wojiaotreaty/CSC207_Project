@@ -12,10 +12,10 @@ import static org.junit.Assert.*;
 
 public class DeleteProjectInteractorUnitTest {
 
-    UserFactory userFactory = new CommonUserFactory();
-    ProjectFactory projectFactory = new CommonProjectFactory();
-    static User testUser;
+    private final UserFactory userFactory = new CommonUserFactory();
+    private final ProjectFactory projectFactory = new CommonProjectFactory();
 
+    static User testUser;
     static final String USERNAME = "username1";
     static final String PROJECT_ID = "32";
     static final String PROJECT_NAME = "foobarProjName";
