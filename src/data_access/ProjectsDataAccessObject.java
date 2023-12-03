@@ -99,7 +99,7 @@ public class ProjectsDataAccessObject {
      * Helper method for getProjects.
      */
     private ArrayList<Task> getTasksList(String currentTasks) {
-        String[] rawTasksList = currentTasks.split("\\[[|]]uwu\\[[|]]");
+        String[] rawTasksList = currentTasks.split("[|]]uwu[|]]");
 
         ArrayList<Task> tasksList = new ArrayList<>();
 
@@ -107,7 +107,7 @@ public class ProjectsDataAccessObject {
             String rawTask = rawTasksList[i];
 //            Get rid of the |uwu| at the end if this is the last task
 //            if (i == rawTasksList.length - 1){
-//                rawTask = rawTask.substring(0, rawTask.length() - "[|]uwu[|]".length());
+//                rawTask = rawTask.substring(0, rawTask.length() - "|uwu|".length());
 //            }
             String[] rawTaskInfo = rawTask.split("`");
             String taskName = rawTaskInfo[0];
@@ -187,7 +187,7 @@ public class ProjectsDataAccessObject {
         StringBuilder rawTasks = new StringBuilder();
         ArrayList<Task> tasksToSave = project.getTasks();
         for (Task task: tasksToSave){
-            rawTasks.append(task.toString()).append("[|]uwu[|]");
+            rawTasks.append(task.toString()).append("|uwu|");
         }
 
         resultBuilder.append(rawTasks);
