@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AddProjectInteractor implements AddProjectInputBoundary {
     final private AddProjectDataAccessInterface userDataAccessObject;
@@ -36,7 +35,7 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
         String url = "https://api.openai.com/v1/chat/completions";
         String apiKey = null;
 
-        try (BufferedReader br = new BufferedReader(new FileReader("../apikey.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/apikey.txt"))) {
             apiKey = br.readLine();
         } catch (IOException e) {
             userPresenter.prepareFailView("Failed to fetch API key: " + e.toString());
@@ -54,11 +53,14 @@ public class AddProjectInteractor implements AddProjectInputBoundary {
             connection.setRequestProperty("Authorization", "Bearer " + apiKey);
             connection.setRequestProperty("Content-Type", "application/json");
 
+            LocalDate currentDate = LocalDate.now();
+
             // The request body
             String body = "{\"model\": \"" + model + "\", \"messages\": " +
                     "[{\"role\": \"user\", \"content\": \"Here are the details of a project I am working on: Project Title: " +
                     addProjectInputData.getProjectTitle() + ". Project Description: " + addProjectInputData.getProjectDetails() +
-                    ". Project Deadline: " + addProjectInputData.getProjectDeadline() + ". Given this project, " +
+                    ". Project Deadline: " + addProjectInputData.getProjectDeadline() + ". Today's date, the starting date, is " +
+                    currentDate + ", and the deadline of the last Task must be" + addProjectInputData.getProjectDeadline() + ". Given this project, " +
                     "break it down into smaller subtasks. I want your response formatted EXACTLY in the following " +
                     "way: <insert task name>~<insert brief task description>~<insert task deadline as YYYY-MM-DD>" +
                     " .... with each task on the next line. Do not include an opening or closing sentence in your response.\"}]}";
