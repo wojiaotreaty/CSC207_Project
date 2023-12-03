@@ -23,7 +23,12 @@ public class SetStatusPresenter implements SetStatusOutputBoundary {
                 String[] taskArray = taskString.split("`");
                 for (ArrayList<String> task : projectData.getProjectTasks()) {
                     if (task.get(0).equals(taskArray[0]) &&  task.get(1).equals(taskArray[1]) && task.get(2).equals(taskArray[2])) {
-                        task.set(3, taskArray[3]);
+                        if (taskArray[3].equals("true")) {
+                            task.set(3, "false");
+                        }
+                        else {
+                            task.set(3, "true");
+                        }
                         break;
                     }
                 }
