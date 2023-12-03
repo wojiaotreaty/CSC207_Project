@@ -103,7 +103,13 @@ public class ProjectsDataAccessObject {
 
         ArrayList<Task> tasksList = new ArrayList<>();
 
-        for (String rawTask : rawTasksList) {
+
+        for (int i = 0; i < rawTasksList.length; i++){
+            String rawTask = rawTasksList[i];
+//            Get rid of the |uwu| at the end if this is the last task
+//            if (i == rawTasksList.length - 1){
+//                rawTask = rawTask.substring(0, rawTask.length() - "|uwu|".length());
+//            }
             String[] rawTaskInfo = rawTask.split("`");
             String taskName = rawTaskInfo[0];
             String taskDesc = rawTaskInfo[1];
