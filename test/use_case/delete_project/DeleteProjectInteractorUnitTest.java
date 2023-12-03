@@ -19,9 +19,10 @@ public class AddProjectInteractorUnitTest {
                 "32");
 
         DeleteProjectDataAccessInterface dummyUsersDataAccessInterface = new DeleteProjectDataAccessInterface() {
+
             @Override
             public User getUser(String userId) {
-                if (userId == "32") {
+                if (userId.equals("32")) {
                     ArrayList<Project> projectList = new ArrayList<>();
                     projectList.add(projectFactory.create("32", "foobarName",
                             "foobarDesc", null));
@@ -31,7 +32,7 @@ public class AddProjectInteractorUnitTest {
             }
 
             @Override
-            public boolean saveUser(String userId) {
+            public boolean saveUser(User user) {
 
             }
         }
