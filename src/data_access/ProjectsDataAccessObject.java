@@ -99,7 +99,7 @@ public class ProjectsDataAccessObject {
      * Helper method for getProjects.
      */
     private ArrayList<Task> getTasksList(String currentTasks) {
-        String[] rawTasksList = currentTasks.split("[|]]uwu[|]]");
+        String[] rawTasksList = currentTasks.split("[|]uwu[|]");
 
         ArrayList<Task> tasksList = new ArrayList<>();
 
