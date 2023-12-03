@@ -42,7 +42,6 @@ public class DashboardState {
     }
 
     public void addProjectData(ArrayList<String> project) {
-        System.out.println(project.get(3));
         ProjectData projectData = new ProjectData(project.get(0), project.get(1), project.get(2), project.get(3));
         this.projects.add(projectData);
     }
