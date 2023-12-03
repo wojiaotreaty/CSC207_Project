@@ -17,4 +17,6 @@ public interface User {
      */
     Project deleteProject(String projectId);
     void addProject(Project project);
+
+    Project getProject(String projectID);
 }

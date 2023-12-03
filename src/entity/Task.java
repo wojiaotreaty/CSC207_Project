@@ -8,6 +8,7 @@ public interface Task {
     void setStatus(boolean status);
 
     LocalDate getDeadline();
+    void setDeadline(LocalDate date);
     String getName();
     String getDescription();
     boolean getStatus();
