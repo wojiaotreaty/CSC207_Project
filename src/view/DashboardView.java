@@ -6,6 +6,7 @@ import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectViewModel;
+import interface_adapter.refactor_project.RefactorProjectController;
 import interface_adapter.send_notification.NotificationController;
 
 
@@ -28,6 +29,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     public final String viewName = "Project Dashboard";
     private final DashboardViewModel dashboardViewModel;
     private final DeleteProjectViewModel deleteProjectViewModel;
+    private final RefactorProjectController refactorProjectController;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
@@ -36,17 +38,18 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final NotificationController notificationController;
     private final DeleteProjectController deleteProjectController;
 
+
     // ***Added notificationController to the constructor.
 
-    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
+    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, RefactorProjectController refactorProjectController, AddProjectController addProjectController,
                          NotificationController notificationController, DeleteProjectController deleteProjectController) {
 
         this.dashboardViewModel = dashboardViewModel;
         this.deleteProjectViewModel = deleteProjectViewModel;
+        this.refactorProjectController = refactorProjectController;
         this.addProjectController = addProjectController;
         this.notificationController = notificationController;
         this.deleteProjectController = deleteProjectController;
-
         DashboardState dashboardState = dashboardViewModel.getState();
 
         dashboardViewModel.addPropertyChangeListener(this);
@@ -387,7 +390,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         refactor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+               // JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+                refactorProjectController.execute(userName,projectID);
             }
         });
 
