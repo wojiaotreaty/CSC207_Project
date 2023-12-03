@@ -106,9 +106,9 @@ public class ProjectsDataAccessObject {
         for (int i = 0; i < rawTasksList.length; i++){
             String rawTask = rawTasksList[i];
 //            Get rid of the |uwu| at the end if this is the last task
-            if (i == rawTasksList.length - 1){
-                rawTask = rawTask.substring(0, rawTask.length() - "[|]uwu[|]".length());
-            }
+//            if (i == rawTasksList.length - 1){
+//                rawTask = rawTask.substring(0, rawTask.length() - "|uwu|".length());
+//            }
             String[] rawTaskInfo = rawTask.split("`");
             String taskName = rawTaskInfo[0];
             String taskDesc = rawTaskInfo[1];
@@ -187,7 +187,7 @@ public class ProjectsDataAccessObject {
         StringBuilder rawTasks = new StringBuilder();
         ArrayList<Task> tasksToSave = project.getTasks();
         for (Task task: tasksToSave){
-            rawTasks.append(task.toString()).append("[|]uwu[|]");
+            rawTasks.append(task.toString()).append("|uwu|");
         }
 
         resultBuilder.append(rawTasks);

@@ -37,9 +37,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final DeleteProjectController deleteProjectController;
 
     // ***Added notificationController to the constructor.
+
     public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
                          NotificationController notificationController, DeleteProjectController deleteProjectController) {
-      
+
         this.dashboardViewModel = dashboardViewModel;
         this.deleteProjectViewModel = deleteProjectViewModel;
         this.addProjectController = addProjectController;
@@ -244,8 +245,9 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    //TODO: PLACEHOLDER FOR VEDANTS PROJECT VIEW POPUP
-                    JOptionPane.showMessageDialog(null, "Clicked on project: " + projectData.getProjectTitle());
+                    // call to Vedant's popup
+                    projectPopup(dashboardViewModel.getState().getUsername(),projectData);
+//                    JOptionPane.showMessageDialog(null, "Clicked on project: " + projectData.getProjectTitle());
                 }
             });
         }
@@ -268,7 +270,142 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             g2d.dispose();
         }
     }
+    private void projectPopup(String userName, ProjectData projectData) {
+        String projectID = projectData.getProjectID();
+        String projectTitle = projectData.getProjectTitle();
+        String projectDescription = projectData.getProjectDescription();
+        ArrayList<ArrayList<String>> projectTasks = projectData.getProjectTasks();
+        System.out.println(projectTasks);
 
+        JFrame popupFrame = new JFrame("Project");
+        popupFrame.setSize(400, 250);
+        JPanel popupPanel = new JPanel();
+        popupPanel.setLayout(new BoxLayout(popupPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(popupPanel);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        popupFrame.add(scrollPane, BorderLayout.CENTER);
+//        add(scrollPane, BorderLayout.CENTER);
+        // The project title
+        JLabel Title = new JLabel(projectTitle);
+//        JLabel Title = new JLabel("Project Name");
+//        JTextField title = new JTextField(projectTitle);
+//        title.setEditable(false);
+        popupFrame.add(Title, BorderLayout.NORTH);
+//        popupPanel.add(title);
+        // The project description
+        JTextArea description = new JTextArea(1,20);
+        description.append("Project Description");
+        description.setWrapStyleWord(true);
+        description.setLineWrap(true);
+        description.setOpaque(false);
+        description.setEditable(false);
+        description.setFocusable(false);
+        description.setBackground(UIManager.getColor("Label.background"));
+        description.setFont(UIManager.getFont("Label.font"));
+        description.setBorder(UIManager.getBorder("Label.border"));
+//        JLabel pdescription = new JLabel(String.format("<html>" + projectDescription), JLabel.LEFT);
+        JTextArea textArea = new JTextArea(5, 20);
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setOpaque(false);
+        textArea.setEditable(false);
+        textArea.setFocusable(false);
+        textArea.setBackground(UIManager.getColor("Label.background"));
+//        textArea.setFont(UIManager.getFont("Label.font"));
+        textArea.setBorder(UIManager.getBorder("Label.border"));
+        textArea.append(projectDescription + "\n");
+        // Creating spacing for the rest of the popup panel
+//        textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//        popupPanel.add(textArea);
+        popupPanel.add(description);
+        popupPanel.add(textArea);
+        // The list of tasks along with their deadlines and descriptions and status
+        int i = 0;
+        for (ArrayList<String> task : projectTasks) {
+            StringBuilder mutableTask = new StringBuilder();
+            mutableTask.append(task);
+//            String[] arrOfStr = task.split("|uwu|");
+            String taskName = task.get(0);
+            String taskDescription = task.get(1);;
+            String taskDeadline = task.get(2);
+            String taskStatus = task.get(3);
+            JLabel tName = new JLabel("Task Name");
+            JTextField name = new JTextField(taskName);
+            name.setEditable(false);
+            // Adding the taskName label and the taskName textField into one panel
+            JPanel panel1 = new JPanel(new GridLayout(2, 1));
+            panel1.add(tName);
+            panel1.add(name);
+            JLabel tDeadline = new JLabel("Task Deadline");
+            JTextField deadline = new JTextField(taskDeadline);
+            deadline.setEditable(false);
+            // Adding the deadline label and the deadline text field into one panel
+            JPanel panel2 = new JPanel(new GridLayout(2, 1));
+            panel2.add(tDeadline);
+            panel2.add(deadline);
+            // Create a check-box which is always checked if the task Status is true
+            JCheckBox status = new JCheckBox("status");
+            if (taskStatus.equals("true")) {
+                status.setSelected(true);
+                status.setEnabled(false);
+            } else {
+                status.setSelected(false);
+            }
+            // Adding the name,deadline,status of the task in a flowLayout from left to right
+            JPanel labelsPanel = new JPanel(new FlowLayout());
+            labelsPanel.add(panel1);
+            labelsPanel.add(panel2);
+            labelsPanel.add(status);
+            popupPanel.add(labelsPanel);
+//             The Task Description area
+            JTextArea tDescription = new JTextArea(5, 20);
+            tDescription.append(taskDescription + "\n");
+            tDescription.setEditable(false);
+            popupPanel.add(tDescription);
+
+            // Action Listener for the check-box status to notify the backend when the user marks
+            // a task as completed.
+
+            status.addActionListener(new ActionListener() {
+//                int finalI = i;
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (status.isSelected()) {
+                        // make the change to the status of the i task in the tasks of the given project id
+                        //  need to make this function in the dashboard state
+//                        dashboardViewModel.getState().setTaskStatus(projectID, finalI, 1);
+                    }
+                }
+            });
+            i = i + 1;
+        }
+        popupFrame.add(scrollPane, BorderLayout.CENTER);
+        popupFrame.setVisible(true);
+
+        JButton refactor = new JButton("Refactor Project Deadlines");
+        JButton delete = new JButton("Delete Project");
+
+        refactor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+            }
+        });
+
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteProjectController.execute(dashboardViewModel.getState().getUsername(), projectID);
+            }
+        });
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttons.add(refactor);
+        buttons.add(delete);
+        popupFrame.add(buttons, BorderLayout.SOUTH);
+
+
+    }
     public void propertyChange(PropertyChangeEvent evt) {
         DashboardState state = (DashboardState) evt.getNewValue();
 
