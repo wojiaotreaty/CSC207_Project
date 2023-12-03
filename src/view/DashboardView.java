@@ -246,7 +246,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     // call to Vedant's popup
-                    ProjectPopup(dashboardViewModel.getState().getUsername(),projectData);
+                    projectPopup(dashboardViewModel.getState().getUsername(),projectData);
 //                    JOptionPane.showMessageDialog(null, "Clicked on project: " + projectData.getProjectTitle());
                 }
             });
@@ -268,7 +268,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             g2d.dispose();
         }
     }
-    private void ProjectPopup(String userName, ProjectData projectData) {
+    private void projectPopup(String userName, ProjectData projectData) {
         String projectID = projectData.getProjectID();
         String projectTitle = projectData.getProjectTitle();
         String projectDescription = projectData.getProjectDescription();
