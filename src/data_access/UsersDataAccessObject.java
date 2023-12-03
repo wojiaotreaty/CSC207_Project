@@ -9,6 +9,7 @@ import use_case.delete_project.DeleteProjectDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.send_notification.NotificationUsersDataAccessInterface;
 
+import use_case.set_status.SetStatusUsersDataAccessInterface;
 import use_case.signup.SignupDataAccessInterface;
 
 import java.io.*;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 
 
-public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface {
+public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface, SetStatusUsersDataAccessInterface {
 
 
     //    This csv file connects user emails to the project IDs that it is associated with.

@@ -7,6 +7,7 @@ import interface_adapter.add_project.AddProjectController;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
+import interface_adapter.set_status.SetStatusController;
 
 
 import javax.swing.*;
@@ -35,17 +36,19 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final AddProjectController addProjectController;
     private final NotificationController notificationController;
     private final DeleteProjectController deleteProjectController;
+    private final SetStatusController setStatusController;
 
     // ***Added notificationController to the constructor.
 
     public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
-                         NotificationController notificationController, DeleteProjectController deleteProjectController) {
+                         NotificationController notificationController, DeleteProjectController deleteProjectController, SetStatusController setStatusController) {
 
         this.dashboardViewModel = dashboardViewModel;
         this.deleteProjectViewModel = deleteProjectViewModel;
         this.addProjectController = addProjectController;
         this.notificationController = notificationController;
         this.deleteProjectController = deleteProjectController;
+        this.setStatusController = setStatusController;
 
         DashboardState dashboardState = dashboardViewModel.getState();
 
@@ -275,7 +278,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         String projectTitle = projectData.getProjectTitle();
         String projectDescription = projectData.getProjectDescription();
         ArrayList<ArrayList<String>> projectTasks = projectData.getProjectTasks();
-        System.out.println(projectTasks);
 
         JFrame popupFrame = new JFrame("Project");
         popupFrame.setSize(1080, 500);
@@ -329,7 +331,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             String taskName = task.get(0);
             String taskDescription = task.get(1);;
             String taskDeadline = task.get(2);
-            String taskStatus = task.get(3);
+            final String[] taskStatus = {task.get(3)};
             JLabel tName = new JLabel("Task Name");
             JLabel name = new JLabel(taskName);
             // Adding the taskName label and the taskName textField into one panel
@@ -344,7 +346,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             panel2.add(deadline);
             // Create a check-box which is always checked if the task Status is true
             JCheckBox status = new JCheckBox("status");
-            if (taskStatus.equals("true")) {
+            if (taskStatus[0].equals("true")) {
                 status.setSelected(true);
                 status.setEnabled(false);
             } else {
@@ -377,6 +379,18 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (e.getSource() == status) {
+                        StringBuilder sbtask = new StringBuilder();
+                        sbtask.append(taskName).append("`");
+                        sbtask.append(taskDescription).append("`");
+                        sbtask.append(taskDeadline).append("`");
+                        sbtask.append(taskStatus[0]);
+                        setStatusController.execute(dashboardViewModel.getState().getUsername(), projectID, String.valueOf(sbtask));
+                        if (taskStatus[0].equals("true")) {
+                            taskStatus[0] = "false";
+                        }
+                        else {
+                            taskStatus[0] = "true";
+                        }
                         // make the change to the status of the i task in the tasks of the given project id
                         //  need to make this function in the dashboard state
 //                        dashboardViewModel.getState().setTaskStatus(projectID, finalI, 1);

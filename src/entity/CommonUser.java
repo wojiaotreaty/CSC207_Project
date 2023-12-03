@@ -1,6 +1,8 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class CommonUser implements User {
@@ -25,7 +27,7 @@ public class CommonUser implements User {
     }
 
     public ArrayList<Project> getProjects() {
-        return (ArrayList<Project>) projects.clone();
+        return projects;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class CommonUser implements User {
         result += "Username: " + this.username + "\n";
         StringBuilder projectList = new StringBuilder();
         for (Project project : this.projects){
-            projectList.append("\t").append(project.getProjectId() + ": ").append(project.getProjectName());
+            projectList.append("\t").append(project.getProjectId()).append(": ").append(project.getProjectName());
         }
         result += projectList;
 
@@ -61,5 +63,32 @@ public class CommonUser implements User {
     }
     public void addProject(Project project) {
         projects.add(project);
+    }
+
+    @Override
+    public Iterator<Project> iterator() {
+        return new Iter(projects);
+    }
+    private class Iter implements Iterator<Project> {
+        int cursor = 0;
+        ArrayList<Project> p;
+
+        public Iter(ArrayList<Project> p) {
+            this.p = p;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < p.size();
+        }
+
+        @Override
+        public Project next() {
+            if (cursor >= p.size()) {
+                throw new NoSuchElementException();
+            }
+            cursor = cursor + 1;
+            return p.get(cursor - 1);
+        }
     }
 }
