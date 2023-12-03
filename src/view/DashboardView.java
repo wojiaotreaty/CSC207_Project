@@ -371,7 +371,13 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (status.isSelected()) {
+                    if (e.getSource() == status) {
+                        StringBuilder sbtask = new StringBuilder();
+                        sbtask.append(taskName).append("`");
+                        sbtask.append(taskDescription).append("`");
+                        sbtask.append(taskDeadline).append("`");
+                        sbtask.append(taskStatus);
+
                         // make the change to the status of the i task in the tasks of the given project id
                         //  need to make this function in the dashboard state
 //                        dashboardViewModel.getState().setTaskStatus(projectID, finalI, 1);

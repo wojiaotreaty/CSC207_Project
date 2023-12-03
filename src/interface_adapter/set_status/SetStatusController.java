@@ -8,8 +8,8 @@ public class SetStatusController {
     public SetStatusController(SetStatusInputBoundary setStatusInteractor) {
         this.setStatusInteractor = setStatusInteractor;
     }
-    public void execute(String projectId, String taskId) {
-        SetStatusInputData setStatusInputData = new SetStatusInputData(projectId, taskId);
+    public void execute(String username, String projectId, String taskString) {
+        SetStatusInputData setStatusInputData = new SetStatusInputData(username, projectId, taskString);
         setStatusInteractor.execute(setStatusInputData);
     }
 }
