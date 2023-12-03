@@ -278,7 +278,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         System.out.println(projectTasks);
 
         JFrame popupFrame = new JFrame("Project");
-        popupFrame.setSize(400, 250);
+        popupFrame.setSize(1080, 500);
+        popupFrame.setResizable(false);
         JPanel popupPanel = new JPanel();
         popupPanel.setLayout(new BoxLayout(popupPanel, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(popupPanel);
@@ -330,15 +331,13 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             String taskDeadline = task.get(2);
             String taskStatus = task.get(3);
             JLabel tName = new JLabel("Task Name");
-            JTextField name = new JTextField(taskName);
-            name.setEditable(false);
+            JLabel name = new JLabel(taskName);
             // Adding the taskName label and the taskName textField into one panel
             JPanel panel1 = new JPanel(new GridLayout(2, 1));
             panel1.add(tName);
             panel1.add(name);
             JLabel tDeadline = new JLabel("Task Deadline");
-            JTextField deadline = new JTextField(taskDeadline);
-            deadline.setEditable(false);
+            JLabel deadline = new JLabel(taskDeadline);
             // Adding the deadline label and the deadline text field into one panel
             JPanel panel2 = new JPanel(new GridLayout(2, 1));
             panel2.add(tDeadline);
@@ -358,9 +357,15 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             labelsPanel.add(status);
             popupPanel.add(labelsPanel);
 //             The Task Description area
-            JTextArea tDescription = new JTextArea(5, 20);
-            tDescription.append(taskDescription + "\n");
+            JTextArea tDescription = new JTextArea(3, 20);
+            tDescription.setWrapStyleWord(true);
+            tDescription.setLineWrap(true);
+            tDescription.setOpaque(false);
             tDescription.setEditable(false);
+            tDescription.setFocusable(false);
+            tDescription.setBackground(UIManager.getColor("Label.background"));
+            tDescription.setBorder(UIManager.getBorder("Label.border"));
+            tDescription.append(taskDescription + "\n");
             popupPanel.add(tDescription);
 
             // Action Listener for the check-box status to notify the backend when the user marks
@@ -371,7 +376,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (status.isSelected()) {
+                    if (e.getSource() == status) {
                         // make the change to the status of the i task in the tasks of the given project id
                         //  need to make this function in the dashboard state
 //                        dashboardViewModel.getState().setTaskStatus(projectID, finalI, 1);
@@ -389,14 +394,18 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         refactor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+                if (e.getSource() == refactor) {
+                    JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+                }
             }
         });
 
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteProjectController.execute(dashboardViewModel.getState().getUsername(), projectID);
+                if (e.getSource() == delete) {
+                    deleteProjectConfirmation(popupFrame, projectTitle, projectID);
+                }
             }
         });
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -405,6 +414,39 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         popupFrame.add(buttons, BorderLayout.SOUTH);
 
 
+    }
+    private void deleteProjectConfirmation(JFrame popup, String projectName, String projectId) {
+        JFrame confirm = new JFrame();
+        confirm.setSize(500, 100);
+        confirm.setResizable(false);
+        JLabel text = new JLabel("Are you sure you want to delete the project: " + projectName + "?", SwingConstants.CENTER);
+        confirm.add(text, BorderLayout.CENTER);
+        JButton yes = new JButton("yes");
+        JButton no = new JButton("no");
+        yes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == yes) {
+                    confirm.dispose();
+                    popup.dispose();
+                    deleteProjectController.execute(dashboardViewModel.getState().getUsername(), projectId);
+                }
+            }
+        });
+
+        no.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == no) {
+                    confirm.dispose();
+                }
+            }
+        });
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttons.add(no);
+        buttons.add(yes);
+        confirm.add(buttons, BorderLayout.SOUTH);
+        confirm.setVisible(true);
     }
     public void propertyChange(PropertyChangeEvent evt) {
         DashboardState state = (DashboardState) evt.getNewValue();
