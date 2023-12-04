@@ -90,6 +90,10 @@ public class NotificationInteractor implements NotificationInputBoundary {
             NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + gptResponse);
             notificationPresenter.prepareNotificationView(notificationOutputData);
         }
+        else {
+            NotificationOutputData notificationOutputData = new NotificationOutputData(null);
+            notificationPresenter.prepareNotificationView(notificationOutputData);
+        }
 
 
 

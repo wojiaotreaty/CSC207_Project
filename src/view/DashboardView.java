@@ -33,6 +33,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
     private boolean fromLogin = true;
+    private boolean expectingNotification = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
     private final AddProjectController addProjectController;
@@ -102,6 +103,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 if (e.getSource() == toggleNotifications) {
                     // If notifications are turned off, start them up again using scheduleAtFixedRate
                     if (scheduledFuture == null) {
+                        expectingNotification = true;
                         Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                         scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
                         toggleNotifications.setText("Notifications Off");
@@ -485,8 +487,22 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             }
             projectsList = state.getProjects();
             displayAllProjects();
+            // ***Displays JOptionPane if there is a notification to be displayed.
+            if (expectingNotification) {
+                expectingNotification = false;
+                if (state.getNotificationMessage() != null) {
+                    JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+                }
+            }
+            if (fromLogin) {
+                fromLogin = false;
+                expectingNotification = true;
+                Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+                scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+            }
+            projectsList = state.getProjects();
+            displayAllProjects();
         }
-
         if (evt.getNewValue() instanceof DeleteProjectState state){
             JOptionPane.showMessageDialog(this, state.getDeletedProjectName()
                     + " successfully deleted.");
