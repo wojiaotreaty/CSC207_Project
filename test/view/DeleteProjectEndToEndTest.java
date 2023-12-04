@@ -1,4 +1,4 @@
-package use_case.delete_project;
+package view;
 
 import app.DashboardViewFactory;
 import data_access.ProjectsDataAccessObject;
