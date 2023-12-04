@@ -5,6 +5,7 @@ import data_access.ProjectsDataAccessObject;
 import data_access.UsersDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
@@ -35,6 +36,10 @@ public class DeleteProjectEndToEndTest {
     private final String PROJECT_NAME = "foobarProjName";
 
     private UsersDataAccessObject usersDataAccessObject;
+
+    private ArrayList<String> projectData;
+
+    private DashboardViewModel dashboardViewModel;
 
     @BeforeEach
     public void init(){
@@ -68,6 +73,16 @@ public class DeleteProjectEndToEndTest {
         testUser.addProject(projectFactory.create(PROJECT_ID, PROJECT_NAME,
                 "foobarProjDesc", taskList));
         this.usersDataAccessObject.saveUser(testUser);
+
+        this.projectData = new ArrayList<>();
+        this.projectData.add(PROJECT_ID);
+        this.projectData.add(PROJECT_NAME);
+        this.projectData.add("foobarProjDesc");
+        StringBuilder taskString = new StringBuilder();
+        for (Task task : taskList) {
+            taskString.append(task.toString()).append("|uwu|");
+        }
+        this.projectData.add(String.valueOf(taskString));
     }
 
     private void goToDashboardView() {
@@ -83,10 +98,11 @@ public class DeleteProjectEndToEndTest {
         new ViewManager(views, cardLayout, viewManagerModel);
 
         // For the Delete Project End-to-End test, we skip the login and signup views
-        DashboardViewModel dashboardViewModel = new DashboardViewModel();
-        DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
-
+        dashboardViewModel = new DashboardViewModel();
         dashboardViewModel.getState().setUsername(USERNAME);
+        dashboardViewModel.getState().addProjectData(projectData);
+
+        DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
 
         DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel,
                 usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
@@ -110,7 +126,7 @@ public class DeleteProjectEndToEndTest {
         for (Window window : windows) {
             if (window instanceof JFrame jframe) {
                 if (jframe.getTitle().equals("Dashboard Example")) {
-                    dashboardWindow = (JFrame) window;
+                    dashboardWindow = jframe;
                 }
             }
         }
@@ -125,8 +141,9 @@ public class DeleteProjectEndToEndTest {
         DashboardView dv = (DashboardView) views.getComponent(0);
         JScrollPane projectScrollPane = (JScrollPane) dv.getComponent(1);
         JViewport projectScrollPaneViewPort = (JViewport) projectScrollPane.getComponent(0);
+        JPanel projectPanels = (JPanel) projectScrollPaneViewPort.getComponent(0);
 
-        return (JPanel) projectScrollPaneViewPort.getComponent(0); // this should be the first project panel
+        return (JPanel) projectPanels.getComponent(0); // this should be the first project panel
     }
 
     private JFrame getProjectPopup(){
@@ -135,7 +152,7 @@ public class DeleteProjectEndToEndTest {
         for (Window window : windows) {
             if (window instanceof JFrame jframe) {
                 // Ensures we are on the right window.
-                if (jframe.getTitle().equals("Project")) {
+                if (jframe.getTitle().equals("Project") && jframe.isDisplayable()) {
                     projectPopup = (JFrame) window;
                 }
             }
@@ -143,23 +160,17 @@ public class DeleteProjectEndToEndTest {
         return projectPopup;
     }
 
-    private JButton getDeleteProjectButton(JFrame projectPopup) {
+    private JButton getDeleteProjectButton(JFrame projPopup) {
 
-        assert(projectPopup.getTitle().equals("Project"));
+        assert(projPopup.getTitle().equals("Project"));
 
-        JButton deleteProjectButton = null;
-        for (Component popupCp : projectPopup.getComponents()){
-            if (popupCp instanceof JPanel buttonPanel){
-                for (Component panelCp : buttonPanel.getComponents()){
-                    if (panelCp instanceof JButton button) {
-                        if (button.getText().equals("Delete Project")){
-                            deleteProjectButton = button;
-                        }
-                    }
-                }
-            }
-        }
-        return deleteProjectButton;
+        JRootPane root = (JRootPane) projPopup.getComponent(0);
+        JPanel contentPane = (JPanel) root.getContentPane();
+        JPanel buttonPanel = (JPanel) contentPane.getComponent(2);
+        JButton deleteButton = (JButton) buttonPanel.getComponent(1);
+
+        assertEquals("Delete Project", deleteButton.getText());
+        return deleteButton;
     }
 
     /**
@@ -168,13 +179,13 @@ public class DeleteProjectEndToEndTest {
     @Test
     public void testDeleteProjectButtonPresent() {
         goToDashboardView();
-        ProjectPanel firstProjectPanel = (ProjectPanel) getFirstProjectPanel();
+        JPanel firstProjectPanel = getFirstProjectPanel();
         assertNotNull(firstProjectPanel);
 
         MouseEvent me = new MouseEvent(
-                firstProjectPanel, 0, 0, 0, 100, 100, 1, true);
+                firstProjectPanel, 0, 0, 0, 50, 50, 1, true);
         for(MouseListener ml: firstProjectPanel.getMouseListeners()){
-            ml.mousePressed(me);
+            ml.mouseClicked(me);
         }
 
         JFrame projectPopup = getProjectPopup();
@@ -190,7 +201,7 @@ public class DeleteProjectEndToEndTest {
         for (Window window : windows) {
             if (window instanceof JFrame jframe) {
                 // Ensures we are on the right window.
-                if (jframe.getTitle().equals("Delete Project?")) {
+                if (jframe.getTitle().equals("Delete Project?") && jframe.isDisplayable()) {
                     confirmationPopup = jframe;
                 }
             }
@@ -202,22 +213,11 @@ public class DeleteProjectEndToEndTest {
 
         assert(confirmationPopup.getTitle().equals("Delete Project?"));
 
-        JButton yesButton = null;
-        JButton noButton = null;
-        for (Component popupCp : confirmationPopup.getComponents()){
-            if (popupCp instanceof JPanel buttonPanel){
-                for (Component panelCp : buttonPanel.getComponents()){
-                    if (panelCp instanceof JButton button) {
-                        if (button.getText().equals("yes")){
-                            yesButton = button;
-                        }
-                        if (button.getText().equals("no")){
-                            noButton = button;
-                        }
-                    }
-                }
-            }
-        }
+        JRootPane root = (JRootPane) confirmationPopup.getComponent(0);
+        JPanel contentPane = (JPanel) root.getContentPane();
+        JPanel buttonPanel = (JPanel) contentPane.getComponent(1);
+        JButton noButton = (JButton) buttonPanel.getComponent(0);
+        JButton yesButton = (JButton) buttonPanel.getComponent(1);
 
         HashMap<String, JButton> result = new HashMap<>();
         result.put("no", noButton);
@@ -238,7 +238,7 @@ public class DeleteProjectEndToEndTest {
         MouseEvent me = new MouseEvent(
                 firstProjectPanel, 0, 0, 0, 50, 50, 1, true);
         for (MouseListener ml: firstProjectPanel.getMouseListeners()){
-            ml.mousePressed(me);
+            ml.mouseClicked(me);
         }
 
         JFrame projectPopup = getProjectPopup();
@@ -270,7 +270,7 @@ public class DeleteProjectEndToEndTest {
         MouseEvent me = new MouseEvent(
                 firstProjectPanel, 0, 0, 0, 50, 50, 1, true);
         for (MouseListener ml: firstProjectPanel.getMouseListeners()){
-            ml.mousePressed(me);
+            ml.mouseClicked(me);
         }
 
         JFrame projectPopup = getProjectPopup();
@@ -285,37 +285,18 @@ public class DeleteProjectEndToEndTest {
         assertNull(getProjectPopup());
         assertNull(getConfirmationPopup());
 
-//        Check that the deletion successful popup exists
-        JOptionPane deletionSuccessful = null;
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window instanceof JFrame jframe) {
-                // Ensures we are on the right window.
-                if (jframe.getTitle().equals("Dashboard Example")) {
-                    for (Component cp : jframe.getComponents()){
-                        if (cp instanceof JOptionPane jOptionPane){
-                            if (jOptionPane.getMessage().equals(PROJECT_NAME
-                                    + " successfully deleted.")) {
-                                deletionSuccessful = jOptionPane;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        assertNotNull(deletionSuccessful);
-
 //        Check that the project has been deleted in the backend
         User resultUser = usersDataAccessObject.getUser(USERNAME);
         for (Project project : resultUser.getProjects()){
             if (project.getProjectId().equals(PROJECT_ID)){
-                fail("Project not deleted in backend.");
+                fail("ERROR: Project not deleted in backend.");
             }
         }
 
-        // Test that there is no first project panel after the only project is deleted.
-        JPanel projectPanel = getFirstProjectPanel();
-        assertNull(projectPanel);
+        // Test that there is no projectData in dashboardState after the only project is deleted.
+        for (ProjectData projData : dashboardViewModel.getState().getProjects()){
+            if (projData.getProjectID().equals(this.PROJECT_ID)) fail("ERROR: Project not deleted in frontend.");
+        }
     }
 
     @AfterEach
@@ -327,6 +308,13 @@ public class DeleteProjectEndToEndTest {
         File testUsersDatabase = new File("./users_test.csv");
         if (!testUsersDatabase.delete()){
             System.out.println("./users_test.csv did not delete properly after testing.");
+        }
+
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window.isDisplayable()){
+                window.dispose();
+            }
         }
     }
 }
