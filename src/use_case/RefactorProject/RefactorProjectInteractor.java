@@ -85,8 +85,25 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
 
                     incomplete_tasks.set(i, shiftedTask);
                 }
+                //                String t=task.toStringUwu();
+//                list_task.add(t);
+//                userDataAccessObject.setTaskDeadline(projectID,tasks.get(i).getId(),shiftedTaskDeadline);
+            }
+            else{
+                userPresenter.prepareFailView("you have already completed the project");
             }
 
+            ArrayList<Task> updated_tasks = new ArrayList<>();
+
+            updated_tasks.addAll(complete_tasks);
+
+            updated_tasks.addAll(incomplete_tasks);
+            Project refactored_project = projectFactory.create(projectID, project.getProjectName(), project.getProjectDescription(), updated_tasks);
+
+            Project old_project = user.deleteProject(projectID);
+            user.addProject(refactored_project);
+
+            userDataAccessObject.saveUser(user);
 
         }
     }
