@@ -44,14 +44,21 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         ArrayList<Task> complete_tasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getStatus() == false) {
+               //updating incomplete tasks array list
                 incomplete_tasks.add(task);
             } else {
+                // updating complete tasks array list
                 complete_tasks.add(task);
             }
         }
         //getting the final task since the final task has the same deadline as the project.
+        // updating the final task
+
+
         Task finalTask = tasks.get(tasks.size() - 1);
         // getting the deadline
+
+
         LocalDate deadline = finalTask.getDeadline();
     }
 }
