@@ -1,4 +1,4 @@
-package use_case.refactor_project;
+package use_case.RefactorProject;
 import entity.*;
 
 import java.time.LocalDate;
@@ -14,11 +14,12 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
 
 
     public RefactorProjectInteractor(RefactorProjectDataAccessInterface refactorProjectDataAccessInterface,
-                                         RefactorProjectOutputBoundary refactorProjectOutputBoundary, ProjectFactory projectFactory) {
+                                     RefactorProjectOutputBoundary refactorProjectOutputBoundary, ProjectFactory projectFactory, TaskFactory taskFactory) {
             this.userDataAccessObject = refactorProjectDataAccessInterface;
             this.userPresenter = refactorProjectOutputBoundary;
             this.projectFactory = projectFactory;
-        }
+        this.taskFactory = taskFactory;
+    }
 
         @Override
         public void execute(RefactorProjectInputData refactorProjectInputData) {
