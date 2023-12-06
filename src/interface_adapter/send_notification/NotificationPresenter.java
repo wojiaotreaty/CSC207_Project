@@ -14,6 +14,7 @@ public class NotificationPresenter implements NotificationOutputBoundary {
     public void prepareNotificationView(NotificationOutputData notificationOutputData) {
         DashboardState dashboardState = dashboardViewModel.getState();
         dashboardState.setNotificationMessage(notificationOutputData.getMessage());
+        dashboardState.setNotificationImage(notificationOutputData.getImageUrl());
         dashboardViewModel.setState(dashboardState);
         dashboardViewModel.firePropertyChanged();
     }

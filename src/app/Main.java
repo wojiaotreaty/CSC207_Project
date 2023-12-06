@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame application = new JFrame("Login Example");
+        JFrame application = new JFrame("WorkFlo");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         CardLayout cardLayout = new CardLayout();

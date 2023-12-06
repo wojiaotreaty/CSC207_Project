@@ -92,29 +92,29 @@ public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDa
                     userExists = true;
                     String password = String.valueOf(col[headers.get("password")]);
 
-                    if (user.getProjects().isEmpty()){
-                        row = username + "%%" + password + "%%" + "-1";
-                    } else {
-                        ArrayList<String> newProjectIds = new ArrayList<>();
-                        for (Project project : user.getProjects()) {
-                            newProjectIds.add(project.getProjectId());
-                        }
+                    ArrayList<String> newProjectIds = new ArrayList<>();
+                    for (Project project : user.getProjects()) {
+                        newProjectIds.add(project.getProjectId());
+                    }
 
 //                    Check for deleted projects
-                        String[] oldProjectIds = String.valueOf(col[headers.get("projectIDs")]).split(";");
-                        for (int i = 0; i < oldProjectIds.length; i++) {
-                            if (!newProjectIds.contains(oldProjectIds[i])) {
-                                projectsDAO.deleteProject(oldProjectIds[i]);
-                            }
+                    String[] oldProjectIds = String.valueOf(col[headers.get("projectIDs")]).split(";");
+                    for (int i = 0; i < oldProjectIds.length; i++) {
+                        if (!newProjectIds.contains(oldProjectIds[i])) {
+                            projectsDAO.deleteProject(oldProjectIds[i]);
                         }
-//                    Create the new projectIDs string
-                        StringBuilder projectIDs = new StringBuilder();
-                        for (String id : newProjectIds) {
-                            projectIDs.append(id).append(";");
-                        }
-
-                        row = username + "%%" + password + "%%" + projectIDs;
                     }
+//                    Create the new projectIDs string
+                    StringBuilder projectIDs = new StringBuilder();
+                    for (String id : newProjectIds) {
+                        projectIDs.append(id).append(";");
+                    }
+
+                    if (user.getProjects().isEmpty()){
+                        row = username + "%%" + password + "%%" + "-1";
+                    }
+                    else row = username + "%%" + password + "%%" + projectIDs;
+
                 }
 
                 inputBuffer.append(row);

@@ -1,4 +1,4 @@
-package use_case.add_project;
+package view;
 
 import app.DashboardViewFactory;
 import data_access.ProjectsDataAccessObject;
