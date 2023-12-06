@@ -1,9 +1,6 @@
 package use_case.RefactorProject;
 
-import entity.Project;
-import entity.ProjectFactory;
-import entity.TaskFactory;
-import entity.User;
+import entity.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,6 +34,19 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         for (Project project1 : projects) {
             if (project1.getProjectId().equals(projectID)) {
                 project = project1;
+            }
+        }
+        if (project == null) {
+            throw new RuntimeException("Error occured while refactoring the project");
+        }
+        ArrayList<Task> tasks = project.getTasks();
+        ArrayList<Task> incomplete_tasks = new ArrayList<>();
+        ArrayList<Task> complete_tasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getStatus() == false) {
+                incomplete_tasks.add(task);
+            } else {
+                complete_tasks.add(task);
             }
         }
 
