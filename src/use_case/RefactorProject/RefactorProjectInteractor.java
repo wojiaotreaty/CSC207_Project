@@ -46,7 +46,7 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         ArrayList<Task> complete_tasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getStatus() == false) {
-               //updating incomplete tasks array list
+                //updating incomplete tasks array list
                 incomplete_tasks.add(task);
             } else {
                 // updating complete tasks array list
@@ -65,19 +65,29 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
 
         // assuming the TasksDeadline is in "YYYY-MM-DD" format
         // calculating the time difference between the current date and the deadline date
-        LocalDateTime deadline_start =deadline.atStartOfDay();
-        LocalDateTime now_start=now.atStartOfDay();
-        long timeDifference= ChronoUnit.DAYS.between(deadline_start,now_start)*86400000;
+        LocalDateTime deadline_start = deadline.atStartOfDay();
+        LocalDateTime now_start = now.atStartOfDay();
+        long timeDifference = ChronoUnit.DAYS.between(deadline_start, now_start) * 86400000;
         if (timeDifference > 0 || timeDifference == 0) {
             double deciDays = timeDifference / 86400000;
             // If the incomplete task size is greater than 1
             if (incomplete_tasks.size() > 1) {
                 double time_to_add = deciDays / incomplete_tasks.size() - 1;
                 long days = Math.round(time_to_add);
+                ArrayList<String> list_task = new ArrayList<String>();
+                for (int i = 0; i < incomplete_tasks.size() - 1; i++) {
+                    LocalDate taskDeadline = incomplete_tasks.get(i).getDeadline();
+
+                    LocalDate shiftedTaskDeadline = now.plusDays(days * (i + 1));
+                    Task task = incomplete_tasks.get(i);
+
+                    Task shiftedTask = taskFactory.create(task.getName(), shiftedTaskDeadline, task.getDescription());
+
+                    incomplete_tasks.set(i, shiftedTask);
+                }
             }
+
+
         }
-
-
-
     }
 }
