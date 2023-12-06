@@ -42,6 +42,7 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
         RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
+
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
         TaskFactory taskFactory = new CommonTaskFactory();
@@ -65,11 +66,7 @@ public class Main {
         LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, dashboardViewModel, usersDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-<<<<<<< HEAD
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel,refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject,usersDataAccessObject);
-=======
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
->>>>>>> cbdd32ef38a4da476f3f8b006df897cf9ed35b4b
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         views.add(dashboardView, dashboardView.viewName);
 
 
@@ -82,5 +79,5 @@ public class Main {
         application.setLayout(new BorderLayout());
         application.setResizable(false);
         application.setVisible(true);
-        }
+    }
 }

@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-    public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
+import static java.time.temporal.ChronoUnit.DAYS;
+
+public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         final private RefactorProjectDataAccessInterface userDataAccessObject;
         final private RefactorProjectOutputBoundary userPresenter;
         final private ProjectFactory projectFactory;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
         @Override
         public void execute(RefactorProjectInputData refactorProjectInputData) {
             // Getting the time right now
-            LocalDateTime now = LocalDateTime.now();
+            LocalDate now = LocalDate.now();
             // getting the user and the project Id from the dao
             User user = userDataAccessObject.getUser(refactorProjectInputData.getUserName());
             String projectID = refactorProjectInputData.getId();
@@ -31,7 +33,7 @@ import java.util.ArrayList;
             projects = user.getProjects();
             Project project = null;
             for (Project project1 : projects) {
-                if (project1.getProjectId() == projectID) {
+                if (project1.getProjectId().equals(projectID)) {
                     project = project1;
                 }
             }
@@ -54,7 +56,9 @@ import java.util.ArrayList;
             LocalDate deadline = finalTask.getDeadline();
             // assuming the TasksDeadline is in "YYYY-MM-DD" format
             // claculating the time difference between the current date and the deadline date
-            long timeDifference = now.until(deadline, ChronoUnit.MILLIS);
+            LocalDateTime q =deadline.atStartOfDay();
+            LocalDateTime v=now.atStartOfDay();
+            long timeDifference= ChronoUnit.DAYS.between(v,q)*86400000;
             if (timeDifference > 0 || timeDifference == 0) {
                 double deciDays = timeDifference / 86400000;
 
