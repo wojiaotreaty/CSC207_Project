@@ -5,6 +5,7 @@ import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
 import interface_adapter.delete_project.DeleteProjectController;
+import interface_adapter.delete_project.DeleteProjectState;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
 import interface_adapter.set_status.SetStatusController;
@@ -51,6 +52,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         this.notificationController = notificationController;
         this.deleteProjectController = deleteProjectController;
         this.setStatusController = setStatusController;
+
+        deleteProjectViewModel.addPropertyChangeListener(this);
 
         DashboardState dashboardState = dashboardViewModel.getState();
 
@@ -433,7 +436,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     }
     private void deleteProjectConfirmation(JFrame popup, String projectName, String projectId) {
-        JFrame confirm = new JFrame();
+        JFrame confirm = new JFrame("Delete Project?");
         confirm.setSize(500, 100);
         confirm.setResizable(false);
         JLabel text = new JLabel("Are you sure you want to delete the project: " + projectName + "?", SwingConstants.CENTER);
@@ -466,25 +469,43 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         confirm.setVisible(true);
     }
     public void propertyChange(PropertyChangeEvent evt) {
-        DashboardState state = (DashboardState) evt.getNewValue();
 
-        if (state.getAddProjectError() != null) {
-            JOptionPane.showMessageDialog(this, state.getAddProjectError());
-        }
-        // ***Displays JOptionPane if there is a notification to be displayed.
-        if (expectingNotification) {
-            expectingNotification = false;
+        if (evt.getNewValue() instanceof DashboardState state){
+
+            if (state.getAddProjectError() != null) {
+                JOptionPane.showMessageDialog(this, state.getAddProjectError());
+            }
+            // ***Displays JOptionPane if there is a notification to be displayed.
             if (state.getNotificationMessage() != null) {
                 JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+                state.setNotificationMessage(null);
             }
+            if (fromLogin) {
+                fromLogin = false;
+                Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+                scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+            }
+            projectsList = state.getProjects();
+            displayAllProjects();
+            // ***Displays JOptionPane if there is a notification to be displayed.
+            if (expectingNotification) {
+                expectingNotification = false;
+                if (state.getNotificationMessage() != null) {
+                    JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+                }
+            }
+            if (fromLogin) {
+                fromLogin = false;
+                expectingNotification = true;
+                Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+                scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+            }
+            projectsList = state.getProjects();
+            displayAllProjects();
         }
-        if (fromLogin) {
-            fromLogin = false;
-            expectingNotification = true;
-            Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
-            scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+        if (evt.getNewValue() instanceof DeleteProjectState state){
+            JOptionPane.showMessageDialog(this, state.getDeletedProjectName()
+                    + " successfully deleted.");
         }
-        projectsList = state.getProjects();
-        displayAllProjects();
     }
 }
