@@ -37,6 +37,7 @@ public class RefactorProjectPresenter implements RefactorProjectOutputBoundary {
         project.add(refactorProjectOutputData.getProjectName());
         project.add(refactorProjectOutputData.getProjectDescription());
         project.add(refactorProjectOutputData.getTasks());
+        System.out.println(project);
         dashboardState.addProjectData(project);
 
         dashboardViewModel.setState(dashboardState);

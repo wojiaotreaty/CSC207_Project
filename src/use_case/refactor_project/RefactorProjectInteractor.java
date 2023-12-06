@@ -90,13 +90,12 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
 
                 userDataAccessObject.saveUser(user);
                 // TODO:Update the project entities
-                String list_tasks="";
+                StringBuilder list_tasks = new StringBuilder();
                 for(Task task:updated_tasks){
                    String new_task= task.toString();
-                   new_task.concat("|uwu|");
-                   list_tasks.concat(new_task);
+                   list_tasks.append(new_task).append("|uwu|");
                 }
-                RefactorProjectOutputData refactorProjectOutputData = new RefactorProjectOutputData(projectID,project.getProjectName(),project.getProjectDescription(),list_tasks);
+                RefactorProjectOutputData refactorProjectOutputData = new RefactorProjectOutputData(projectID,project.getProjectName(),project.getProjectDescription(), String.valueOf(list_tasks));
 
                 userPresenter.prepareSuccessView(refactorProjectOutputData);
             }
