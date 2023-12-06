@@ -11,12 +11,17 @@ import interface_adapter.send_notification.NotificationController;
 import interface_adapter.set_status.SetStatusController;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -477,6 +482,22 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             }
             // ***Displays JOptionPane if there is a notification to be displayed.
             if (state.getNotificationMessage() != null) {
+                if (state.getNotificationImage() != null) {
+                    try {
+                        URL url = new URL(state.getNotificationImage());
+                        BufferedImage image = ImageIO.read(url);
+                        JLabel label = new JLabel(new ImageIcon(image));
+                        JFrame f = new JFrame();
+                        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        f.getContentPane().add(label);
+                        f.pack();
+                        f.setLocation(200, 200);
+                        f.toFront();
+                        f.setVisible(true);
+                    } catch (IOException ignored) {
+                        ;
+                    }
+                }
                 JOptionPane.showMessageDialog(this, state.getNotificationMessage());
                 state.setNotificationMessage(null);
             }
