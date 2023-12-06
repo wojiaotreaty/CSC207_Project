@@ -34,6 +34,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
     private boolean fromLogin = true;
+    private ArrayList<ProjectData>project_popup = new ArrayList<>();
     private boolean expectingNotification = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
@@ -415,8 +416,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         refactor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                project_popup.add(projectData);
                     refactorProjectController.execute(userName,projectID);
+                    popupFrame.dispose();
             }
+
         });
 
         delete.addActionListener(new ActionListener() {
@@ -479,12 +483,17 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             if (state.getNotificationMessage() != null) {
                 JOptionPane.showMessageDialog(this, state.getNotificationMessage());
             }
+
         }
         if (fromLogin) {
             fromLogin = false;
             expectingNotification = true;
             Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
             scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+        }
+        if (project_popup.size()>0){
+            int size = state.getProjects().size();
+            projectPopup(state.getUsername(),state.getProjects().get(size-1));
         }
         projectsList = state.getProjects();
         displayAllProjects();
