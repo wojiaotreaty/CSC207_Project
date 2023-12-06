@@ -1,27 +1,19 @@
-package use_case.RefactorProject;
-import entity.Project;
-import entity.ProjectFactory;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+package use_case.refactor_project;
+import entity.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Objects;
 
-    public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
-        final RefactorProjectDataAccessInterface userDataAccessObject;
-        final RefactorProjectOutputBoundary userPresenter;
-        final ProjectFactory projectFactory;
+public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
+    final private RefactorProjectDataAccessInterface userDataAccessObject;
+    final private RefactorProjectOutputBoundary userPresenter;
+    final private ProjectFactory projectFactory;
+    final private TaskFactory taskFactory;
 
-        public RefactorProjectInteractor(RefactorProjectDataAccessInterface refactorProjectDataAccessInterface,
+
+    public RefactorProjectInteractor(RefactorProjectDataAccessInterface refactorProjectDataAccessInterface,
                                          RefactorProjectOutputBoundary refactorProjectOutputBoundary, ProjectFactory projectFactory) {
             this.userDataAccessObject = refactorProjectDataAccessInterface;
             this.userPresenter = refactorProjectOutputBoundary;
