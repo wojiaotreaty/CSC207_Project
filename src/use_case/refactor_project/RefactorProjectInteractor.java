@@ -61,43 +61,48 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
             long timeDifference= ChronoUnit.DAYS.between(v,q)*86400000;
             if (timeDifference > 0 || timeDifference == 0) {
                 double deciDays = timeDifference / 86400000;
+                // If the incomplete task size is greater than 1
+                if (incomplete_tasks.size() > 1) {
+                    double time_to_add = deciDays / incomplete_tasks.size()-1 ;
+                    long days = Math.round(time_to_add);
+                    ArrayList<String> list_task = new ArrayList<String>();
+                    for (int i =0 ; i < incomplete_tasks.size()-1; i++) {
+                        LocalDate taskDeadline = incomplete_tasks.get(i).getDeadline();
 
-                double time_to_add = deciDays / incomplete_tasks.size();
-                long days = Math.round(time_to_add);
-                ArrayList<String> list_task = new ArrayList<String>();
-                for (int i = 0; i < incomplete_tasks.size(); i++) {
-                    LocalDate taskDeadline = incomplete_tasks.get(i).getDeadline();
+                        LocalDate shiftedTaskDeadline = now.plusDays(days * (i+1));
+                        Task task = incomplete_tasks.get(i);
 
-                    LocalDate shiftedTaskDeadline = taskDeadline.plusDays(days);
-                    Task task = incomplete_tasks.get(i);
+                        Task shiftedTask = taskFactory.create(task.getName(), shiftedTaskDeadline, task.getDescription());
 
-                    Task shiftedTask = taskFactory.create(task.getName(), shiftedTaskDeadline, task.getDescription());
-
-                    incomplete_tasks.set(i, shiftedTask);
+                        incomplete_tasks.set(i, shiftedTask);
 //                String t=task.toStringUwu();
 //                list_task.add(t);
 //                userDataAccessObject.setTaskDeadline(projectID,tasks.get(i).getId(),shiftedTaskDeadline);
+                    }
                 }
-                ArrayList<Task> updated_tasks = new ArrayList<>();
-
-                updated_tasks.addAll(complete_tasks);
-
-                updated_tasks.addAll(incomplete_tasks);
-                Project refactored_project = projectFactory.create(projectID, project.getProjectName(), project.getProjectDescription(), updated_tasks);
-
-                Project old_project = user.deleteProject(projectID);
-                user.addProject(refactored_project);
-
-                userDataAccessObject.saveUser(user);
-                // TODO:Update the project entities
-                StringBuilder list_tasks = new StringBuilder();
-                for(Task task:updated_tasks){
-                   String new_task= task.toString();
-                   list_tasks.append(new_task).append("|uwu|");
+                else{
+                    userPresenter.prepareFailView("you have already completed the project");
                 }
-                RefactorProjectOutputData refactorProjectOutputData = new RefactorProjectOutputData(projectID,project.getProjectName(),project.getProjectDescription(), String.valueOf(list_tasks));
+                    ArrayList<Task> updated_tasks = new ArrayList<>();
 
-                userPresenter.prepareSuccessView(refactorProjectOutputData);
+                    updated_tasks.addAll(complete_tasks);
+
+                    updated_tasks.addAll(incomplete_tasks);
+                    Project refactored_project = projectFactory.create(projectID, project.getProjectName(), project.getProjectDescription(), updated_tasks);
+
+                    Project old_project = user.deleteProject(projectID);
+                    user.addProject(refactored_project);
+
+                    userDataAccessObject.saveUser(user);
+                    StringBuilder list_tasks = new StringBuilder();
+                    for (Task task : updated_tasks) {
+                        String new_task = task.toString();
+                        list_tasks.append(new_task).append("|uwu|");
+                    }
+                    RefactorProjectOutputData refactorProjectOutputData = new RefactorProjectOutputData(projectID, project.getProjectName(), project.getProjectDescription(), String.valueOf(list_tasks));
+
+                    userPresenter.prepareSuccessView(refactorProjectOutputData);
+
             }
             else{
                 userPresenter.prepareFailView("unable to refactor since the deadline has already crossed");
