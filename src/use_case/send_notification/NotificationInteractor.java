@@ -253,7 +253,6 @@ public class NotificationInteractor implements NotificationInputBoundary {
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
 
-            System.out.println("dall-e call finished");
 
 
             StringBuilder response = new StringBuilder();
