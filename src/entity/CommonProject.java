@@ -2,6 +2,8 @@ package entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class CommonProject implements Project {
@@ -32,7 +34,7 @@ public class CommonProject implements Project {
     }
 
     public ArrayList<Task> getTasks() {
-        return (ArrayList<Task>) tasks.clone();
+        return tasks;
     }
     // adds task to tasks such that it is the first task with its deadline chronologically.
     public void addTask(Task task) {
@@ -78,5 +80,32 @@ public class CommonProject implements Project {
 
     public void removeTask(Task task) {
         tasks.remove(task);
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iter(tasks);
+    }
+
+    private class Iter implements Iterator<Task> {
+        int cursor = 0;
+        ArrayList<Task> t;
+        public Iter(ArrayList<Task> t) {
+            this.t = t;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < t.size();
+        }
+
+        @Override
+        public Task next() {
+            if (cursor >= t.size()) {
+                throw new NoSuchElementException();
+            }
+            cursor = cursor + 1;
+            return t.get(cursor - 1);
+        }
     }
 }

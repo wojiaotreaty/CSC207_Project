@@ -25,6 +25,7 @@ public class AddProjectInteractorUnitTest {
         AddProjectOutputBoundary successPresenter = new AddProjectOutputBoundary() {
             @Override
             public void prepareSuccessView(AddProjectOutputData addProjectOutputData) {
+                // Tests to see if the output data contains the correct information
                 assertEquals("100", addProjectOutputData.getProject().get(0));
                 assertEquals("CSC207 Group Project", addProjectOutputData.getProject().get(1));
                 assertEquals("Create an application, which makes use of Clean Architecture and SOLID Design principles, " +
@@ -33,6 +34,9 @@ public class AddProjectInteractorUnitTest {
                         addProjectOutputData.getProject().get(2));
 
                 try {
+                    // projectTasks may not be used here, but the process of splitting/parsing the string is
+                    // tested to see if it can be run without failure as the same process is undergone
+                    // deeper in the frontend.
                     ArrayList<ArrayList<String>> projectTasks = new ArrayList<>();
 
                     String[] tasks = addProjectOutputData.getProject().get(3).split("[|]uwu[|]");
@@ -61,6 +65,7 @@ public class AddProjectInteractorUnitTest {
         addProjectInteractor.execute(inputData);
     }
 
+    // Dummy DAO created for the purpose of the Interactor Unit Test.
     private static class DummyUsersDataAccessObject implements AddProjectDataAccessInterface {
 
         @Override

@@ -12,6 +12,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class NotificationInteractor implements NotificationInputBoundary {
     final NotificationUsersDataAccessInterface notificationUsersDataAccessInterface;
@@ -67,8 +68,30 @@ public class NotificationInteractor implements NotificationInputBoundary {
             // generates gpt query and executes the api call using helper functions
             String[] gptQuery = generateQuery(duePlusOne, duePlusTwo, dueToday);
             String gptOutput = apiCall(gptQuery[0]);
+            String[] gptOutputArray1 = gptOutput.split("\\\\n");
+            String gptOutputReformat1 = String.join("\n", gptOutputArray1);
+            String[] gptOutputArray2 = gptOutputReformat1.split(" ");
+            ArrayList<String> gptOutputArrayList = new ArrayList<>(List.of(gptOutputArray2));
+            StringBuilder gptOutputReformat2 = new StringBuilder();
+            int i = 0;
+            int j = 0;
+            while (i < gptOutputArrayList.size()) {
+                if (j == 20) {
+                    gptOutputReformat2.append(String.join(" ", gptOutputArrayList.subList(i - 20, i))).append("\n");
+                    j = 0;
+                }
+                j = j + 1;
+                i = i + 1;
+            }
+            gptOutputReformat2.append(String.join(" ", gptOutputArrayList.subList(i - j, i)));
+            String gptResponse = String.valueOf(gptOutputReformat2);
+
             // Creates output data and calls presenter
-            NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + gptOutput);
+            NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + gptResponse);
+            notificationPresenter.prepareNotificationView(notificationOutputData);
+        }
+        else {
+            NotificationOutputData notificationOutputData = new NotificationOutputData(null);
             notificationPresenter.prepareNotificationView(notificationOutputData);
         }
 
@@ -80,84 +103,83 @@ public class NotificationInteractor implements NotificationInputBoundary {
                                         HashMap<Project, ArrayList<Task>> today) {
         // initializes the StringBuilder and briefly explains to gpt the situation.
         StringBuilder m = new StringBuilder("I am working on some projects right now and these are some " +
-                "upcoming tasks that are due. \n");
+                "upcoming tasks that are due. ");
         StringBuilder q = new StringBuilder();
         // Note that all three if statements are essentially exactly the same as this one.
         // They just add information about the tasks due on their specific days.
         if (!today.isEmpty()) {
             // Curly brackets, {}, are used to encompass tasks due on the same day and
             // related to the same project.
-            m.append("These tasks are due today: {\n");
+            m.append("These tasks are due today: [");
             q.append("These tasks are due today: \n");
             for (Project project : today.keySet()) {
                 // The project description is omitted to save space in the call. I aim to have
                 // gpt give a relatively brief response, and I feel that the task descriptions
                 // along with the project title should be enough information to give some
                 // quick advice and a motivational statement.
-                m.append("For Project: ").append(project.getProjectName()).append(" {\n");
+                m.append("For Project: ").append(project.getProjectName()).append(" [");
                 q.append("     For Project: ").append(project.getProjectName()).append("\n");
                 ArrayList<Task> tasks = today.get(project);
                 for (Task task : tasks) {
                     m.append("Task Name: ").append(task.getName()).append(", ");
-                    m.append("Task Description: ").append(task.getDescription()).append("\n");
-                    q.append("     Task Name: ").append(task.getName()).append(", ");
-                    q.append("Task Description: ").append(task.getDescription()).append("\n");
+                    m.append("Task Description: ").append(task.getDescription()).append(". ");
+                    q.append("          Task Name: ").append(task.getName()).append("\n");
+                    q.append("          Task Description: ").append(task.getDescription()).append("\n\n");
                 }
-                m.append("}\n");
+                m.append("]");
             }
-            m.append("}\n");
+            m.append("] ");
         }
         if (!one.isEmpty()) {
-            m.append("These tasks are due tomorrow: {\n");
+            m.append("These tasks are due tomorrow: [");
             q.append("These tasks are due tomorrow: \n");
             for (Project project : one.keySet()) {
-                m.append("For Project: ").append(project.getProjectName()).append(" {\n");
+                m.append("For Project: ").append(project.getProjectName()).append(" [");
                 q.append("     For Project: ").append(project.getProjectName()).append("\n");
                 ArrayList<Task> tasks = one.get(project);
                 for (Task task : tasks) {
                     m.append("Task Name: ").append(task.getName()).append(", ");
-                    m.append("Task Description: ").append(task.getDescription()).append("\n");
-                    q.append("     Task Name: ").append(task.getName()).append(", ");
-                    q.append("Task Description: ").append(task.getDescription()).append("\n");
+                    m.append("Task Description: ").append(task.getDescription()).append(". ");
+                    q.append("          Task Name: ").append(task.getName()).append("\n");
+                    q.append("          Task Description: ").append(task.getDescription()).append("\n\n");
                 }
-                q.append("}\n");
+                m.append("]");
             }
-            q.append("}\n");
+            m.append("] ");
         }
         if (!two.isEmpty()) {
-            m.append("These tasks are due the day after tomorrow: {\n");
+            m.append("These tasks are due the day after tomorrow: [");
             q.append("These tasks are due the day after tomorrow: \n");
             for (Project project : two.keySet()) {
-                m.append("For Project: ").append(project.getProjectName()).append(" {\n");
+                m.append("For Project: ").append(project.getProjectName()).append(" [");
                 q.append("     For Project: ").append(project.getProjectName()).append("\n");
                 ArrayList<Task> tasks = two.get(project);
                 for (Task task : tasks) {
                     m.append("Task Name: ").append(task.getName()).append(", ");
-                    m.append("Task Description: ").append(task.getDescription()).append("\n");
-                    q.append("     Task Name: ").append(task.getName()).append(", ");
-                    q.append("Task Description: ").append(task.getDescription()).append("\n");
+                    m.append("Task Description: ").append(task.getDescription()).append(". ");
+                    q.append("          Task Name: ").append(task.getName()).append("\n");
+                    q.append("          Task Description: ").append(task.getDescription()).append("\n\n");
                 }
-                q.append("}\n");
+                m.append("]");
             }
-            q.append("}\n");
+            m.append("] ");
         }
         m.append("Briefly give me some advice for how I should get started, as well as some encouragement" +
-                "and motivation.\n");
-        m.append("IMPORTANT: mark the beginning and end of your response with \"|uwu|\"");
+                "and motivation. IMPORTANT: keep you response very brief! less than 100 words.");
+//        m.append("IMPORTANT: mark the beginning and end of your response with \"|uwu|\"");
         return new String[]{String.valueOf(m), String.valueOf(q)};
     }
     private static String apiCall(String query) {
         String url = "https://api.openai.com/v1/chat/completions";
-        String apiKey;
+        String apiKey = null;
 
-        try (BufferedReader br = new BufferedReader(new FileReader("../apikey.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/apikey.txt"))) {
             apiKey = br.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         String model = "gpt-3.5-turbo";
 
-        ArrayList<HashMap<String, String>> tasks = new ArrayList<HashMap<String, String>>();
         try {
             URL obj = new URI(url).toURL();
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
@@ -165,17 +187,21 @@ public class NotificationInteractor implements NotificationInputBoundary {
             connection.setRequestProperty("Authorization", "Bearer " + apiKey);
             connection.setRequestProperty("Content-Type", "application/json");
 
-            // The request body
+
             String body = "{\"model\": \"" + model + "\", \"messages\": " +
                     "[{\"role\": \"user\", \"content\": \"" + query + "\"}]}";
-            connection.setDoOutput(true);
+
+            connection.setDoOutput(true);;
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+
             writer.write(body);
             writer.flush();
             writer.close();
 
+
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
+
 
             StringBuilder response = new StringBuilder();
 
@@ -191,9 +217,9 @@ public class NotificationInteractor implements NotificationInputBoundary {
         }
     }
     private static String extractMessage(String response) {
-        int start = response.indexOf("|uwu|");
+        int start = response.indexOf("content") + 11;
 
-        int end = response.indexOf("|uwu|", start + 5);
+        int end = response.indexOf("}", start) - 7;
 
         return response.substring(start, end);
     }

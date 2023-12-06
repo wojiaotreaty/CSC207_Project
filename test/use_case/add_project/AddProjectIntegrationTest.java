@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import data_access.ProjectsDataAccessObject;
 import data_access.UsersDataAccessObject;
 import entity.*;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,6 +50,7 @@ public class AddProjectIntegrationTest {
         AddProjectOutputBoundary successPresenter = new AddProjectOutputBoundary() {
             @Override
             public void prepareSuccessView(AddProjectOutputData addProjectOutputData) {
+                // Tests to see if the output data contains the correct information
                 assertEquals("1", addProjectOutputData.getProject().get(0));
                 assertEquals("CSC207 Group Project", addProjectOutputData.getProject().get(1));
                 assertEquals("Create an application, which makes use of Clean Architecture and SOLID Design principles, " +
@@ -60,6 +59,9 @@ public class AddProjectIntegrationTest {
                         addProjectOutputData.getProject().get(2));
 
                 try {
+                    // projectTasks may not be used here, but the process of splitting/parsing the string is
+                    // tested to see if it can be run without failure as the same process is undergone
+                    // deeper in the frontend.
                     ArrayList<ArrayList<String>> projectTasks = new ArrayList<>();
 
                     String[] tasks = addProjectOutputData.getProject().get(3).split("[|]uwu[|]");
@@ -72,8 +74,10 @@ public class AddProjectIntegrationTest {
                     fail("Text completion generated did not match the given restrictions.");
                 }
 
+                // First tests to see if the Project entity was created in the DAO
                 assertEquals(usersDAO.getUser("foobar").getProjects().size(), 1);
 
+                // Tests to see if properties of the Project entity are as expected
                 Project addedProject = usersDAO.getUser("foobar").getProjects().get(0);
                 assertEquals(addedProject.getProjectId(), "1");
                 assertEquals(addedProject.getProjectDescription(), "Create an application, which makes use of " +

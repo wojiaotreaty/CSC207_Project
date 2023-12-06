@@ -1,8 +1,9 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public interface User {
+public interface User extends Iterable<Project> {
     String getUsername();
     String getPassword();
     ArrayList<Project> getProjects();
