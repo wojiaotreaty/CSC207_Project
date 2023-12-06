@@ -68,7 +68,14 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         LocalDateTime deadline_start =deadline.atStartOfDay();
         LocalDateTime now_start=now.atStartOfDay();
         long timeDifference= ChronoUnit.DAYS.between(deadline_start,now_start)*86400000;
-
+        if (timeDifference > 0 || timeDifference == 0) {
+            double deciDays = timeDifference / 86400000;
+            // If the incomplete task size is greater than 1
+            if (incomplete_tasks.size() > 1) {
+                double time_to_add = deciDays / incomplete_tasks.size() - 1;
+                long days = Math.round(time_to_add);
+            }
+        }
 
 
 
