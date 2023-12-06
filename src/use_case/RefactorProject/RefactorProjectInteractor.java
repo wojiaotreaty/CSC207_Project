@@ -3,6 +3,8 @@ package use_case.RefactorProject;
 import entity.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
@@ -60,5 +62,15 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
 
 
         LocalDate deadline = finalTask.getDeadline();
+
+        // assuming the TasksDeadline is in "YYYY-MM-DD" format
+        // calculating the time difference between the current date and the deadline date
+        LocalDateTime deadline_start =deadline.atStartOfDay();
+        LocalDateTime now_start=now.atStartOfDay();
+        long timeDifference= ChronoUnit.DAYS.between(deadline_start,now_start)*86400000;
+
+
+
+
     }
 }
