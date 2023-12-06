@@ -49,6 +49,9 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
                 complete_tasks.add(task);
             }
         }
-
+        //getting the final task since the final task has the same deadline as the project.
+        Task finalTask = tasks.get(tasks.size() - 1);
+        // getting the deadline
+        LocalDate deadline = finalTask.getDeadline();
     }
 }
