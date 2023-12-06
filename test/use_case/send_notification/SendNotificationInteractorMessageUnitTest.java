@@ -21,12 +21,9 @@ public class SendNotificationInteractorMessageUnitTest {
         NotificationInputData notificationInputData = new NotificationInputData(LocalDate.now(), "foo");
         NotificationUsersDataAccessInterface dummyUsersDataAccess = new DummyUsersDataAccessObject();
 
-        NotificationOutputBoundary successPresenter = new NotificationOutputBoundary() {
-            @Override
-            public void prepareNotificationView(NotificationOutputData notificationOutputData) {
-                assertEquals(notificationOutputData.getMessage().substring(0,output.length()), output);
-                assertNotNull(notificationOutputData.getImageUrl());
-            }
+        NotificationOutputBoundary successPresenter = notificationOutputData -> {
+            assertEquals(notificationOutputData.getMessage().substring(0,output.length()), output);
+            assertNotNull(notificationOutputData.getImageUrl());
         };
         NotificationInputBoundary notificationInteractor = new NotificationInteractor(dummyUsersDataAccess, successPresenter);
         notificationInteractor.execute(notificationInputData);
