@@ -1,15 +1,10 @@
-package use_case.RefactorProject;
-
-import entity.Project;
-import entity.Task;
-
-import java.util.ArrayList;
+package use_case.refactor_project;
 
 public class RefactorProjectOutputData {
-private String projectId;
-private String projectName;
-private String projectDescription;
-private String tasks;
+private final String projectId;
+private final String projectName;
+private final String projectDescription;
+private final String tasks;
 
 
     public RefactorProjectOutputData(String projectID, String projectName, String projectDescription, String tasks) {

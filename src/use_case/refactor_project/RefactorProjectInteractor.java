@@ -1,4 +1,4 @@
-package use_case.RefactorProject;
+package use_case.refactor_project;
 
 import entity.*;
 
