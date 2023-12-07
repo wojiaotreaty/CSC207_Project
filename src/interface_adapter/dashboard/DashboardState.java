@@ -7,6 +7,7 @@ public class DashboardState {
     private ArrayList<ProjectData> projects = new ArrayList<ProjectData>();
     private String addProjectError = null;
     private String notificationMessage = null;
+    private String notificationImage = null;
 
     public DashboardState(DashboardState copy) {
         username = copy.username;
@@ -61,5 +62,13 @@ public class DashboardState {
 
     public String getNotificationMessage() {
         return notificationMessage;
+    }
+
+    public void setNotificationImage(String notificationImage) {
+        this.notificationImage = notificationImage;
+    }
+
+    public String getNotificationImage() {
+        return notificationImage;
     }
 }

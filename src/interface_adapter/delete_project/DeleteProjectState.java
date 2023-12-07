@@ -17,11 +17,11 @@ public class DeleteProjectState {
         this.deletedProjectName = deletedProjectName;
     }
 
-    String getDeletedProjectId(){
+    public String getDeletedProjectId(){
         return this.deletedProjectId;
     }
 
-    String getDeletedProjectName(){
+    public String getDeletedProjectName(){
         return this.deletedProjectName;
     }
 }

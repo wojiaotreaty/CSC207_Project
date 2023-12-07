@@ -86,12 +86,16 @@ public class NotificationInteractor implements NotificationInputBoundary {
             gptOutputReformat2.append(String.join(" ", gptOutputArrayList.subList(i - j, i)));
             String gptResponse = String.valueOf(gptOutputReformat2);
 
+
+            String image = apiCall2();
+
+
             // Creates output data and calls presenter
-            NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + gptResponse);
+            NotificationOutputData notificationOutputData = new NotificationOutputData(gptQuery[1] + gptResponse + "\n\nEnjoy this motivational image generated just for you!", image);
             notificationPresenter.prepareNotificationView(notificationOutputData);
         }
         else {
-            NotificationOutputData notificationOutputData = new NotificationOutputData(null);
+            NotificationOutputData notificationOutputData = new NotificationOutputData(null, null);
             notificationPresenter.prepareNotificationView(notificationOutputData);
         }
 
@@ -216,10 +220,65 @@ public class NotificationInteractor implements NotificationInputBoundary {
             return "GPT had an Oopsie, but it wishes you good luck on your tasks.";
         }
     }
+    private static String apiCall2() {
+        String url = "https://api.openai.com/v1/images/generations";
+        String apiKey = null;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("src/apikey.txt"))) {
+            apiKey = br.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String model = "dall-e-3";
+
+        try {
+            URL obj = new URI(url).toURL();
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+            connection.setRequestProperty("Content-Type", "application/json");
+
+
+            String body = "{\"model\": \"" + model + "\", \"prompt\": \"An encouraging and motivational image.\"" +
+                    ", \"n\": 1, \"size\": \"1024x1024\"}";
+
+            connection.setDoOutput(true);;
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+
+            writer.write(body);
+            writer.flush();
+            writer.close();
+
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+
+
+
+            StringBuilder response = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+
+            return extractMessage2(response.toString());
+
+        } catch (IOException | URISyntaxException e) {
+            return "GPT had an Oopsie, but it wishes you good luck on your tasks.";
+        }
+    }
     private static String extractMessage(String response) {
         int start = response.indexOf("content") + 11;
 
         int end = response.indexOf("}", start) - 7;
+
+        return response.substring(start, end);
+    }
+    private static String extractMessage2(String response) {
+        int start = response.indexOf("url") + 7;
+
+        int end = response.indexOf("}", start) - 5;
 
         return response.substring(start, end);
     }

@@ -103,6 +103,7 @@ public class ProjectsDataAccessObject {
 
         ArrayList<Task> tasksList = new ArrayList<>();
 
+
         for (int i = 0; i < rawTasksList.length; i++){
             String rawTask = rawTasksList[i];
 //            Get rid of the |uwu| at the end if this is the last task
@@ -115,7 +116,7 @@ public class ProjectsDataAccessObject {
             LocalDate taskDeadline = LocalDate.parse(rawTaskInfo[2]);
 
             Task newTask = taskFactory.create(taskName, taskDeadline, taskDesc);
-            if (rawTaskInfo[3].equals("true")){
+            if (rawTaskInfo[3].equals("true")) {
                 newTask.setStatus(true);
             }
 
