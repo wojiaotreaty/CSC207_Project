@@ -37,9 +37,9 @@ public class SignupEndToEndTest {
          */
     // test to see that view changes back to loginview
     // check that username field is auto filled up from signup
-    private String PROJECTS_PATH = "./projects.csv";
-    private String USERS_PATH = "./users.csv";
-    private ViewManagerModel viewManagerModel;
+    private final String PROJECTS_PATH = "./projects.csv";
+    private final String USERS_PATH = "./users.csv";
+    private final ViewManagerModel viewManagerModel = new ViewManagerModel();;
     public void SetUpSignupViewTest() {
         JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -51,7 +51,6 @@ public class SignupEndToEndTest {
         application.add(views);
 
         // This keeps track of and manages which view is currently showing.
-        this.viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
         DashboardViewModel dashboardViewModel = new DashboardViewModel();
