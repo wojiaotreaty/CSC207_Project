@@ -7,6 +7,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.refactor_project.RefactorProjectViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupViewModel;
 import use_case.login.LoginDataAccessInterface;
@@ -40,6 +41,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
+        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
@@ -64,7 +66,7 @@ public class Main {
         LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, dashboardViewModel, usersDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         views.add(dashboardView, dashboardView.viewName);
 
 
@@ -77,5 +79,5 @@ public class Main {
         application.setLayout(new BorderLayout());
         application.setResizable(false);
         application.setVisible(true);
-        }
+    }
 }

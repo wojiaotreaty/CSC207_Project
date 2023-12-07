@@ -10,6 +10,9 @@ import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectPresenter;
 import interface_adapter.delete_project.DeleteProjectViewModel;
+import interface_adapter.refactor_project.RefactorProjectController;
+import interface_adapter.refactor_project.RefactorProjectPresenter;
+import interface_adapter.refactor_project.RefactorProjectViewModel;
 import interface_adapter.send_notification.NotificationController;
 import interface_adapter.send_notification.NotificationPresenter;
 import interface_adapter.set_status.SetStatusController;
@@ -22,6 +25,10 @@ import use_case.delete_project.DeleteProjectDataAccessInterface;
 import use_case.delete_project.DeleteProjectInputBoundary;
 import use_case.delete_project.DeleteProjectInteractor;
 import use_case.delete_project.DeleteProjectOutputBoundary;
+import use_case.refactor_project.RefactorProjectDataAccessInterface;
+import use_case.refactor_project.RefactorProjectInputBoundary;
+import use_case.refactor_project.RefactorProjectInteractor;
+import use_case.refactor_project.RefactorProjectOutputBoundary;
 import use_case.send_notification.NotificationInputBoundary;
 import use_case.send_notification.NotificationInteractor;
 import use_case.send_notification.NotificationOutputBoundary;
@@ -41,18 +48,21 @@ public class DashboardViewFactory {
 
     public static DashboardView create(DashboardViewModel dashboardViewModel,
                                        DeleteProjectViewModel deleteProjectViewModel,
+                                       RefactorProjectViewModel refactorProjectViewModel,
                                        ViewManagerModel viewManagerModel,
                                        AddProjectDataAccessInterface addProjectDataAccessInterface,
                                        NotificationUsersDataAccessInterface notificationUsersDataAccessInterface,
                                        DeleteProjectDataAccessInterface deleteProjectDataAccessInterface,
+                                       RefactorProjectDataAccessInterface refactorProjectDataAccessInterface,
                                        SetStatusUsersDataAccessInterface setStatusUsersDataAccessInterface) {
 
         try {
             AddProjectController addProjectController = createAddProjectUseCase(dashboardViewModel, addProjectDataAccessInterface);
             NotificationController notificationController = createNotificationUseCase(dashboardViewModel, notificationUsersDataAccessInterface);
             DeleteProjectController deleteProjectController = createDeleteProjectUseCase(deleteProjectViewModel, dashboardViewModel, viewManagerModel, deleteProjectDataAccessInterface);
+            RefactorProjectController refactorProjectController = createRefactorProjectUseCase(refactorProjectViewModel, dashboardViewModel, viewManagerModel, refactorProjectDataAccessInterface);
             SetStatusController setStatusController = createSetStatusUseCase(dashboardViewModel, setStatusUsersDataAccessInterface);
-            return new DashboardView(dashboardViewModel, deleteProjectViewModel, addProjectController, notificationController, deleteProjectController, setStatusController);
+            return new DashboardView(dashboardViewModel, deleteProjectViewModel, addProjectController, notificationController, deleteProjectController, refactorProjectController, setStatusController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not instantiate DashboardView.");
         }
@@ -92,7 +102,20 @@ public class DashboardViewFactory {
 
         return new DeleteProjectController(deleteprojectInteractor);
     }
-    private static SetStatusController createSetStatusUseCase(DashboardViewModel dashboardViewModel,
+    private static RefactorProjectController createRefactorProjectUseCase(RefactorProjectViewModel refactorprojectViewModel,
+                                                                          DashboardViewModel dashboardViewModel,
+                                                                          ViewManagerModel viewManagerModel,
+                                                                          RefactorProjectDataAccessInterface refactorProjectDataAccessInterface) throws IOException {
+        RefactorProjectOutputBoundary refactorProjectOutputBoundary = new RefactorProjectPresenter(refactorprojectViewModel, dashboardViewModel, viewManagerModel);
+        ProjectFactory projectFactory = new CommonProjectFactory();
+        TaskFactory taskFactory = new CommonTaskFactory();
+
+        RefactorProjectInputBoundary refactorProjectInteractor = new RefactorProjectInteractor(refactorProjectDataAccessInterface, refactorProjectOutputBoundary, projectFactory, taskFactory);
+
+        return new RefactorProjectController(refactorProjectInteractor);
+    }
+
+        private static SetStatusController createSetStatusUseCase(DashboardViewModel dashboardViewModel,
                                                                     SetStatusUsersDataAccessInterface setStatusUsersDataAccessInterface) throws IOException {
         SetStatusOutputBoundary setStatusOutputBoundary = new SetStatusPresenter(dashboardViewModel);
 
