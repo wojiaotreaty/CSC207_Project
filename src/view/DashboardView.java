@@ -184,17 +184,18 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private void showAddProjectPopup() throws ParseException {
         JFrame popupFrame = new JFrame("Add Project");
-        popupFrame.setSize(400, 250);
+        popupFrame.setSize(700, 400);
 
         JPanel popupPanel = new JPanel(new GridLayout(4, 2));
 
-        JLabel nameLabel = new JLabel("Project Title:");
+        JLabel nameLabel = new JLabel("Project Title:", SwingConstants.CENTER);
         JTextField nameField = new JTextField();
 
-        JLabel descriptionLabel = new JLabel("Project Description:");
+        JLabel descriptionLabel = new JLabel("Project Description:", SwingConstants.CENTER);
         JTextArea descriptionArea = new JTextArea(5, 20);
+        descriptionArea.setLineWrap(true);
 
-        JLabel deadlineLabel = new JLabel("Deadline (YYYY/MM/DD):");
+        JLabel deadlineLabel = new JLabel("Deadline (YYYY/MM/DD):", SwingConstants.CENTER);
         MaskFormatter dateFormatter = new MaskFormatter("####/##/##");
         dateFormatter.setPlaceholderCharacter('_');
 
