@@ -135,7 +135,7 @@ public class SignupEndToEndTest {
     public void testSignupButtonPresent() {
         SetUpSignupViewTest();
         JButton button = getButton();
-        assert(button.getText().equals("Go to Signup"));
+        assert(button.getText().equals("Sign up"));
     }
 
     @org.junit.Test
