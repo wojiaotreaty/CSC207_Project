@@ -41,6 +41,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private ArrayList<ProjectData> projectsList;
     public boolean fromLogin = true;
     private boolean expectingNotification = false;
+    private boolean fromRefactor = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
     private final AddProjectController addProjectController;
@@ -422,6 +423,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == refactor) {
+                    fromRefactor = true;
                     //JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
                     refactorProjectController.execute(userName,projectID);
                     popupFrame.dispose();
@@ -525,7 +527,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                 scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
             }
-            if (state.getProjects().size()>0){
+            if (fromRefactor){
+                fromRefactor = false;
                 int size = state.getProjects().size();
                 projectPopup(state.getUsername(),state.getProjects().get(size-1));
             }

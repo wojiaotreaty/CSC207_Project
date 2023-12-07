@@ -12,8 +12,9 @@ import java.util.List;
 
 public class SendNotificationInteractorMessageUnitTest {
     private final String output = "These tasks are due today: \n     For Project: project1\n          Task Name: task1\n          Task Description: task1 desc\n\n" +
-            "These tasks are due tomorrow: \n     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
+            "These tasks are due tomorrow: \n" +
             "     For Project: project2\n          Task Name: task3\n          Task Description: task3 desc\n\n" +
+            "     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
             "These tasks are due the day after tomorrow: \n     For Project: project2\n          Task Name: task4\n          Task Description: task4 desc\n\n";
 
     @Test
