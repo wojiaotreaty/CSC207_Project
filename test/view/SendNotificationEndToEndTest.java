@@ -9,7 +9,6 @@ import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
-import interface_adapter.refactor_project.RefactorProjectViewModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

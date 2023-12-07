@@ -5,18 +5,14 @@ import data_access.ProjectsDataAccessObject;
 import data_access.UsersDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
-import interface_adapter.refactor_project.RefactorProjectViewModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import view.DashboardView;
-import view.ViewManager;
 import view.DashboardView.ProjectPanel;
 
 import javax.swing.*;
@@ -28,7 +24,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class DeleteProjectEndToEndTest {
 

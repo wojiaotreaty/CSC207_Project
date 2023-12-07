@@ -7,11 +7,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.login.LoginViewModel;
-import interface_adapter.refactor_project.RefactorProjectViewModel;
-import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupViewModel;
-import use_case.login.LoginDataAccessInterface;
-import use_case.signup.SignupDataAccessInterface;
 import view.DashboardView;
 import view.LoginView;
 import view.SignupView;
@@ -20,7 +16,6 @@ import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -61,12 +56,15 @@ public class Main {
 
         SignupView signupView = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 usersDataAccessObject);
-        views.add(signupView, signupView.viewName);
+        assert signupView != null;
+        views.add(signupView, SignupView.viewName);
 
         LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, dashboardViewModel, usersDataAccessObject);
+        assert loginView != null;
         views.add(loginView, loginView.viewName);
 
         DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        assert dashboardView != null;
         views.add(dashboardView, dashboardView.viewName);
 
 

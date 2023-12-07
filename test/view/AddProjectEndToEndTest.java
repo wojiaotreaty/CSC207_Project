@@ -10,11 +10,8 @@ import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
-import interface_adapter.refactor_project.RefactorProjectViewModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import view.DashboardView;
-import view.ViewManager;
 import view.DashboardView.ProjectPanel;
 
 import javax.swing.*;
