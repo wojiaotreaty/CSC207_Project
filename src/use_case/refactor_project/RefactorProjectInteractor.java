@@ -67,7 +67,7 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         // calculating the time difference between the current date and the deadline date
         LocalDateTime deadline_start = deadline.atStartOfDay();
         LocalDateTime now_start = now.atStartOfDay();
-        long timeDifference = ChronoUnit.DAYS.between(deadline_start, now_start) * 86400000;
+        long timeDifference = ChronoUnit.DAYS.between(now_start, deadline_start) * 86400000;
         if (timeDifference > 0 || timeDifference == 0) {
             double deciDays = timeDifference / 86400000;
             // If the incomplete task size is greater than 1
@@ -86,9 +86,9 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
                     incomplete_tasks.set(i, shiftedTask);
                 }
             }
-            else{
-                userPresenter.prepareFailView("you have already completed the project");
-            }
+//            else{
+//                userPresenter.prepareFailView("you have already completed the project");
+//            }
             ArrayList<Task> updated_tasks = new ArrayList<>();
 
             updated_tasks.addAll(complete_tasks);
