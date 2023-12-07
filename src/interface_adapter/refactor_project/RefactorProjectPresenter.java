@@ -3,7 +3,6 @@ package interface_adapter.refactor_project;
 import interface_adapter.ViewManagerModel;
 
 import interface_adapter.dashboard.DashboardState;
-
 import interface_adapter.dashboard.DashboardViewModel;
 
 import use_case.refactor_project.RefactorProjectOutputBoundary;

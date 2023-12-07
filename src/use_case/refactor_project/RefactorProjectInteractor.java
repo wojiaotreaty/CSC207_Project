@@ -28,8 +28,7 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         // getting the user and the project I'd from the dao
         User user = userDataAccessObject.getUser(refactorProjectInputData.getUserName());
         String projectID = refactorProjectInputData.getId();
-        ArrayList<Project> projects = new ArrayList<>();
-        projects = user.getProjects();
+        ArrayList<Project> projects = user.getProjects();
         // Have set it to null in the beginning so that it can throw an error if the
         // project ID is not in the array(which should ideally never happen)
         Project project = null;
@@ -45,7 +44,7 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         ArrayList<Task> incomplete_tasks = new ArrayList<>();
         ArrayList<Task> complete_tasks = new ArrayList<>();
         for (Task task : tasks) {
-            if (task.getStatus() == false) {
+            if (!(task.getStatus())) {
                 //updating incomplete tasks array list
                 incomplete_tasks.add(task);
             } else {
@@ -68,7 +67,7 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
         LocalDateTime deadline_start = deadline.atStartOfDay();
         LocalDateTime now_start = now.atStartOfDay();
         long timeDifference = ChronoUnit.DAYS.between(now_start, deadline_start) * 86400000;
-        if (timeDifference > 0 || timeDifference == 0) {
+        if (timeDifference >= 0) {
             double deciDays = timeDifference / 86400000;
             // If the incomplete task size is greater than 1
             if (incomplete_tasks.size() > 1) {

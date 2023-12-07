@@ -491,7 +491,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
             scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
         }
-        if (project_popup.size()>0){
+        if (state.getProjects().size()>0){
             int size = state.getProjects().size();
             projectPopup(state.getUsername(),state.getProjects().get(size-1));
         }
