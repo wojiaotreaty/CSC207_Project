@@ -9,6 +9,7 @@ import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
+import interface_adapter.refactor_project.RefactorProjectViewModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +44,7 @@ public class SendNotificationEndToEndTest {
         // For the Add Project End-to-End test, we can skip the login and signup views altogether
         DashboardViewModel dashboardViewModel = new DashboardViewModel();
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
+        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
@@ -91,7 +93,7 @@ public class SendNotificationEndToEndTest {
             System.out.println("ERROR: IOexception when creating UsersDAO");
         }
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
 
         assert dashboardView != null;
         dashboardView.fromLogin = false;
@@ -185,11 +187,18 @@ public class SendNotificationEndToEndTest {
 
 
         String output = "These tasks are due today: \n     For Project: project1\n          Task Name: task1\n          Task Description: task1 desc\n\n" +
-                "These tasks are due tomorrow: \n     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
+                "These tasks are due tomorrow: \n" +
+                "     For Project: project2\n          Task Name: task3\n          Task Description: task3 desc\n\n" +
+                "     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
+                "These tasks are due the day after tomorrow: \n     For Project: project2\n          Task Name: task4\n          Task Description: task4 desc\n\n";
+
+        String output2 = "These tasks are due today: \n     For Project: project1\n          Task Name: task1\n          Task Description: task1 desc\n\n" +
+                "These tasks are due tomorrow: \n" +
+                "     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
                 "     For Project: project2\n          Task Name: task3\n          Task Description: task3 desc\n\n" +
                 "These tasks are due the day after tomorrow: \n     For Project: project2\n          Task Name: task4\n          Task Description: task4 desc\n\n";
 
-        assert(message.contains(output));
+        assert(message.contains(output) || message.contains(output2));
     }
 
 

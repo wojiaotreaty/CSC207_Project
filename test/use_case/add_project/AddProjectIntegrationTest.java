@@ -90,7 +90,7 @@ public class AddProjectIntegrationTest {
 
             @Override
             public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
+                fail("Use case failure is unexpected." + error);
             }
         };
 
