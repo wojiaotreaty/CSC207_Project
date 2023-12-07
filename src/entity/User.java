@@ -1,7 +1,6 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public interface User extends Iterable<Project> {
     String getUsername();

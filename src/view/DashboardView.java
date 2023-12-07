@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -49,8 +48,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final DeleteProjectController deleteProjectController;
     private final SetStatusController setStatusController;
 
-    // ***Added notificationController to the constructor.
-
     public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController
                          ,NotificationController notificationController, DeleteProjectController deleteProjectController, RefactorProjectController refactorProjectController,SetStatusController setStatusController) {
         this.refactorProjectController=refactorProjectController;
@@ -68,15 +65,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         dashboardViewModel.addPropertyChangeListener(this);
 
         projectsList = dashboardState.getProjects();
-//        projectsList = new ArrayList<ProjectData>();
-//        projectsList.add(new ProjectData("1", "P", "Desc", "tasks"));
-
-
-
-//        this.setSize(600, 400);
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.setLayout(new BorderLayout());
-//        this.setResizable(false);
 
         dashboardPanel = new JPanel();
         dashboardPanel.setLayout(new BoxLayout(dashboardPanel, BoxLayout.Y_AXIS));
@@ -84,17 +72,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         JScrollPane scrollPane = new JScrollPane(dashboardPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-//        add(scrollPane, BorderLayout.CENTER);
-
-
-
         JButton addProjectButton = new JButton("Add Project");
-        // ***Created toggleNotifications button
         JButton toggleNotifications = new JButton("Notifications Off");
         addProjectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // ***Added check for addProjectButton
                 if (e.getSource() == addProjectButton) {
                     try {
                         showAddProjectPopup();
@@ -104,7 +86,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 }
             }
         });
-        // ***Added actionListener to toggleNotification button
+
         toggleNotifications.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,7 +111,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setPreferredSize(new Dimension(600, 40));
         scrollPane.setPreferredSize(new Dimension(600, 360));
-        // ***Added toggleNotification button to buttonPanel
         buttonPanel.add(toggleNotifications);
         buttonPanel.add(addProjectButton);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -137,19 +118,9 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
         this.add(buttonPanel);
         this.add(scrollPane);
-//        updateEmptyDashboardLabel();
-//
-//        JLabel empty = new JLabel("test");
-//        dashboardPanel.add(empty);
-//        dashboardPanel.revalidate();
-//        dashboardPanel.repaint();
+
         displayAllProjects();
 
-
-//        add(buttonPanel, BorderLayout.NORTH);
-        // ***Automatically sets notifications to be sent periodically
-//        Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
-//        scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
     }
 
     private void updateEmptyDashboardLabel() {
@@ -245,15 +216,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     public class ProjectPanel extends JPanel {
         private final ProjectData projectData;
-        private static final int PANEL_MIN_MAX_HEIGHT = 100;
         private static final int ARC_SIZE = 20;
 
         public ProjectPanel(ProjectData projectData) {
             this.projectData = projectData;
-//            setMinimumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-//            setMaximumSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-//            setPreferredSize(new Dimension((int) (DashboardView.this.getWidth() * 0.95), PANEL_MIN_MAX_HEIGHT));
-//            setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 10));
 
             setMinimumSize(new Dimension(570, 100));
             setMaximumSize(new Dimension(570, 100));
@@ -265,7 +231,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     // call to Vedant's popup
                     projectPopup(dashboardViewModel.getState().getUsername(),projectData);
-//                    JOptionPane.showMessageDialog(null, "Clicked on project: " + projectData.getProjectTitle());
                 }
             });
         }
@@ -297,20 +262,17 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         JFrame popupFrame = new JFrame("Project");
         popupFrame.setSize(1080, 500);
         popupFrame.setResizable(false);
+
         JPanel popupPanel = new JPanel();
         popupPanel.setLayout(new BoxLayout(popupPanel, BoxLayout.Y_AXIS));
+
         JScrollPane scrollPane = new JScrollPane(popupPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         popupFrame.add(scrollPane, BorderLayout.CENTER);
-//        add(scrollPane, BorderLayout.CENTER);
+
         // The project title
         JLabel Title = new JLabel(projectTitle);
-//        JLabel Title = new JLabel("Project Name");
-//        JTextField title = new JTextField(projectTitle);
-//        title.setEditable(false);
         popupFrame.add(Title, BorderLayout.NORTH);
-//        popupPanel.add(title);
-        // The project description
         JTextArea description = new JTextArea(1,20);
         description.append("Project Description");
         description.setWrapStyleWord(true);
@@ -321,7 +283,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         description.setBackground(UIManager.getColor("Label.background"));
         description.setFont(UIManager.getFont("Label.font"));
         description.setBorder(UIManager.getBorder("Label.border"));
-//        JLabel pdescription = new JLabel(String.format("<html>" + projectDescription), JLabel.LEFT);
         JTextArea textArea = new JTextArea(5, 20);
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
@@ -329,36 +290,36 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         textArea.setEditable(false);
         textArea.setFocusable(false);
         textArea.setBackground(UIManager.getColor("Label.background"));
-//        textArea.setFont(UIManager.getFont("Label.font"));
         textArea.setBorder(UIManager.getBorder("Label.border"));
         textArea.append(projectDescription + "\n");
+
         // Creating spacing for the rest of the popup panel
-//        textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//        popupPanel.add(textArea);
         popupPanel.add(description);
         popupPanel.add(textArea);
+
         // The list of tasks along with their deadlines and descriptions and status
         int i = 0;
         for (ArrayList<String> task : projectTasks) {
             StringBuilder mutableTask = new StringBuilder();
             mutableTask.append(task);
-//            String[] arrOfStr = task.split("|uwu|");
             String taskName = task.get(0);
             String taskDescription = task.get(1);;
             String taskDeadline = task.get(2);
+
             final String[] taskStatus = {task.get(3)};
             JLabel tName = new JLabel("Task Name");
             JLabel name = new JLabel(taskName);
-            // Adding the taskName label and the taskName textField into one panel
             JPanel panel1 = new JPanel(new GridLayout(2, 1));
             panel1.add(tName);
             panel1.add(name);
             JLabel tDeadline = new JLabel("Task Deadline");
             JLabel deadline = new JLabel(taskDeadline);
+
             // Adding the deadline label and the deadline text field into one panel
             JPanel panel2 = new JPanel(new GridLayout(2, 1));
             panel2.add(tDeadline);
             panel2.add(deadline);
+
             // Create a check-box which is always checked if the task Status is true
             JCheckBox status = new JCheckBox("status");
             if (taskStatus[0].equals("true")) {
@@ -367,13 +328,15 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             } else {
                 status.setSelected(false);
             }
+
             // Adding the name,deadline,status of the task in a flowLayout from left to right
             JPanel labelsPanel = new JPanel(new FlowLayout());
             labelsPanel.add(panel1);
             labelsPanel.add(panel2);
             labelsPanel.add(status);
             popupPanel.add(labelsPanel);
-//             The Task Description area
+
+            // The Task Description area
             JTextArea tDescription = new JTextArea(3, 20);
             tDescription.setWrapStyleWord(true);
             tDescription.setLineWrap(true);
@@ -389,8 +352,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             // a task as completed.
 
             status.addActionListener(new ActionListener() {
-//                int finalI = i;
-
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (e.getSource() == status) {
@@ -406,9 +367,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                         else {
                             taskStatus[0] = "true";
                         }
-                        // make the change to the status of the i task in the tasks of the given project id
-                        //  need to make this function in the dashboard state
-//                        dashboardViewModel.getState().setTaskStatus(projectID, finalI, 1);
                     }
                 }
             });
@@ -425,7 +383,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == refactor) {
                     fromRefactor = true;
-                    //JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
                     refactorProjectController.execute(userName,projectID);
                     popupFrame.dispose();
                 }
@@ -440,12 +397,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 }
             }
         });
+
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttons.add(refactor);
         buttons.add(delete);
         popupFrame.add(buttons, BorderLayout.SOUTH);
-
-
     }
     private void deleteProjectConfirmation(JFrame popup, String projectName, String projectId) {
         JFrame confirm = new JFrame("Delete Project?");
@@ -502,6 +458,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                         f.toFront();
                         f.setVisible(true);
                     } catch (IOException ignored) {
+                        // If there is an error, no image pops up so nothing is done and no errors thrown.
                         ;
                     }
                 }

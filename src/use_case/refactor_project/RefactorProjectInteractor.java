@@ -85,9 +85,7 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
                     incomplete_tasks.set(i, shiftedTask);
                 }
             }
-//            else{
-//                userPresenter.prepareFailView("you have already completed the project");
-//            }
+
             ArrayList<Task> updated_tasks = new ArrayList<>();
 
             updated_tasks.addAll(complete_tasks);

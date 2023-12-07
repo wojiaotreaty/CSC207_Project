@@ -22,9 +22,6 @@ import java.util.Map;
  * This DAO interacts with information of users (username, password, list of projects).
  * It DOES NOT have project information.
  */
-
-
-
 public class UsersDataAccessObject implements SignupDataAccessInterface, LoginDataAccessInterface, DeleteProjectDataAccessInterface, NotificationUsersDataAccessInterface, AddProjectDataAccessInterface, RefactorProjectDataAccessInterface, SetStatusUsersDataAccessInterface {
 
 
