@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import view.DashboardView;
-import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,6 +60,7 @@ public class SetStatusEndToEndTest {
 
             Task task1 = taskFactory.create("task1", LocalDate.now(), "task1 desc");
             Task task2 = taskFactory.create("task2", LocalDate.now().plusDays(1), "task2 desc");
+            task2.setStatus(true);
             Task task3 = taskFactory.create("task3", LocalDate.now().plusDays(1), "task3 desc");
             Task task4 = taskFactory.create("task4", LocalDate.now().plusDays(2), "task4 desc");
 
@@ -132,18 +131,7 @@ public class SetStatusEndToEndTest {
         }
         return projectPopup;
     }
-    private JButton getStatusBox(JFrame projPopup) {
 
-        assert(projPopup.getTitle().equals("Project"));
-
-        JRootPane root = (JRootPane) projPopup.getComponent(0);
-        JPanel contentPane = (JPanel) root.getContentPane();
-        JPanel buttonPanel = (JPanel) contentPane.getComponent(2);
-        JButton deleteButton = (JButton) buttonPanel.getComponent(1);
-
-        assertEquals("Delete Project", deleteButton.getText());
-        return deleteButton;
-    }
 
     private JPanel getFirstProjectPanel() {
         JFrame app = null;
@@ -175,76 +163,54 @@ public class SetStatusEndToEndTest {
         return (JPanel) projectPanel.getComponent(0); // this should be the first project panel
     }
 
-    public JButton getToggleNotificationButton() {
-        JFrame app = null;
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window instanceof JFrame) {
-                app = (JFrame) window;
-            }
-        }
 
-        assertNotNull(app); // found the window?
 
-        Component root = app.getComponent(0);
-
-        Component cp = ((JRootPane) root).getContentPane();
-
-        JPanel jp = (JPanel) cp;
-
-        JPanel jp2 = (JPanel) jp.getComponent(0);
-
-        DashboardView dv = (DashboardView) jp2.getComponent(0);
-
-        JPanel buttons = (JPanel) dv.getComponent(0);
-
-        return (JButton) buttons.getComponent(0); // this should be the first add project button
-    }
-    private JButton getDeleteProjectButton(JFrame projPopup) {
-
-        assert(projPopup.getTitle().equals("Project"));
-
-        JRootPane root = (JRootPane) projPopup.getComponent(0);
-        JPanel contentPane = (JPanel) root.getContentPane();
-        JPanel buttonPanel = (JPanel) contentPane.getComponent(2);
-        JButton deleteButton = (JButton) buttonPanel.getComponent(1);
-
-        assertEquals("Delete Project", deleteButton.getText());
-        return deleteButton;
-    }
-    getStatusButton(JFrame projectPopup) {
+    private static JPanel getTaskPane(JFrame projectPopup, int num) {
         JRootPane root = (JRootPane) projectPopup.getComponent(0);
         JPanel contentPane = (JPanel) root.getContentPane();
         JScrollPane scrollPanel = (JScrollPane) contentPane.getComponent(1);
-        JPanel taskPane = (JPanel) scrollPanel.getComponent(2);
-        JCheckBox checkBox = (JCheckBox) taskPane.getComponent(2);
-        checkBox.doClick();
+        JViewport viewport = scrollPanel.getViewport();
+        JPanel view = (JPanel) viewport.getView();
 
+        return (JPanel) view.getComponent(num);
     }
 
-    @Test
-    public void testAddProjectButtonsPresent() throws IOException {
-        goToDashboardView();
-        JButton firstNotificationButton = getToggleNotificationButton();
-        assert(firstNotificationButton.getText().equals("Notifications Off"));
-    }
 
     @Test
-    public void testSendNotification() {
+    public void TestSetTrueNotification() {
         openProjectPopupView();
         JFrame projectPopup = getProjectPopup();
-        }
+        JPanel taskPane = getTaskPane(projectPopup, 2);
 
+        JLabel taskLabel = (JLabel) ((JPanel) taskPane.getComponent(0)).getComponent(1);
+        assert taskLabel.getText().equals("task1");
 
-        assert(popUpDiscovered);
+        JCheckBox checkBox = (JCheckBox) taskPane.getComponent(2);
 
+        assert(!checkBox.isSelected());
 
-        String output = "These tasks are due today: \n     For Project: project1\n          Task Name: task1\n          Task Description: task1 desc\n\n" +
-                "These tasks are due tomorrow: \n     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
-                "     For Project: project2\n          Task Name: task3\n          Task Description: task3 desc\n\n" +
-                "These tasks are due the day after tomorrow: \n     For Project: project2\n          Task Name: task4\n          Task Description: task4 desc\n\n";
+        checkBox.doClick();
 
-        assert(message.contains(output));
+        assert(checkBox.isSelected());
+    }
+
+    @Test
+    public void TestSetFalseNotification() {
+        openProjectPopupView();
+        JFrame projectPopup = getProjectPopup();
+        JPanel taskPane = getTaskPane(projectPopup, 2);
+
+        JLabel taskLabel = (JLabel) ((JPanel) taskPane.getComponent(0)).getComponent(1);
+        assert taskLabel.getText().equals("task1");
+
+        JCheckBox checkBox = (JCheckBox) taskPane.getComponent(2);
+
+        assert (!checkBox.isSelected());
+
+        checkBox.doClick();
+        checkBox.doClick();
+
+        assert (!checkBox.isSelected());
     }
 
 
