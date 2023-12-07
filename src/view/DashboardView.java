@@ -39,8 +39,9 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final RefactorProjectController refactorProjectController;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
-    private boolean fromLogin = true;
+    public boolean fromLogin = true;
     private boolean expectingNotification = false;
+    private boolean fromRefactor = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
     private final AddProjectController addProjectController;
@@ -183,17 +184,18 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private void showAddProjectPopup() throws ParseException {
         JFrame popupFrame = new JFrame("Add Project");
-        popupFrame.setSize(400, 250);
+        popupFrame.setSize(700, 400);
 
         JPanel popupPanel = new JPanel(new GridLayout(4, 2));
 
-        JLabel nameLabel = new JLabel("Project Title:");
+        JLabel nameLabel = new JLabel("Project Title:", SwingConstants.CENTER);
         JTextField nameField = new JTextField();
 
-        JLabel descriptionLabel = new JLabel("Project Description:");
+        JLabel descriptionLabel = new JLabel("Project Description:", SwingConstants.CENTER);
         JTextArea descriptionArea = new JTextArea(5, 20);
+        descriptionArea.setLineWrap(true);
 
-        JLabel deadlineLabel = new JLabel("Deadline (YYYY/MM/DD):");
+        JLabel deadlineLabel = new JLabel("Deadline (YYYY/MM/DD):", SwingConstants.CENTER);
         MaskFormatter dateFormatter = new MaskFormatter("####/##/##");
         dateFormatter.setPlaceholderCharacter('_');
 
@@ -422,6 +424,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == refactor) {
+                    fromRefactor = true;
                     //JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
                     refactorProjectController.execute(userName,projectID);
                     popupFrame.dispose();
@@ -525,7 +528,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                 scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
             }
-            if (state.getProjects().size()>0){
+            if (fromRefactor){
+                fromRefactor = false;
                 int size = state.getProjects().size();
                 projectPopup(state.getUsername(),state.getProjects().get(size-1));
             }

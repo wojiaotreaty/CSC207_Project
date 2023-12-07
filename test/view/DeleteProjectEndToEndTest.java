@@ -11,6 +11,7 @@ import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
+import interface_adapter.refactor_project.RefactorProjectViewModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -103,9 +104,10 @@ public class DeleteProjectEndToEndTest {
         dashboardViewModel.getState().addProjectData(projectData);
 
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
+        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel,
-                usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel,
+                usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         assert dashboardView != null;
         views.add(dashboardView, dashboardView.viewName);
 
