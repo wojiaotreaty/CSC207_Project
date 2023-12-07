@@ -4,8 +4,6 @@ import entity.Project;
 import entity.Task;
 import entity.User;
 
-import java.util.ArrayList;
-
 public class SetStatusInteractor implements SetStatusInputBoundary {
     final SetStatusUsersDataAccessInterface usersDataAccessObject;
     final SetStatusOutputBoundary setStatusPresenter;

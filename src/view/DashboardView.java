@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -217,7 +216,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     public class ProjectPanel extends JPanel {
         private final ProjectData projectData;
-        private static final int PANEL_MIN_MAX_HEIGHT = 100;
         private static final int ARC_SIZE = 20;
 
         public ProjectPanel(ProjectData projectData) {

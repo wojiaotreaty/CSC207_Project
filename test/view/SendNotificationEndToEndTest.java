@@ -43,7 +43,6 @@ public class SendNotificationEndToEndTest {
         // For the Add Project End-to-End test, we can skip the login and signup views altogether
         DashboardViewModel dashboardViewModel = new DashboardViewModel();
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
-        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
@@ -92,7 +91,7 @@ public class SendNotificationEndToEndTest {
             System.out.println("ERROR: IOexception when creating UsersDAO");
         }
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
 
         assert dashboardView != null;
         dashboardView.fromLogin = false;

@@ -3,8 +3,6 @@ package interface_adapter.refactor_project;
 import use_case.refactor_project.RefactorProjectInputBoundary;
 import use_case.refactor_project.RefactorProjectInputData;
 
-import java.time.LocalDate;
-
 public class RefactorProjectController {
 
     final RefactorProjectInputBoundary refactorProjectInteractor;

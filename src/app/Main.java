@@ -36,7 +36,6 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
-        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
@@ -63,7 +62,7 @@ public class Main {
         assert loginView != null;
         views.add(loginView, loginView.viewName);
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         assert dashboardView != null;
         views.add(dashboardView, dashboardView.viewName);
 

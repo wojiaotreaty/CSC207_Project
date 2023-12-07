@@ -2,7 +2,6 @@ package use_case.delete_project;
 
 import entity.Project;
 import entity.User;
-import interface_adapter.delete_project.DeleteProjectPresenter;
 
 public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
 

@@ -99,9 +99,8 @@ public class DeleteProjectEndToEndTest {
         dashboardViewModel.getState().addProjectData(projectData);
 
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
-        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel,
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel,
                 usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         assert dashboardView != null;
         views.add(dashboardView, dashboardView.viewName);

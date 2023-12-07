@@ -12,11 +12,11 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 
 public class LoginInteractorIntegrationTest {
-    private String PROJECTS_PATH = "./projects_test.csv";
-    private String USERS_PATH = "./users_test.csv";
-    private UserFactory USER_FACTORY = new CommonUserFactory();
-    private ProjectFactory PROJECT_FACTORY = new CommonProjectFactory();
-    private TaskFactory TASK_FACTORY = new CommonTaskFactory();
+    private final String PROJECTS_PATH = "./projects_test.csv";
+    private final String USERS_PATH = "./users_test.csv";
+    private final UserFactory USER_FACTORY = new CommonUserFactory();
+    private final ProjectFactory PROJECT_FACTORY = new CommonProjectFactory();
+    private final TaskFactory TASK_FACTORY = new CommonTaskFactory();
 
     @Test
     public void successTest() throws IOException {

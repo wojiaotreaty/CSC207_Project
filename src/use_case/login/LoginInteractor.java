@@ -49,7 +49,7 @@ public class LoginInteractor implements LoginInputBoundary {
                 }
 
 
-                LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), projectData, false);
+                LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), projectData);
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
