@@ -22,8 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class SignupEndToEndTest {
-    static boolean userExists;
-    static boolean passwordMismatch;
     static String message;
     static boolean popUpDiscovered;
 
