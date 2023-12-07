@@ -1,7 +1,5 @@
 package interface_adapter.refactor_project;
 
-import interface_adapter.ViewManagerModel;
-
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 
@@ -14,38 +12,11 @@ import java.util.ArrayList;
 public class RefactorProjectPresenter implements RefactorProjectOutputBoundary {
     private final DashboardViewModel dashboardViewModel;
 
-    private final ViewManagerModel viewManagerModel;
-
-    private final RefactorProjectViewModel refactorProjectViewModel;
-
-    public RefactorProjectPresenter( RefactorProjectViewModel refactorProjectViewModel,
-
-                                     DashboardViewModel dashboardViewModel,
-
-                                     ViewManagerModel viewManagerModel) {
+    public RefactorProjectPresenter(DashboardViewModel dashboardViewModel) {
         this.dashboardViewModel = dashboardViewModel;
-
-        this.viewManagerModel = viewManagerModel;
-
-        this.refactorProjectViewModel=refactorProjectViewModel;
     }
-
     @Override
     public void prepareSuccessView(RefactorProjectOutputData refactorProjectOutputData) {
-        RefactorProjectState refactorProjectState = refactorProjectViewModel.getState();
-
-        String projectID = refactorProjectOutputData.getProjectId();
-
-        String Tasks =  refactorProjectOutputData.getTasks();
-
-        refactorProjectState.setRefactoredProjectId(projectID);
-
-        refactorProjectState.setRefactoredProjectTasks(Tasks);
-
-        refactorProjectViewModel.setState(refactorProjectState);
-
-        refactorProjectViewModel.firePropertyChanged();
-
         DashboardState dashboardState = dashboardViewModel.getState();
 
         dashboardState.deleteProjectData(refactorProjectOutputData.getProjectId());
@@ -72,9 +43,6 @@ public class RefactorProjectPresenter implements RefactorProjectOutputBoundary {
 
         dashboardViewModel.firePropertyChanged();
 // I need to change the active view to the dashboard view
-        viewManagerModel.setActiveView(dashboardViewModel.getViewName());
-
-        viewManagerModel.firePropertyChanged();
     }
  // fail view for the presenter which gets called only when the refactor project fails
     public void prepareFailView(String error){

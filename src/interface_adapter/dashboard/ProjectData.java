@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ProjectData {
-    private String projectTitle = "";
-    private String projectID = "";
-    private String projectDescription = "";
-    private ArrayList<ArrayList<String>> projectTasks = new ArrayList<>();
+    private final String projectTitle;
+    private final String projectID;
+    private final String projectDescription;
+    private final ArrayList<ArrayList<String>> projectTasks = new ArrayList<>();
 
     public ProjectData(String projectID, String projectTitle, String projectDescription, String projectTasks) {
         this.projectTitle = projectTitle;

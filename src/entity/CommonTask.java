@@ -2,8 +2,6 @@ package entity;
 
 import java.time.LocalDate;
 import java.lang.StringBuilder;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class CommonTask implements Task {
