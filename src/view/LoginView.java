@@ -1,9 +1,9 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
-import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,21 +64,22 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         );
 
 
-        usernameInputField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                LoginState currentState = loginViewModel.getState();
-                currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
-                loginViewModel.setState(currentState);
-            }
+        usernameInputField.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        LoginState currentState = loginViewModel.getState();
+                        currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+                        loginViewModel.setState(currentState);
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                    }
         });
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -116,6 +117,10 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
             if (evt.getSource().equals(logIn)) {
                 LoginState currentState = loginViewModel.getState();
+                String un = usernameInputField.getText();
+                String pw = passwordInputField.getText();
+                currentState.setUsername(un);
+                currentState.setPassword(pw);
 
                 loginController.execute(
                         currentState.getUsername(),
@@ -125,6 +130,9 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 viewManagerModel.setActiveView(SignupView.viewName);
                 viewManagerModel.firePropertyChanged();
             }
+    }
+    public LoginViewModel getLoginViewModel() {
+        return loginViewModel;
     }
 
     @Override
