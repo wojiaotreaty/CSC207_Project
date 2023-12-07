@@ -52,12 +52,12 @@ public class SetStatusIntegrationTest {
             Task task2 = taskFactory.create("task2", LocalDate.parse("2024-01-01"), "task2 desc");
             task2.setStatus(true);
             ArrayList<Task> tasks2 = new ArrayList<>();
-            tasks.add(task2);
+            tasks2.add(task2);
             Project project2 = projectFactory.create("2", "project2", "project2 desc", tasks2);
             ArrayList<Project> projects2 = new ArrayList<>();
-            projects.add(project2);
+            projects2.add(project2);
 
-            User user2 = new CommonUser("fee", "baz", projects2);
+            User user2 = new CommonUser("fee", "baz2", projects2);
             usersDAO.saveUser(user2);
             usersDAO.saveUser(user2);
 
@@ -98,7 +98,7 @@ public class SetStatusIntegrationTest {
     }
     @Test
     void SetFalseTest() {
-        SetStatusInputData inputData = new SetStatusInputData("fee", "1", "task1`task1 desc`2024-01-01`true");
+        SetStatusInputData inputData = new SetStatusInputData("fee", "2", "task2`task2 desc`2024-01-01`true");
 
         SetStatusOutputBoundary successPresenter = new SetStatusOutputBoundary() {
 
@@ -107,17 +107,17 @@ public class SetStatusIntegrationTest {
                 User user = usersDAO.getUser("fee");
                 Project project = null;
                 for (Project p : user) {
-                    if (p.getProjectId().equals("1")) {
+                    if (p.getProjectId().equals("2")) {
                         project = p;
                         break;
                     }
                 }
                 assert project != null;
                 Task task1 = project.getTasks().get(0);
-                assertEquals("task1`task1 desc`2024-01-01`false", task1.toString());
+                assertEquals("task2`task2 desc`2024-01-01`false", task1.toString());
 
-                assertEquals("1", setStatusOutputData.getProjectId());
-                assertEquals("task1`task1 desc`2024-01-01`true", setStatusOutputData.getTaskString());
+                assertEquals("2", setStatusOutputData.getProjectId());
+                assertEquals("task2`task2 desc`2024-01-01`true", setStatusOutputData.getTaskString());
             }
         };
 
