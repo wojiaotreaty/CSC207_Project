@@ -1,7 +1,7 @@
 package interface_adapter;
 
-import use_case.RefactorProject.RefactorProjectOutputBoundary;
-import use_case.RefactorProject.RefactorProjectOutputData;
+import use_case.refactor_project.RefactorProjectOutputBoundary;
+import use_case.refactor_project.RefactorProjectOutputData;
 import interface_adapter.dashboard;
 public class Presenter implements RefactorProjectOutputBoundary {
     private final DashboardViewModel dashboardViewModel;
