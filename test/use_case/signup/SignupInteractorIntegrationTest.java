@@ -47,7 +47,7 @@ public class SignupInteractorIntegrationTest {
 
     @Test
     void failurePasswordMismatchTest() throws IOException {
-        SignupInputData inputData = new SignupInputData("Paul", "password", "wrong");
+        SignupInputData inputData = new SignupInputData("Daniel", "password", "wrong");
         ProjectsDataAccessObject projectsDAO = new ProjectsDataAccessObject(
                 PROJECTS_PATH, PROJECT_FACTORY, TASK_FACTORY);
         SignupDataAccessInterface userRepository = new UsersDataAccessObject(
