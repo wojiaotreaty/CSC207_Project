@@ -90,6 +90,7 @@ public class SignupEndToEndTest {
                 usersDataAccessObject,
                 usersDataAccessObject,
                 usersDataAccessObject,
+                usersDataAccessObject,
                 usersDataAccessObject);
         views.add(dashboardView, dashboardView.viewName);
 
