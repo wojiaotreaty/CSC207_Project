@@ -110,5 +110,8 @@ public class RefactorProjectInteractor implements RefactorProjectInputBoundary {
             userPresenter.prepareSuccessView(refactorProjectOutputData);
 
         }
+        else{
+            userPresenter.prepareFailView("unable to refactor since the deadline has already crossed");
+        }
     }
 }
