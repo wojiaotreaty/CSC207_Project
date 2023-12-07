@@ -1,4 +1,4 @@
-package use_case.send_notification;
+package view;
 
 import app.DashboardViewFactory;
 import data_access.ProjectsDataAccessObject;
@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import view.DashboardView;
-import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
