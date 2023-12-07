@@ -68,6 +68,7 @@ public class AddProjectEndToEndTest {
         DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         assert dashboardView != null;
         views.add(dashboardView, dashboardView.viewName);
+        dashboardView.fromLogin = false;
 
         viewManagerModel.setActiveView(dashboardView.viewName);
         viewManagerModel.firePropertyChanged();
