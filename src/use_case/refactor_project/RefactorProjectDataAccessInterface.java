@@ -1,10 +1,6 @@
-package use_case.RefactorProject;
+package use_case.refactor_project;
 
-import entity.Project;
 import entity.User;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public interface RefactorProjectDataAccessInterface {
     // getting the user from the dao
