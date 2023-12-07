@@ -6,7 +6,6 @@ import data_access.UsersDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardViewModel;
-import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,18 +13,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import view.DashboardView;
 import view.ViewManager;
-import view.DashboardView.ProjectPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class SendNotificationEndToEndTest {
