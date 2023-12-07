@@ -1,4 +1,4 @@
-package use_case.set_status;
+package view;
 
 import app.DashboardViewFactory;
 import data_access.ProjectsDataAccessObject;
@@ -17,6 +17,7 @@ import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class SetStatusEndToEndTest {
 
 
-    public void openProjectPopupView() throws AWTException {
+    public void openProjectPopupView() {
         JFrame application = new JFrame("WorkFlo");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,14 +109,40 @@ public class SetStatusEndToEndTest {
         application.setResizable(false);
         application.setVisible(true);
 
-        JPanel projectPanel = getFirstProjectPanel();
-        Point location = projectPanel.getLocation();
-        Robot bot = new Robot();
-        bot.mouseMove(location.x, location.y);
-        bot.mousePress(MouseEvent.BUTTON1_MASK);
-        bot.mouseRelease(MouseEvent.BUTTON1_MASK);
+        DashboardView.ProjectPanel firstProjectPanel = (DashboardView.ProjectPanel) getFirstProjectPanel();
+
+        MouseEvent me = new MouseEvent(
+                firstProjectPanel, 0, 0, 0, 50, 50, 1, true);
+        for (MouseListener ml: firstProjectPanel.getMouseListeners()){
+            ml.mouseClicked(me);
+        }
 
 
+    }
+    private JFrame getProjectPopup(){
+        JFrame projectPopup = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame jframe) {
+                // Ensures we are on the right window.
+                if (jframe.getTitle().equals("Project") && jframe.isDisplayable()) {
+                    projectPopup = (JFrame) window;
+                }
+            }
+        }
+        return projectPopup;
+    }
+    private JButton getStatusBox(JFrame projPopup) {
+
+        assert(projPopup.getTitle().equals("Project"));
+
+        JRootPane root = (JRootPane) projPopup.getComponent(0);
+        JPanel contentPane = (JPanel) root.getContentPane();
+        JPanel buttonPanel = (JPanel) contentPane.getComponent(2);
+        JButton deleteButton = (JButton) buttonPanel.getComponent(1);
+
+        assertEquals("Delete Project", deleteButton.getText());
+        return deleteButton;
     }
 
     private JPanel getFirstProjectPanel() {
@@ -173,7 +200,25 @@ public class SetStatusEndToEndTest {
 
         return (JButton) buttons.getComponent(0); // this should be the first add project button
     }
-    getStatusButton() {
+    private JButton getDeleteProjectButton(JFrame projPopup) {
+
+        assert(projPopup.getTitle().equals("Project"));
+
+        JRootPane root = (JRootPane) projPopup.getComponent(0);
+        JPanel contentPane = (JPanel) root.getContentPane();
+        JPanel buttonPanel = (JPanel) contentPane.getComponent(2);
+        JButton deleteButton = (JButton) buttonPanel.getComponent(1);
+
+        assertEquals("Delete Project", deleteButton.getText());
+        return deleteButton;
+    }
+    getStatusButton(JFrame projectPopup) {
+        JRootPane root = (JRootPane) projectPopup.getComponent(0);
+        JPanel contentPane = (JPanel) root.getContentPane();
+        JScrollPane scrollPanel = (JScrollPane) contentPane.getComponent(1);
+        JPanel taskPane = (JPanel) scrollPanel.getComponent(2);
+        JCheckBox checkBox = (JCheckBox) taskPane.getComponent(2);
+        checkBox.doClick();
 
     }
 
@@ -186,41 +231,8 @@ public class SetStatusEndToEndTest {
 
     @Test
     public void testSendNotification() {
-        goToDashboardView();
-        popUpDiscovered = false;
-        message = "";
-
-        JButton button = getToggleNotificationButton();
-
-        button.doClick();
-
-        try {
-            TimeUnit.SECONDS.sleep(40);
-        } catch (InterruptedException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-
-            if (window instanceof JDialog) {
-
-                JDialog dialog = (JDialog)window;
-
-                // this ignores old dialogs
-                if (dialog.isVisible()) {
-                    String s = ((JOptionPane) ((BorderLayout) dialog.getRootPane()
-                            .getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER)).getMessage().toString();
-                    System.out.println("message = " + s);
-
-                    // store the information we got from the JDialog
-                    SendNotificationEndToEndTest.message = s;
-                    SendNotificationEndToEndTest.popUpDiscovered = true;
-
-                    System.out.println("disposing of..." + window.getClass());
-                    window.dispose();
-                }
-            }
+        openProjectPopupView();
+        JFrame projectPopup = getProjectPopup();
         }
 
 
