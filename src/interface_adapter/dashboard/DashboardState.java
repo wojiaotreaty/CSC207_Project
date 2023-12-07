@@ -9,11 +9,6 @@ public class DashboardState {
     private String notificationMessage = null;
     private String notificationImage = null;
 
-    public DashboardState(DashboardState copy) {
-        username = copy.username;
-    }
-
-    // Because of the previous copy constructor, the default constructor must be explicit.
     public DashboardState() {
     }
 

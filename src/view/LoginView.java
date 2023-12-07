@@ -3,8 +3,6 @@ package view;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
-import interface_adapter.signup.SignupController;
-import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;
@@ -42,21 +40,22 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         this.viewManagerModel = viewManagerModel;
 
 
-        JLabel title = new JLabel("Login Screen");
+        JLabel title = new JLabel(loginViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel usernameInfo = new LabelTextPanel(
-                new JLabel("Username"), usernameInputField);
+                new JLabel(loginViewModel.USERNAME_LABEL), usernameInputField);
         LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel("Password"), passwordInputField);
+                new JLabel(loginViewModel.PASSWORD_LABEL), passwordInputField);
 
         JPanel buttons = new JPanel();
-        logIn = new JButton(loginViewModel.LOGIN_BUTTON_LABEL);
+        logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
         buttons.add(logIn);
-        signUp = new JButton(loginViewModel.GO_TO_SIGNUP_BUTTON_LABEL);
+        signUp = new JButton(LoginViewModel.GO_TO_SIGNUP_BUTTON_LABEL);
         buttons.add(signUp);
 
-        logIn.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
+        logIn.addActionListener(
+                // This creates an anonymous subclass of ActionListener and instantiates it.
                 this
         );
         signUp.addActionListener(

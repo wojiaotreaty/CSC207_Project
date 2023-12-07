@@ -10,11 +10,8 @@ import interface_adapter.dashboard.ProjectData;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import static org.junit.jupiter.api.Assertions.*;
 
-import interface_adapter.refactor_project.RefactorProjectViewModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import view.DashboardView;
-import view.ViewManager;
 import view.DashboardView.ProjectPanel;
 
 import javax.swing.*;
@@ -42,7 +39,6 @@ public class AddProjectEndToEndTest {
         // For the Add Project End-to-End test, we can skip the login and signup views altogether
         DashboardViewModel dashboardViewModel = new DashboardViewModel();
         DeleteProjectViewModel deleteProjectViewModel = new DeleteProjectViewModel();
-        RefactorProjectViewModel refactorProjectViewModel = new RefactorProjectViewModel();
 
         UserFactory userFactory = new CommonUserFactory();
         ProjectFactory projectFactory = new CommonProjectFactory();
@@ -65,7 +61,7 @@ public class AddProjectEndToEndTest {
             System.out.println("ERROR: IOexception when creating UsersDAO");
         }
 
-        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, refactorProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
+        DashboardView dashboardView = DashboardViewFactory.create(dashboardViewModel, deleteProjectViewModel, viewManagerModel, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject, usersDataAccessObject);
         assert dashboardView != null;
         views.add(dashboardView, dashboardView.viewName);
         dashboardView.fromLogin = false;

@@ -12,17 +12,15 @@ public class LoginOutputData {
     projects is unique to every user.
      */
     private final ArrayList<ArrayList<String>> projects;
-    private boolean useCaseFailed;
 
-    public LoginOutputData(String username, ArrayList<ArrayList<String>> projects, boolean useCaseFailed) {
+    public LoginOutputData(String username, ArrayList<ArrayList<String>> projects) {
         this.username = username;
-        this.useCaseFailed = useCaseFailed;
         this.projects = projects;
     }
 
     public String getUsername() {
         return username;
     }
-    public ArrayList<ArrayList<String>> getProjectData() {return projects;}
+    public ArrayList<ArrayList<String>> getProjectData() { return projects; }
 
 }
