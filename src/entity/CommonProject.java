@@ -16,7 +16,10 @@ public class CommonProject implements Project {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.tasks = tasks;
+        this.tasks = new ArrayList<Task>();
+        for (Task task : tasks) {
+            this.addTask(task);
+        }
     }
 
     public String getProjectName() {

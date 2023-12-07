@@ -7,6 +7,7 @@ import interface_adapter.add_project.AddProjectController;
 import interface_adapter.delete_project.DeleteProjectController;
 import interface_adapter.delete_project.DeleteProjectState;
 import interface_adapter.delete_project.DeleteProjectViewModel;
+import interface_adapter.refactor_project.RefactorProjectController;
 import interface_adapter.send_notification.NotificationController;
 import interface_adapter.set_status.SetStatusController;
 
@@ -35,9 +36,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     public final String viewName = "Project Dashboard";
     private final DashboardViewModel dashboardViewModel;
     private final DeleteProjectViewModel deleteProjectViewModel;
+    private final RefactorProjectController refactorProjectController;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
-    private boolean fromLogin = true;
+    public boolean fromLogin = true;
     private boolean expectingNotification = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
@@ -48,9 +50,9 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     // ***Added notificationController to the constructor.
 
-    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
-                         NotificationController notificationController, DeleteProjectController deleteProjectController, SetStatusController setStatusController) {
-
+    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController
+                         ,NotificationController notificationController, DeleteProjectController deleteProjectController, RefactorProjectController refactorProjectController,SetStatusController setStatusController) {
+        this.refactorProjectController=refactorProjectController;
         this.dashboardViewModel = dashboardViewModel;
         this.deleteProjectViewModel = deleteProjectViewModel;
         this.addProjectController = addProjectController;
@@ -420,7 +422,9 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == refactor) {
-                    JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+                    //JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
+                    refactorProjectController.execute(userName,projectID);
+                    popupFrame.dispose();
                 }
             }
         });
@@ -520,6 +524,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 expectingNotification = true;
                 Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
                 scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+            }
+            if (state.getProjects().size()>0){
+                int size = state.getProjects().size();
+                projectPopup(state.getUsername(),state.getProjects().get(size-1));
             }
             projectsList = state.getProjects();
             displayAllProjects();
