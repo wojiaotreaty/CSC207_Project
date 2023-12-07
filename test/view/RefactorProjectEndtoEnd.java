@@ -190,9 +190,8 @@ public class RefactorProjectEndtoEnd {
     }
 
     /**
-     //     * Test that clicking the Delete Project button creates a confirmation popup.
-     //     * This test navigates to an existing project popup, then clicks the Delete Project button.
-     //     * It then checks if the confirmation popup and confirmation buttons exist.
+     //     * Test that clicking the Refactor Project button refreshes the original project pop up.
+     //     * This test navigates to an existing project popup, then clicks the Refactor Project button.
      //     */
     @Test
     public void testRefactorProjectProjectPopup() {
@@ -210,7 +209,11 @@ public class RefactorProjectEndtoEnd {
         refactorProjectButton.doClick();
         JFrame newProjectPopup = getProjectPopup();
         assertNotNull(newProjectPopup);
-
+        assert(newProjectPopup.getTitle().equals("Project"));
+        Component[] task_components=newProjectPopup.getComponents();
+        JRootPane first_component =(JRootPane)task_components[0];
+        JLabel name = (JLabel)first_component.getContentPane().getComponent(0);
+        assertEquals(name.getText(),PROJECT_NAME);
     }
 
     public void cleanUp() {
