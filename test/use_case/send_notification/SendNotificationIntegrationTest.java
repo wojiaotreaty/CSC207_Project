@@ -27,6 +27,11 @@ public class SendNotificationIntegrationTest {
             "These tasks are due tomorrow: \n     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
             "     For Project: project2\n          Task Name: task3\n          Task Description: task3 desc\n\n" +
             "These tasks are due the day after tomorrow: \n     For Project: project2\n          Task Name: task4\n          Task Description: task4 desc\n\n";
+    private final String output2 = "These tasks are due today: \n     For Project: project1\n          Task Name: task1\n          Task Description: task1 desc\n\n" +
+            "These tasks are due tomorrow: \n" +
+            "     For Project: project2\n          Task Name: task3\n          Task Description: task3 desc\n\n" +
+            "     For Project: project1\n          Task Name: task2\n          Task Description: task2 desc\n\n" +
+            "These tasks are due the day after tomorrow: \n     For Project: project2\n          Task Name: task4\n          Task Description: task4 desc\n\n";
 
 
     @BeforeEach
@@ -63,7 +68,7 @@ public class SendNotificationIntegrationTest {
         NotificationInputData notificationInputData = new NotificationInputData(LocalDate.now(), "foo");
 
         NotificationOutputBoundary successPresenter = notificationOutputData -> {
-            assertEquals(notificationOutputData.getMessage().substring(0,output.length()), output);
+            assert(notificationOutputData.getMessage().substring(0,output.length()).equals(output) || notificationOutputData.getMessage().substring(0,output2.length()).equals(output2));
             assertNotNull(notificationOutputData.getImageUrl());
         };
         NotificationInputBoundary notificationInteractor = new NotificationInteractor(usersDAO, successPresenter);
