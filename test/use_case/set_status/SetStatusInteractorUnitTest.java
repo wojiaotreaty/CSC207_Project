@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SetStatusInteractorUnitTest {
 
@@ -32,7 +30,6 @@ public class SetStatusInteractorUnitTest {
                 successPresenter);
         SetStatusInteractor.execute(inputData);
     }
-
     @Test
     void SetFalseTest() {
         SetStatusInputData inputData = new SetStatusInputData("fee", "1", "task1`task1 desc`2024-01-01`true");
@@ -65,7 +62,7 @@ public class SetStatusInteractorUnitTest {
                 ProjectFactory projectFactory = new CommonProjectFactory();
                 ArrayList<Task> tasks = new ArrayList<>();
                 tasks.add(task1);
-                Project project1 = projectFactory.create("1", "project1", "project1 desc", tasks);
+                Project project1 = projectFactory.create("1", "foo", "project1 desc", tasks);
                 ArrayList<Project> projects = new ArrayList<>();
                 projects.add(project1);
                 return new CommonUser("foo", "baz", projects);
@@ -75,7 +72,7 @@ public class SetStatusInteractorUnitTest {
                 ProjectFactory projectFactory = new CommonProjectFactory();
                 ArrayList<Task> tasks = new ArrayList<>();
                 tasks.add(task1);
-                Project project1 = projectFactory.create("1", "project1", "project1 desc", tasks);
+                Project project1 = projectFactory.create("1", "fee", "project1 desc", tasks);
                 ArrayList<Project> projects = new ArrayList<>();
                 projects.add(project1);
                 return new CommonUser("fee", "baz", projects);
