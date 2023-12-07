@@ -36,7 +36,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final DeleteProjectViewModel deleteProjectViewModel;
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
-    private boolean fromLogin = true;
+    public boolean fromLogin = true;
     private boolean expectingNotification = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;

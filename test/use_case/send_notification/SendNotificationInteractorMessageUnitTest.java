@@ -37,7 +37,7 @@ public class SendNotificationInteractorMessageUnitTest {
             Task task2 = taskFactory.create("task2", LocalDate.now().plusDays(1), "task2 desc");
             Task task3 = taskFactory.create("task3", LocalDate.now().plusDays(1), "task3 desc");
             Task task4 = taskFactory.create("task4", LocalDate.now().plusDays(2), "task4 desc");
-            ProjectFactory projectFactory= new CommonProjectFactory();
+            ProjectFactory projectFactory = new CommonProjectFactory();
             Project project1 = projectFactory.create("1", "project1", "project1 desc", new ArrayList<Task>(List.of(new Task[]{task1, task2})));
             Project project2 = projectFactory.create("2", "project2", "project2 desc", new ArrayList<Task>(List.of(new Task[]{task3, task4})));
             UserFactory userFactory = new CommonUserFactory();
