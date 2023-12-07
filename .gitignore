@@ -1,5 +1,5 @@
 ### Your own API keys! ###
-apikey.txt
+src/apikey.txt
 
 ### IntelliJ IDEA ###
 .idea/misc.xml
