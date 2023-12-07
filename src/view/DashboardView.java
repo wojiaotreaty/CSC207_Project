@@ -5,18 +5,24 @@ import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.dashboard.ProjectData;
 import interface_adapter.add_project.AddProjectController;
 import interface_adapter.delete_project.DeleteProjectController;
+import interface_adapter.delete_project.DeleteProjectState;
 import interface_adapter.delete_project.DeleteProjectViewModel;
 import interface_adapter.refactor_project.RefactorProjectController;
 import interface_adapter.send_notification.NotificationController;
 import interface_adapter.set_status.SetStatusController;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,7 +40,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private JPanel dashboardPanel;
     private ArrayList<ProjectData> projectsList;
     private boolean fromLogin = true;
-    private ArrayList<ProjectData>project_popup = new ArrayList<>();
     private boolean expectingNotification = false;
     private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture = null;
@@ -43,19 +48,19 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final DeleteProjectController deleteProjectController;
     private final SetStatusController setStatusController;
 
-
     // ***Added notificationController to the constructor.
 
-    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController,
-                         NotificationController notificationController, DeleteProjectController deleteProjectController, RefactorProjectController refactorProjectController, SetStatusController setStatusController) {
-
+    public DashboardView(DashboardViewModel dashboardViewModel, DeleteProjectViewModel deleteProjectViewModel, AddProjectController addProjectController
+                         ,NotificationController notificationController, DeleteProjectController deleteProjectController, RefactorProjectController refactorProjectController,SetStatusController setStatusController) {
+        this.refactorProjectController=refactorProjectController;
         this.dashboardViewModel = dashboardViewModel;
         this.deleteProjectViewModel = deleteProjectViewModel;
-        this.refactorProjectController = refactorProjectController;
         this.addProjectController = addProjectController;
         this.notificationController = notificationController;
         this.deleteProjectController = deleteProjectController;
         this.setStatusController = setStatusController;
+
+        deleteProjectViewModel.addPropertyChangeListener(this);
 
         DashboardState dashboardState = dashboardViewModel.getState();
 
@@ -416,11 +421,12 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         refactor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                project_popup.add(projectData);
+                if (e.getSource() == refactor) {
+                    //JOptionPane.showMessageDialog(popupPanel, "Not yet Implemented.");
                     refactorProjectController.execute(userName,projectID);
                     popupFrame.dispose();
+                }
             }
-
         });
 
         delete.addActionListener(new ActionListener() {
@@ -439,7 +445,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     }
     private void deleteProjectConfirmation(JFrame popup, String projectName, String projectId) {
-        JFrame confirm = new JFrame();
+        JFrame confirm = new JFrame("Delete Project?");
         confirm.setSize(500, 100);
         confirm.setResizable(false);
         JLabel text = new JLabel("Are you sure you want to delete the project: " + projectName + "?", SwingConstants.CENTER);
@@ -472,30 +478,63 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         confirm.setVisible(true);
     }
     public void propertyChange(PropertyChangeEvent evt) {
-        DashboardState state = (DashboardState) evt.getNewValue();
 
-        if (state.getAddProjectError() != null) {
-            JOptionPane.showMessageDialog(this, state.getAddProjectError());
-        }
-        // ***Displays JOptionPane if there is a notification to be displayed.
-        if (expectingNotification) {
-            expectingNotification = false;
-            if (state.getNotificationMessage() != null) {
-                JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+        if (evt.getNewValue() instanceof DashboardState state){
+
+            if (state.getAddProjectError() != null) {
+                JOptionPane.showMessageDialog(this, state.getAddProjectError());
             }
-
+            // ***Displays JOptionPane if there is a notification to be displayed.
+            if (state.getNotificationMessage() != null) {
+                if (state.getNotificationImage() != null) {
+                    try {
+                        URL url = new URL(state.getNotificationImage());
+                        BufferedImage image = ImageIO.read(url);
+                        JLabel label = new JLabel(new ImageIcon(image));
+                        JFrame f = new JFrame();
+                        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        f.getContentPane().add(label);
+                        f.pack();
+                        f.setLocation(200, 200);
+                        f.toFront();
+                        f.setVisible(true);
+                    } catch (IOException ignored) {
+                        ;
+                    }
+                }
+                JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+                state.setNotificationMessage(null);
+            }
+            if (fromLogin) {
+                fromLogin = false;
+                Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+                scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+            }
+            projectsList = state.getProjects();
+            displayAllProjects();
+            // ***Displays JOptionPane if there is a notification to be displayed.
+            if (expectingNotification) {
+                expectingNotification = false;
+                if (state.getNotificationMessage() != null) {
+                    JOptionPane.showMessageDialog(this, state.getNotificationMessage());
+                }
+            }
+            if (fromLogin) {
+                fromLogin = false;
+                expectingNotification = true;
+                Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
+                scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+            }
+            if (state.getProjects().size()>0){
+                int size = state.getProjects().size();
+                projectPopup(state.getUsername(),state.getProjects().get(size-1));
+            }
+            projectsList = state.getProjects();
+            displayAllProjects();
         }
-        if (fromLogin) {
-            fromLogin = false;
-            expectingNotification = true;
-            Runnable sendNotification = () -> notificationController.execute(LocalDate.now(), dashboardViewModel.getState().getUsername());
-            scheduledFuture = schedule.scheduleAtFixedRate(sendNotification, 0, 24, TimeUnit.HOURS);
+        if (evt.getNewValue() instanceof DeleteProjectState state){
+            JOptionPane.showMessageDialog(this, state.getDeletedProjectName()
+                    + " successfully deleted.");
         }
-        if (state.getProjects().size()>0){
-            int size = state.getProjects().size();
-            projectPopup(state.getUsername(),state.getProjects().get(size-1));
-        }
-        projectsList = state.getProjects();
-        displayAllProjects();
     }
 }
